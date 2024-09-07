@@ -141,7 +141,7 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 	char weapon[64];
 	event.GetString("weapon", weapon, sizeof(weapon));
 
-	PrintToServer("[Tank Draw] Event_PlayerDeath triggered. Victim: %d, Attacker: %d, weapon: &d", victim, attacker, weapon);
+	PrintToServer("[Tank Draw] Event_PlayerDeath triggered. Victim: %d, Attacker: %d, weapon: %s", victim, attacker, weapon);
 
 	if (!IsValidClient(victim) || !IsValidClient(attacker))
 	{
@@ -159,7 +159,7 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 	}
 
 	bool isBot = event.GetBool("victimisbot");
-	PrintToServer("[Tank Draw] is bot: %s", isBot);
+	PrintToServer("[Tank Draw] Is victim a bot: %s", isBot ? "Yes" : "No");
 
 	char victimName[MAX_NAME_LENGTH], attackerName[MAX_NAME_LENGTH];
 	GetClientName(victim, victimName, sizeof(victimName));
