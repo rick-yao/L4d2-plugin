@@ -8,11 +8,20 @@
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
 #define COMMAND_FILTER COMMAND_FILTER_CONNECTED | COMMAND_FILTER_NO_BOTS
 
-public void OnPluginStart()
+public Plugin myinfo =
+{
+	author = "test plugin by rick",
+
+
+}
+
+public void
+	OnPluginStart()
 {
 	// Hook the tank_killed event
 	HookEvent("tank_killed", Event_TankKilled);
 	HookEvent("tank_spawn", Event_TankSpawn);
+	HookEvent("player_death", Event_PlayerDeath);
 }
 
 public void Event_TankSpawn(Event event, const char[] name, bool dontBroadcast)
@@ -123,4 +132,63 @@ public void Event_TankKilled(Event event, const char[] name, bool dontBroadcast)
 
 	bool solo = event.GetBool("solo");
 	PrintToServer("[Tank Draw] Was the Tank killed solo? %s", solo ? "Yes" : "No");
+}
+
+public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast)
+{
+	int  victim   = GetClientOfUserId(event.GetInt("userid"));
+	int  attacker = GetClientOfUserId(event.GetInt("attacker"));
+	char weapon   = event.GetString("weapon");
+
+	PrintToServer("[Tank Draw] Event_PlayerDeath triggered. Victim: %d, Attacker: %d, weapon: &d", victim, attacker, weapon);
+
+	if (!IsValidClient(victim) || !IsValidClient(attacker))
+	{
+		PrintToServer("[Tank Draw] Invalid client detected. Victim valid: %d, Attacker valid: %d", IsValidClient(victim), IsValidClient(attacker));
+		return Plugin_Continue;
+	}
+
+	// Check if the victim is a Tank
+	int zombieClass = GetEntProp(victim, Prop_Send, "m_zombieClass");
+	PrintToServer("[Tank Draw] Victim's zombie class: %d", zombieClass);
+	if (zombieClass != 8)
+	{
+		PrintToServer("[Tank Draw] Victim is not a Tank. Exiting event.");
+		return Plugin_Continue;
+	}
+
+	int damagetype = event.GetInt("type");
+	PrintToServer("[Tank Draw] Damage type: %d", damagetype);
+
+	char victimName[MAX_NAME_LENGTH], attackerName[MAX_NAME_LENGTH];
+	GetClientName(victim, victimName, sizeof(victimName));
+	GetClientName(attacker, attackerName, sizeof(attackerName));
+	PrintToServer("[Tank Draw] Victim name: %s, Attacker name: %s", victimName, attackerName);
+
+	// Check if the damage type includes melee
+	if (damagetype & DMG_CLUB)
+	{
+		PrintToServer("[Tank Draw] Tank was killed by melee!");
+		PrintToChatAll("\x04[Tank Draw] \x01Tank was killed by melee! Attacker: %s", attackerName);
+		// Add your custom logic here
+	}
+	else
+	{
+		PrintToServer("[Tank Draw] Tank was killed by non-melee damage.");
+		PrintToChatAll("\x04[Tank Draw] \x01Tank was killed by %s", attackerName);
+	}
+
+	float tankPos[3];
+	GetClientAbsOrigin(victim, tankPos);
+	PrintToServer("[Tank Draw] Tank death position: %.2f, %.2f, %.2f", tankPos[0], tankPos[1], tankPos[2]);
+
+	int health = GetClientHealth(attacker);
+	PrintToServer("[Tank Draw] Attacker's health after killing Tank: %d", health);
+
+	return Plugin_Continue;
+}
+
+bool IsValidClient(int client)
+{
+	return (client > 0 && client <= MaxClients && IsClientInGame(client));
 }
