@@ -10,7 +10,7 @@
 
 #define Z_TANK	       8
 
-ConVar g_hInfiniteAmmo;
+ConVar g_hInfinitePrimaryAmmo;
 ConVar g_MeleeRange;
 ConVar MoonGravity;
 ConVar MoonGravityOneShotTime;
@@ -117,7 +117,7 @@ Action LuckyDraw(int victim, int attacker)
 
 	PrintToChatAll("[Tank Draw] 幸运抽奖开始");
 
-	int random = GetRandomInt(11, 11);
+	int random = GetRandomInt(1, 100);
 
 	switch (random)
 	{
@@ -130,10 +130,10 @@ Action LuckyDraw(int victim, int attacker)
 		}
 		case 11, 12, 13, 14, 15, 16, 17, 18, 19, 20:
 		{
-			g_hInfiniteAmmo = FindConVar("sv_infinite_ammo");
-			if (g_hInfiniteAmmo != null)
+			g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
+			if (g_hInfinitePrimaryAmmo != null)
 			{
-				g_hInfiniteAmmo.IntValue = 1;
+				g_hInfinitePrimaryAmmo.IntValue = 1;
 				PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：所有人无限子弹", attackerName);
 			}
 		}
@@ -146,18 +146,6 @@ Action LuckyDraw(int victim, int attacker)
 				PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：无限近战", attackerName);
 			}
 		}
-		// comment for now
-		// case 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50:
-		// {
-		// 	int amount = GetRandomInt(1, 5);
-		// 	char item[64];
-		// 	item = GetRandomItem();
-		// 	for (int i = 0; i < amount; i++)
-		// 	{
-		// 		CheatCommand(attacker, "give", item);
-		// 	}
-		// 	PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：%d * %s", attackerName, amount, item);
-		// }
 		case 41, 42, 43, 44, 45, 46, 47, 48, 49, 50:
 		{
 			for (int i = 1; i <= MaxClients; i++)
@@ -181,15 +169,23 @@ Action LuckyDraw(int victim, int attacker)
 		{
 			// sum all alive survivors' health, then set survivor's health to the average health
 			int health = 0;
-			for (int i = 1; i <= MaxClients; i++)
+			for (int i = 0; i <= MaxClients; i++)
 			{
 				if (IsValidAliveClient(i))
 				{
 					health += GetClientHealth(i);
 				}
 			}
-			int averageHealth = RoundToNearest(float(health) / float(GetClientCount()));
-			for (int i = 1; i <= MaxClients; i++)
+			int numOfAliveClient = 0;
+			for (int i = 0; i <= MaxClients; i++)
+			{
+				if (IsValidAliveClient(i))
+				{
+					numOfAliveClient++;
+				}
+			}
+			int averageHealth = RoundToNearest(float(health) / float(numOfAliveClient));
+			for (int i = 0; i <= MaxClients; i++)
 			{
 				if (IsValidAliveClient(i))
 				{
@@ -344,5 +340,5 @@ bool IsValidClient(int client)
 
 bool IsValidAliveClient(int client)
 {
-	return (1 <= client <= MaxClients && IsClientInGame(client) && IsPlayerAlive(client));
+	return (1 <= client <= MaxClients && IsClientInGame(client) && IsPlayerAlive(client) && (GetClientTeam(client) == 2));
 }
