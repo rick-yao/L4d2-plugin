@@ -11,6 +11,7 @@
 #define Z_TANK	       8
 
 ConVar g_hInfiniteAmmo;
+ConVar g_MeleeRange;
 ConVar MoonGravity;
 ConVar MoonGravityOneShotTime;
 
@@ -127,13 +128,22 @@ Action LuckyDraw(int victim, int attacker)
 			SetEntityHealth(attacker, health);
 			PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：随机增加%d血量", attackerName, randomHealth);
 		}
-		case 11:
+		case 11, 12, 13, 14, 15, 16, 17, 18, 19, 20:
 		{
 			g_hInfiniteAmmo = FindConVar("sv_infinite_ammo");
 			if (g_hInfiniteAmmo != null)
 			{
 				g_hInfiniteAmmo.IntValue = 1;
 				PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：所有人无限子弹", attackerName);
+			}
+		}
+		case 21, 22, 23, 24, 25, 26, 27, 28, 29, 30:
+		{
+			g_MeleeRange = FindConVar("melee_range");
+			if (g_MeleeRange != null)
+			{
+				g_MeleeRange.IntValue = 700;
+				PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：无限近战", attackerName);
 			}
 		}
 		// comment for now
