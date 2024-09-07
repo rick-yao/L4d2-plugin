@@ -157,8 +157,8 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 		return Plugin_Continue;
 	}
 
-	int damagetype = event.GetInt("type");
-	PrintToServer("[Tank Draw] Damage type: %d", damagetype);
+	bool isBot = event.GetBool("victimisbot");
+	PrintToServer("[Tank Draw] is bot: %s", isBot);
 
 	char victimName[MAX_NAME_LENGTH], attackerName[MAX_NAME_LENGTH];
 	GetClientName(victim, victimName, sizeof(victimName));
@@ -166,17 +166,6 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 	PrintToServer("[Tank Draw] Victim name: %s, Attacker name: %s", victimName, attackerName);
 
 	// Check if the damage type includes melee
-	if (damagetype & DMG_CLUB)
-	{
-		PrintToServer("[Tank Draw] Tank was killed by melee!");
-		PrintToChatAll("\x04[Tank Draw] \x01Tank was killed by melee! Attacker: %s", attackerName);
-		// Add your custom logic here
-	}
-	else
-	{
-		PrintToServer("[Tank Draw] Tank was killed by non-melee damage.");
-		PrintToChatAll("\x04[Tank Draw] \x01Tank was killed by %s", attackerName);
-	}
 
 	float tankPos[3];
 	GetClientAbsOrigin(victim, tankPos);
