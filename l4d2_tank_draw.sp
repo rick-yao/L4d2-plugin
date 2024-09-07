@@ -12,7 +12,7 @@ public void OnPluginStart()
 {
 	// Hook the tank_killed event
 	HookEvent("tank_killed", Event_TankKilled);
-	HookEvent("tank_spawn", Event_TankSpawn)
+	HookEvent("tank_spawn", Event_TankSpawn);
 }
 
 public void Event_TankSpawn(Event event, const char[] name, bool dontBroadcast)
