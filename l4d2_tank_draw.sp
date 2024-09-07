@@ -138,7 +138,8 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 {
 	int  victim   = GetClientOfUserId(event.GetInt("userid"));
 	int  attacker = GetClientOfUserId(event.GetInt("attacker"));
-	char weapon   = event.GetString("weapon");
+	char weapon[64];
+	event.GetString("weapon", weapon, sizeof(weapon));
 
 	PrintToServer("[Tank Draw] Event_PlayerDeath triggered. Victim: %d, Attacker: %d, weapon: &d", victim, attacker, weapon);
 
