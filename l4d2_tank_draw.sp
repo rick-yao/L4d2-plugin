@@ -137,7 +137,7 @@ Action LuckyDraw(int victim, int attacker)
 				PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：所有人无限子弹", attackerName);
 			}
 		}
-		case 21, 22, 23, 24, 25, 26, 27, 28, 29, 30:
+		case 21, 22, 23, 24, 25:
 		{
 			g_MeleeRange = FindConVar("melee_range");
 			if (g_MeleeRange != null)
