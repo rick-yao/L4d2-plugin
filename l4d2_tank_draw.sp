@@ -104,6 +104,10 @@ bool IsTank(int client)
 		PrintToServer("[Tank Draw] IsTank: Client %d is not on the infected team (Team: %d)", client, GetClientTeam(client));
 		return false;
 	}
+	if (!HasEntProp(client, Prop_Send, "m_zombieClass"))
+	{
+		return false;
+	}
 
 	PrintToServer("[Tank Draw] IsTank: Client %d passed all preliminary checks", client);
 	return (GetEntProp(client, Prop_Send, "m_zombieClass") == Z_TANK);
