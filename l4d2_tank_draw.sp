@@ -13,6 +13,7 @@
 ConVar g_hInfinitePrimaryAmmo;
 ConVar g_MeleeRange;
 ConVar MoonGravity;
+ConVar IsMoonGravity;
 ConVar MoonGravityOneShotTime;
 
 public Plugin myinfo =
@@ -30,9 +31,14 @@ public void
 {
 	MoonGravity	       = CreateConVar("l4d2_tank_draw_moongravity", "0.1", "月球重力参数", false, false);
 	MoonGravityOneShotTime = CreateConVar("l4d2_tank_draw_moongravityoneshottime", "180", "限时月球重力秒数", false, false);
+	IsMoonGravity	       = CreateConVar("l4d2_tank_draw_ismoongravity", "0", "是否已经开启月球重力", PLUGIN_FLAG, true, 0.00, true, 1.00);
 	PrintToServer("[Tank Draw] Plugin loaded");
 	PrintToServer("[Tank Draw] maxclients: %d", MaxClients);
 	HookEvent("player_incapacitated", Event_PlayerDeath);
+	HookEvent("round_end", Event_Roundend);
+	HookEvent("finale_vehicle_leaving", Event_Roundend);
+	HookEvent("mission_lost", Event_Roundend);
+	HookEvent("map_transition", Event_Roundend);
 
 	AutoExecConfig(true, "l4d2_tank_draw");
 }
@@ -79,6 +85,17 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 
 	PrintToChatAll("[Tank Draw] 幸运抽奖结束");
 
+	return Plugin_Continue;
+}
+
+public Action Event_Roundend(Event event, const char[] name, bool dontBroadcast)
+{
+	// reset all changed server value
+	g_hInfinitePrimaryAmmo		= FindConVar("sv_infinite_ammo");
+	g_hInfinitePrimaryAmmo.IntValue = 0;
+	g_MeleeRange			= FindConVar("melee_range");
+	g_MeleeRange.IntValue		= 70;
+	SetConVarInt(IsMoonGravity, 0);
 	return Plugin_Continue;
 }
 
@@ -215,14 +232,29 @@ Action LuckyDraw(int victim, int attacker)
 		// all players get moon gravity
 		case 81, 82, 83, 84, 85, 86, 87, 88, 89, 90:
 		{
-			for (int i = 1; i <= MaxClients; i++)
+			if (GetConVarInt(IsMoonGravity) == 0)
 			{
-				if (IsValidAliveClient(i))
+				SetConVarInt(IsMoonGravity, 1);
+				for (int i = 1; i <= MaxClients; i++)
 				{
-					SetEntityGravity(i, GetConVarFloat(MoonGravity));
+					if (IsValidAliveClient(i))
+					{
+						SetEntityGravity(i, GetConVarFloat(MoonGravity));
+					}
 				}
+				PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：所有幸存者获得月球重力", attackerName);
 			}
-			PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：所有幸存者获得月球重力", attackerName);
+			else {
+				SetConVarInt(IsMoonGravity, 0);
+				for (int i = 1; i <= MaxClients; i++)
+				{
+					if (IsValidAliveClient(i))
+					{
+						SetEntityGravity(i, 1.00);
+					}
+				}
+				PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：取消月球重力", attackerName);
+			}
 		}
 		case 91, 92, 93, 94, 95:
 		{
