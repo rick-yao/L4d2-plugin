@@ -139,37 +139,6 @@ public Action Event_Roundend(Event event, const char[] name, bool dontBroadcast)
 	return Plugin_Continue;
 }
 
-bool IsTank(int client)
-{
-	// Check if the client is valid and in-game
-	if (!IsValidClient(client))
-	{
-		PrintToServer("[Tank Draw] IsTank: Client %d is not valid", client);
-		return false;
-	}
-
-	// Check if the client is actually connected
-	if (!IsClientConnected(client))
-	{
-		PrintToServer("[Tank Draw] IsTank: Client %d is not connected", client);
-		return false;
-	}
-
-	// Check if the client is on the infected team
-	if (GetClientTeam(client) != 3)	       // 3 is typically the infected team in L4D2
-	{
-		PrintToServer("[Tank Draw] IsTank: Client %d is not on the infected team (Team: %d)", client, GetClientTeam(client));
-		return false;
-	}
-	if (!HasEntProp(client, Prop_Send, "m_zombieClass"))
-	{
-		return false;
-	}
-
-	PrintToServer("[Tank Draw] IsTank: Client %d passed all preliminary checks", client);
-	return (GetEntProp(client, Prop_Send, "m_zombieClass") == Z_TANK);
-}
-
 Action LuckyDraw(int victim, int attacker)
 {
 	char victimName[MAX_NAME_LENGTH], attackerName[MAX_NAME_LENGTH];
@@ -458,4 +427,35 @@ stock void TankDraw_PrintToChat(int client = 0, const char[] format, any...)
 	{
 		PrintToChat(client, message);
 	}
+}
+
+bool IsTank(int client)
+{
+	// Check if the client is valid and in-game
+	if (!IsValidClient(client))
+	{
+		PrintToServer("[Tank Draw] IsTank: Client %d is not valid", client);
+		return false;
+	}
+
+	// Check if the client is actually connected
+	if (!IsClientConnected(client))
+	{
+		PrintToServer("[Tank Draw] IsTank: Client %d is not connected", client);
+		return false;
+	}
+
+	// Check if the client is on the infected team
+	if (GetClientTeam(client) != 3)	       // 3 is typically the infected team in L4D2
+	{
+		PrintToServer("[Tank Draw] IsTank: Client %d is not on the infected team (Team: %d)", client, GetClientTeam(client));
+		return false;
+	}
+	if (!HasEntProp(client, Prop_Send, "m_zombieClass"))
+	{
+		return false;
+	}
+
+	PrintToServer("[Tank Draw] IsTank: Client %d passed all preliminary checks", client);
+	return (GetEntProp(client, Prop_Send, "m_zombieClass") == Z_TANK);
 }
