@@ -12,6 +12,19 @@
 
 ConVar g_hInfinitePrimaryAmmo;
 ConVar g_MeleeRange;
+
+// Custom ConVars for the plugin
+ConVar ChanceNoPrice;
+ConVar ChanceIncreaseHealth;
+ConVar ChanceInfiniteAmmo;
+ConVar ChanceInfiniteMelee;
+ConVar ChanceMoonGravityAll;
+ConVar ChanceMoonGravityOne;
+ConVar ChanceAverageHealth;
+ConVar ChanceMoonGravityToggle;
+ConVar ChanceIncreaseGravity;
+ConVar ChanceDecreaseHealth;
+
 ConVar MoonGravity;
 ConVar MoonGravityOneShotTime;
 ConVar InfiniteMeeleRange;
@@ -36,15 +49,26 @@ int IsMoonGravity = 0;
 
 public void OnPluginStart()
 {
-	MoonGravity	       = CreateConVar("l4d2_tank_draw_moongravity", "0.1", "月球重力参数，正常值为1.0", false, false);
-	IncreasedGravity       = CreateConVar("l4d2_tank_draw_increased_gravity", "2.0", "抽奖增加重力的倍数，从1.0至3.0", PLUGIN_FLAG, true, 1.0, true, 3.0);
-	MoonGravityOneShotTime = CreateConVar("l4d2_tank_draw_moongravityoneshottime", "180", "限时月球重力秒数", false, false);
-	L4D2TankDrawDebugMode  = CreateConVar("l4d2_tank_draw_debug_mode", "0", "是否开启调试模式，修改后会影响抽奖结果，总是同一个结果", false, false);
-	InfiniteMeeleRange     = CreateConVar("l4d2_tank_draw_infinite_melee_range", "700", "游戏默认为70，会自动恢复", false, false);
-	MinHealthIncrease      = CreateConVar("l4d2_tank_draw_min_health_increase", "200", "抽奖增加血量的最小值", false, false);
-	MaxHealthIncrease      = CreateConVar("l4d2_tank_draw_max_health_increase", "500", "抽奖增加血量的最大值", false, false);
-	MinHealthDecrease      = CreateConVar("l4d2_tank_draw_min_health_decrease", "200", "抽奖减少血量的最小值", false, false);
-	MaxHealthDecrease      = CreateConVar("l4d2_tank_draw_max_health_decrease", "500", "抽奖减少血量的最大值", false, false);
+	MoonGravity		= CreateConVar("l4d2_tank_draw_moongravity", "0.1", "月球重力参数，正常值为1.0", false, false);
+	IncreasedGravity	= CreateConVar("l4d2_tank_draw_increased_gravity", "2.0", "抽奖增加重力的倍数，从1.0至3.0", PLUGIN_FLAG, true, 1.0, true, 3.0);
+	MoonGravityOneShotTime	= CreateConVar("l4d2_tank_draw_moongravityoneshottime", "180", "限时月球重力持续秒数", false, false);
+	L4D2TankDrawDebugMode	= CreateConVar("l4d2_tank_draw_debug_mode", "0", "是否开启调试模式，修改后会影响抽奖结果，总是同一个结果", false, false);
+	InfiniteMeeleRange	= CreateConVar("l4d2_tank_draw_infinite_melee_range", "700", "游戏默认为70，会自动恢复", false, false);
+	MinHealthIncrease	= CreateConVar("l4d2_tank_draw_min_health_increase", "200", "抽奖增加血量的最小值", false, false);
+	MaxHealthIncrease	= CreateConVar("l4d2_tank_draw_max_health_increase", "500", "抽奖增加血量的最大值", false, false);
+	MinHealthDecrease	= CreateConVar("l4d2_tank_draw_min_health_decrease", "200", "抽奖减少血量的最小值", false, false);
+	MaxHealthDecrease	= CreateConVar("l4d2_tank_draw_max_health_decrease", "500", "抽奖减少血量的最大值", false, false);
+
+	ChanceNoPrice		= CreateConVar("l4d2_tank_draw_chance_no_price", "20", "没有奖励的概率（百分比）", FCVAR_NONE, true, 0.0, true, 100.0);
+	ChanceIncreaseHealth	= CreateConVar("l4d2_tank_draw_chance_increase_health", "10", "增加生命值的概率（百分比）", FCVAR_NONE, true, 0.0, true, 100.0);
+	ChanceInfiniteAmmo	= CreateConVar("l4d2_tank_draw_chance_infinite_ammo", "10", "无限弹药的概率（百分比）", FCVAR_NONE, true, 0.0, true, 100.0);
+	ChanceInfiniteMelee	= CreateConVar("l4d2_tank_draw_chance_infinite_melee", "5", "无限近战范围的概率（百分比）", FCVAR_NONE, true, 0.0, true, 100.0);
+	ChanceMoonGravityAll	= CreateConVar("l4d2_tank_draw_chance_moon_gravity_all", "10", "所有人获得限时月球重力的概率（百分比）", FCVAR_NONE, true, 0.0, true, 100.0);
+	ChanceMoonGravityOne	= CreateConVar("l4d2_tank_draw_chance_moon_gravity_one", "10", "抽奖者获得限时月球重力的概率（百分比）", FCVAR_NONE, true, 0.0, true, 100.0);
+	ChanceAverageHealth	= CreateConVar("l4d2_tank_draw_chance_average_health", "10", "平均生命值的概率（百分比）", FCVAR_NONE, true, 0.0, true, 100.0);
+	ChanceMoonGravityToggle = CreateConVar("l4d2_tank_draw_chance_moon_gravity_toggle", "5", "切换月球重力的概率（百分比）", FCVAR_NONE, true, 0.0, true, 100.0);
+	ChanceIncreaseGravity	= CreateConVar("l4d2_tank_draw_chance_increase_gravity", "10", "增加重力的概率（百分比）", FCVAR_NONE, true, 0.0, true, 100.0);
+	ChanceDecreaseHealth	= CreateConVar("l4d2_tank_draw_chance_decrease_health", "10", "减少生命值的概率（百分比）", FCVAR_NONE, true, 0.0, true, 100.0);
 
 	PrintToServer("[Tank Draw] Plugin loaded");
 	PrintToServer("[Tank Draw] debug mode: %d", L4D2TankDrawDebugMode.IntValue);
@@ -155,6 +179,8 @@ Action LuckyDraw(int victim, int attacker)
 	TankDraw_PrintToChat(0, "幸运抽奖开始");
 
 	int random;
+	int totalChance	  = 0;
+	int chanceNoPrice = ChanceNoPrice.IntValue;
 
 	if (L4D2TankDrawDebugMode.IntValue == 1)
 	{
@@ -164,53 +190,150 @@ Action LuckyDraw(int victim, int attacker)
 		random = GetRandomInt(1, 100);
 	}
 
-	switch (random)
+	if (random <= chanceNoPrice)
 	{
-		// increate players health randomly
-		case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10:
-		{
-			int minHealth	 = GetConVarInt(MinHealthIncrease);
-			int maxHealth	 = GetConVarInt(MaxHealthIncrease);
-			int randomHealth = GetRandomInt(minHealth, maxHealth);
-			int health	 = GetClientHealth(attacker) + randomHealth;
-			SetEntityHealth(attacker, health);
-			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机增加 %d 血量", attackerName, randomHealth);
-		}
-		// infinite ammo
-		case 11, 12, 13, 14, 15, 16, 17, 18, 19, 20:
-		{
-			g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
-			if (g_hInfinitePrimaryAmmo.IntValue == 0)
-			{
-				g_hInfinitePrimaryAmmo.IntValue = 1;
-				TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有人无限子弹", attackerName);
-			}
-			else {
-				g_hInfinitePrimaryAmmo.IntValue = 0;
-				TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：关闭无限子弹", attackerName);
-			}
-		}
-		// infinite melee range
-		case 21, 22, 23, 24, 25, 101:
-		{
-			g_MeleeRange = FindConVar("melee_range");
-			char default_range[16];
-			g_MeleeRange.GetDefault(default_range, sizeof(default_range));
-			int default_range_int = StringToInt(default_range);
+		TankDraw_PrintToChat(0, "非常遗憾，此次砍死tank没有中奖");
+		return Plugin_Continue;
+	}
 
-			if (g_MeleeRange.IntValue == default_range_int)
+	int chanceIncreaseHealth    = ChanceIncreaseHealth.IntValue;
+	int chanceInfiniteAmmo	    = ChanceInfiniteAmmo.IntValue;
+	int chanceInfiniteMelee	    = ChanceInfiniteMelee.IntValue;
+	int chanceMoonGravityAll    = ChanceMoonGravityAll.IntValue;
+	int chanceMoonGravityOne    = ChanceMoonGravityOne.IntValue;
+	int chanceAverageHealth	    = ChanceAverageHealth.IntValue;
+	int chanceMoonGravityToggle = ChanceMoonGravityToggle.IntValue;
+	int chanceIncreaseGravity   = ChanceIncreaseGravity.IntValue;
+	int chanceDecreaseHealth    = ChanceDecreaseHealth.IntValue;
+
+	totalChance		    = chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceMoonGravityAll + chanceMoonGravityOne + chanceAverageHealth + chanceMoonGravityToggle + chanceIncreaseGravity + chanceDecreaseHealth;
+
+	random			    = GetRandomInt(1, totalChance);
+
+	int currentChance	    = 0;
+
+	currentChance += chanceIncreaseHealth;
+	if (random <= currentChance)
+	{
+		// Increase player's health randomly
+		int minHealth	 = GetConVarInt(MinHealthIncrease);
+		int maxHealth	 = GetConVarInt(MaxHealthIncrease);
+		int randomHealth = GetRandomInt(minHealth, maxHealth);
+		int health	 = GetClientHealth(attacker) + randomHealth;
+		SetEntityHealth(attacker, health);
+		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机增加 %d 血量", attackerName, randomHealth);
+		return Plugin_Continue;
+	}
+
+	currentChance += chanceInfiniteAmmo;
+	if (random <= currentChance)
+	{
+		// Infinite ammo
+		g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
+		if (g_hInfinitePrimaryAmmo.IntValue == 0)
+		{
+			g_hInfinitePrimaryAmmo.IntValue = 1;
+			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有人无限子弹", attackerName);
+		}
+		else {
+			g_hInfinitePrimaryAmmo.IntValue = 0;
+			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：关闭无限子弹", attackerName);
+		}
+		return Plugin_Continue;
+	}
+
+	currentChance += chanceInfiniteMelee;
+	if (random <= currentChance)
+	{
+		// Infinite melee range
+		g_MeleeRange = FindConVar("melee_range");
+		char default_range[16];
+		g_MeleeRange.GetDefault(default_range, sizeof(default_range));
+		int default_range_int = StringToInt(default_range);
+
+		if (g_MeleeRange.IntValue == default_range_int)
+		{
+			g_MeleeRange.IntValue = GetConVarInt(InfiniteMeeleRange);
+			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：无限近战", attackerName);
+		}
+		else {
+			g_MeleeRange.RestoreDefault();
+			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：关闭无限近战", attackerName);
+		}
+		return Plugin_Continue;
+	}
+
+	currentChance += chanceMoonGravityAll;
+	if (random <= currentChance)
+	{
+		// Limited time moon gravity for all
+		for (int i = 1; i <= MaxClients; i++)
+		{
+			if (IsValidAliveClient(i))
 			{
-				g_MeleeRange.IntValue = GetConVarInt(InfiniteMeeleRange);
-				TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：无限近战", attackerName);
-			}
-			else {
-				g_MeleeRange.RestoreDefault();
-				TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：关闭无限近战", attackerName);
+				SetEntityGravity(i, GetConVarFloat(MoonGravity));
 			}
 		}
-		// limited time moon gravity for drawer
-		case 41, 42, 43, 44, 45, 46, 47, 48, 49, 50:
+		StringMap data = new StringMap();
+		data.SetValue("client", attacker);
+		data.SetValue("resetAll", true);
+		CreateTimer(GetConVarFloat(MoonGravityOneShotTime), ResetGravity, data, TIMER_FLAG_NO_MAPCHANGE | TIMER_DATA_HNDL_CLOSE);
+		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有人限时 %d 秒月球重力", attackerName, GetConVarInt(MoonGravityOneShotTime));
+		return Plugin_Continue;
+	}
+
+	currentChance += chanceMoonGravityOne;
+	if (random <= currentChance)
+	{
+		// Limited time moon gravity for drawer
+		SetEntityGravity(attacker, GetConVarFloat(MoonGravity));
+		StringMap data = new StringMap();
+		data.SetValue("client", attacker);
+		data.SetValue("resetAll", false);
+		CreateTimer(GetConVarFloat(MoonGravityOneShotTime), ResetGravity, data, TIMER_FLAG_NO_MAPCHANGE | TIMER_DATA_HNDL_CLOSE);
+		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：限时 %d 秒月球重力体验卡", attackerName, GetConVarInt(MoonGravityOneShotTime));
+		return Plugin_Continue;
+	}
+
+	currentChance += chanceAverageHealth;
+	if (random <= currentChance)
+	{
+		// Average all survivors' health
+		int health = 0;
+		for (int i = 0; i <= MaxClients; i++)
 		{
+			if (IsValidAliveClient(i))
+			{
+				health += GetClientHealth(i);
+			}
+		}
+		int numOfAliveClient = 0;
+		for (int i = 0; i <= MaxClients; i++)
+		{
+			if (IsValidAliveClient(i))
+			{
+				numOfAliveClient++;
+			}
+		}
+		int averageHealth = RoundToNearest(float(health) / float(numOfAliveClient));
+		for (int i = 0; i <= MaxClients; i++)
+		{
+			if (IsValidAliveClient(i))
+			{
+				SetEntityHealth(i, averageHealth);
+			}
+		}
+		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有人平均血量 %d", attackerName, averageHealth);
+		return Plugin_Continue;
+	}
+
+	currentChance += chanceMoonGravityToggle;
+	if (random <= currentChance)
+	{
+		// Toggle moon gravity for all survivors
+		if (IsMoonGravity == 0)
+		{
+			IsMoonGravity = 1;
 			for (int i = 1; i <= MaxClients; i++)
 			{
 				if (IsValidAliveClient(i))
@@ -218,116 +341,54 @@ Action LuckyDraw(int victim, int attacker)
 					SetEntityGravity(i, GetConVarFloat(MoonGravity));
 				}
 			}
-			StringMap data = new StringMap();
-			data.SetValue("client", attacker);
-			data.SetValue("resetAll", true);
-			CreateTimer(GetConVarFloat(MoonGravityOneShotTime), ResetGravity, data, TIMER_FLAG_NO_MAPCHANGE | TIMER_DATA_HNDL_CLOSE);
-			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有人限时 %d 秒月球重力", attackerName, GetConVarInt(MoonGravityOneShotTime));
+			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有幸存者获得月球重力", attackerName);
 		}
-		// limited time moon gravity for all
-		case 51, 52, 53, 54, 55, 56, 57, 58, 59, 60:
-		{
-			// set the attacker's gravity , several seconds later change it to 1, the time should only execute once
-			SetEntityGravity(attacker, GetConVarFloat(MoonGravity));
-			StringMap data = new StringMap();
-			data.SetValue("client", attacker);
-			data.SetValue("resetAll", false);
-			CreateTimer(GetConVarFloat(MoonGravityOneShotTime), ResetGravity, data, TIMER_FLAG_NO_MAPCHANGE | TIMER_DATA_HNDL_CLOSE);
-			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：限时 %d 秒月球重力体验卡", attackerName, GetConVarInt(MoonGravityOneShotTime));
-		}
-		// average all survivors' health
-		case 61, 62, 63, 64, 65, 66, 67, 68, 69, 70:
-		{
-			// sum all alive survivors' health, then set survivor's health to the average health
-			int health = 0;
-			for (int i = 0; i <= MaxClients; i++)
+		else {
+			IsMoonGravity = 0;
+			for (int i = 1; i <= MaxClients; i++)
 			{
 				if (IsValidAliveClient(i))
 				{
-					health += GetClientHealth(i);
+					SetEntityGravity(i, 1.00);
 				}
 			}
-			int numOfAliveClient = 0;
-			for (int i = 0; i <= MaxClients; i++)
-			{
-				if (IsValidAliveClient(i))
-				{
-					numOfAliveClient++;
-				}
-			}
-			int averageHealth = RoundToNearest(float(health) / float(numOfAliveClient));
-			for (int i = 0; i <= MaxClients; i++)
-			{
-				if (IsValidAliveClient(i))
-				{
-					SetEntityHealth(i, averageHealth);
-				}
-			}
-			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有人平均血量 %d", attackerName, averageHealth);
+			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：取消月球重力", attackerName);
 		}
-		// moon gravity for one
-		case 71, 72, 73, 74, 75, 76, 77, 78, 79, 80:
-		{
-			SetEntityGravity(attacker, GetConVarFloat(MoonGravity));
-			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：月球重力", attackerName);
-		}
-		// all survivors toggle moon gravity
-		case 81, 82, 83, 84, 85, 86, 87, 88, 89, 90:
-		{
-			if (IsMoonGravity == 0)
-			{
-				IsMoonGravity = 1;
-				for (int i = 1; i <= MaxClients; i++)
-				{
-					if (IsValidAliveClient(i))
-					{
-						SetEntityGravity(i, GetConVarFloat(MoonGravity));
-					}
-				}
-				TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有幸存者获得月球重力", attackerName);
-			}
-			else {
-				IsMoonGravity = 0;
-				for (int i = 1; i <= MaxClients; i++)
-				{
-					if (IsValidAliveClient(i))
-					{
-						SetEntityGravity(i, 1.00);
-					}
-				}
-				TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：取消月球重力", attackerName);
-			}
-		}
-		// increase gravity for drawer
-		case 91, 92, 93, 94, 95:
-		{
-			SetEntityGravity(attacker, GetConVarFloat(IncreasedGravity));
-			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：获得 %.1f 倍重力", attackerName, GetConVarFloat(IncreasedGravity));
-		}
-		// decrease drawer's health randomly
-		case 96, 97, 98, 99, 100:
-		{
-			int minDecrease	 = GetConVarInt(MinHealthDecrease);
-			int maxDecrease	 = GetConVarInt(MaxHealthDecrease);
-			int randomHealth = GetRandomInt(minDecrease, maxDecrease);
-			int health	 = GetClientHealth(attacker);
-			if (health > randomHealth)
-			{
-				SetEntityHealth(attacker, health - randomHealth);
-				TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机减少%d血量", attackerName, randomHealth);
-			}
-			else
-			{
-				SetEntityHealth(attacker, 1);
-				TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机减少%d血量，但由于血量过低，所以仅剩1血量", attackerName, randomHealth);
-			}
-		}
-		default:
-		{
-			TankDraw_PrintToChat(0, "非常遗憾，此次砍死tank没有中奖");
-		}
+		return Plugin_Continue;
 	}
 
+	currentChance += chanceIncreaseGravity;
+	if (random <= currentChance)
+	{
+		// Increase gravity for drawer
+		SetEntityGravity(attacker, GetConVarFloat(IncreasedGravity));
+		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：获得 %.1f 倍重力", attackerName, GetConVarFloat(IncreasedGravity));
+		return Plugin_Continue;
+	}
+
+	currentChance += chanceDecreaseHealth;
+	if (random <= currentChance)
+	{
+		// Decrease drawer's health randomly
+		int minDecrease	 = GetConVarInt(MinHealthDecrease);
+		int maxDecrease	 = GetConVarInt(MaxHealthDecrease);
+		int randomHealth = GetRandomInt(minDecrease, maxDecrease);
+		int health	 = GetClientHealth(attacker);
+		if (health > randomHealth)
+		{
+			SetEntityHealth(attacker, health - randomHealth);
+			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机减少%d血量", attackerName, randomHealth);
+		}
+		else
+		{
+			SetEntityHealth(attacker, 1);
+			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机减少%d血量，但由于血量过低，所以仅剩1血量", attackerName, randomHealth);
+		}
+		return Plugin_Continue;
+	}
+
+	// This shouldn't happen, but just in case
+	TankDraw_PrintToChat(0, "抽奖出现意外，没有中奖");
 	return Plugin_Continue;
 }
 
