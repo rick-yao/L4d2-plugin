@@ -239,7 +239,7 @@ Action LuckyDraw(int victim, int attacker)
 		StringMap data = new StringMap();
 		data.SetValue("client", attacker);
 		data.SetValue("resetAll", true);
-		CreateTimer(GetConVarFloat(MoonGravityOneShotTime), ResetGravity, data, TIMER_FLAG_NO_MAPCHANGE | TIMER_DATA_HNDL_CLOSE);
+		CreateTimer(GetConVarFloat(MoonGravityOneShotTime), ResetGravity, data);
 		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有人限时 %d 秒月球重力", attackerName, GetConVarInt(MoonGravityOneShotTime));
 		return Plugin_Continue;
 	}
@@ -252,7 +252,7 @@ Action LuckyDraw(int victim, int attacker)
 		StringMap data = new StringMap();
 		data.SetValue("client", attacker);
 		data.SetValue("resetAll", false);
-		CreateTimer(GetConVarFloat(MoonGravityOneShotTime), ResetGravity, data, TIMER_FLAG_NO_MAPCHANGE | TIMER_DATA_HNDL_CLOSE);
+		CreateTimer(GetConVarFloat(MoonGravityOneShotTime), ResetGravity, data);
 		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：限时 %d 秒月球重力体验卡", attackerName, GetConVarInt(MoonGravityOneShotTime));
 		return Plugin_Continue;
 	}
