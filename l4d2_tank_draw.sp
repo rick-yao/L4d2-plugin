@@ -148,22 +148,8 @@ Action LuckyDraw(int victim, int attacker)
 	TankDraw_PrintToChat(0, "幸运抽奖开始");
 
 	int random;
-	int totalChance	  = 0;
-	int chanceNoPrice = ChanceNoPrice.IntValue;
-
-	if (L4D2TankDrawDebugMode.IntValue == 1)
-	{
-		random = 101;
-	}
-	else {
-		random = GetRandomInt(1, 100);
-	}
-
-	if (random <= chanceNoPrice)
-	{
-		TankDraw_PrintToChat(0, "非常遗憾，此次砍死tank没有中奖");
-		return Plugin_Continue;
-	}
+	int totalChance		    = 0;
+	int chanceNoPrice	    = ChanceNoPrice.IntValue;
 
 	int chanceIncreaseHealth    = ChanceIncreaseHealth.IntValue;
 	int chanceInfiniteAmmo	    = ChanceInfiniteAmmo.IntValue;
@@ -175,11 +161,18 @@ Action LuckyDraw(int victim, int attacker)
 	int chanceIncreaseGravity   = ChanceIncreaseGravity.IntValue;
 	int chanceDecreaseHealth    = ChanceDecreaseHealth.IntValue;
 
-	totalChance		    = chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceMoonGravityAll + chanceMoonGravityOne + chanceAverageHealth + chanceMoonGravityToggle + chanceIncreaseGravity + chanceDecreaseHealth;
+	totalChance		    = chanceNoPrice + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceMoonGravityAll + chanceMoonGravityOne + chanceAverageHealth + chanceMoonGravityToggle + chanceIncreaseGravity + chanceDecreaseHealth;
 
 	random			    = GetRandomInt(1, totalChance);
 
 	int currentChance	    = 0;
+
+	currentChance += chanceNoPrice;
+	if (random <= currentChance)
+	{
+		TankDraw_PrintToChat(0, "非常遗憾，此次砍死tank没有中奖");
+		return Plugin_Continue;
+	}
 
 	currentChance += chanceIncreaseHealth;
 	if (random <= currentChance)
