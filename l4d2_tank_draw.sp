@@ -50,7 +50,7 @@ int IsMoonGravity = 0;
 public void OnPluginStart()
 {
 	MoonGravity		= CreateConVar("l4d2_tank_draw_moongravity", "0.1", "月球重力参数，正常值为1.0", false, false);
-	IncreasedGravity	= CreateConVar("l4d2_tank_draw_increased_gravity", "2.0", "抽奖增加重力的倍数，从1.0至3.0", PLUGIN_FLAG, true, 1.0, true, 3.0);
+	IncreasedGravity	= CreateConVar("l4d2_tank_draw_increased_gravity", "2.0", "抽奖增加重力的倍数，从1.0至8.0", PLUGIN_FLAG, true, 1.0, true, 8.0);
 	MoonGravityOneShotTime	= CreateConVar("l4d2_tank_draw_moongravityoneshottime", "180", "限时月球重力持续秒数", false, false);
 	L4D2TankDrawDebugMode	= CreateConVar("l4d2_tank_draw_debug_mode", "0", "是否开启调试模式，修改后会影响抽奖结果，总是同一个结果", false, false);
 	InfiniteMeeleRange	= CreateConVar("l4d2_tank_draw_infinite_melee_range", "700", "游戏默认为70，会自动恢复", false, false);
@@ -59,16 +59,16 @@ public void OnPluginStart()
 	MinHealthDecrease	= CreateConVar("l4d2_tank_draw_min_health_decrease", "200", "抽奖减少血量的最小值", false, false);
 	MaxHealthDecrease	= CreateConVar("l4d2_tank_draw_max_health_decrease", "500", "抽奖减少血量的最大值", false, false);
 
-	ChanceNoPrice		= CreateConVar("l4d2_tank_draw_chance_no_price", "20", "没有奖励的概率（百分比）", FCVAR_NONE, true, 0.0, true, 100.0);
-	ChanceIncreaseHealth	= CreateConVar("l4d2_tank_draw_chance_increase_health", "10", "增加生命值的概率（百分比）", FCVAR_NONE, true, 0.0, true, 100.0);
-	ChanceInfiniteAmmo	= CreateConVar("l4d2_tank_draw_chance_infinite_ammo", "10", "无限弹药的概率（百分比）", FCVAR_NONE, true, 0.0, true, 100.0);
-	ChanceInfiniteMelee	= CreateConVar("l4d2_tank_draw_chance_infinite_melee", "5", "无限近战范围的概率（百分比）", FCVAR_NONE, true, 0.0, true, 100.0);
-	ChanceMoonGravityAll	= CreateConVar("l4d2_tank_draw_chance_moon_gravity_all", "10", "所有人获得限时月球重力的概率（百分比）", FCVAR_NONE, true, 0.0, true, 100.0);
-	ChanceMoonGravityOne	= CreateConVar("l4d2_tank_draw_chance_moon_gravity_one", "10", "抽奖者获得限时月球重力的概率（百分比）", FCVAR_NONE, true, 0.0, true, 100.0);
-	ChanceAverageHealth	= CreateConVar("l4d2_tank_draw_chance_average_health", "10", "平均生命值的概率（百分比）", FCVAR_NONE, true, 0.0, true, 100.0);
-	ChanceMoonGravityToggle = CreateConVar("l4d2_tank_draw_chance_moon_gravity_toggle", "5", "切换月球重力的概率（百分比）", FCVAR_NONE, true, 0.0, true, 100.0);
-	ChanceIncreaseGravity	= CreateConVar("l4d2_tank_draw_chance_increase_gravity", "10", "增加重力的概率（百分比）", FCVAR_NONE, true, 0.0, true, 100.0);
-	ChanceDecreaseHealth	= CreateConVar("l4d2_tank_draw_chance_decrease_health", "10", "减少生命值的概率（百分比）", FCVAR_NONE, true, 0.0, true, 100.0);
+	ChanceNoPrice		= CreateConVar("l4d2_tank_draw_chance_no_price", "20", "没有奖励的概率（百分比）", FCVAR_NONE);
+	ChanceIncreaseHealth	= CreateConVar("l4d2_tank_draw_chance_increase_health", "10", "增加生命值的概率（百分比）", FCVAR_NONE);
+	ChanceInfiniteAmmo	= CreateConVar("l4d2_tank_draw_chance_infinite_ammo", "10", "无限弹药的概率（百分比）", FCVAR_NONE);
+	ChanceInfiniteMelee	= CreateConVar("l4d2_tank_draw_chance_infinite_melee", "5", "无限近战范围的概率（百分比）", FCVAR_NONE);
+	ChanceMoonGravityAll	= CreateConVar("l4d2_tank_draw_chance_moon_gravity_all", "10", "所有人获得限时月球重力的概率（百分比）", FCVAR_NONE);
+	ChanceMoonGravityOne	= CreateConVar("l4d2_tank_draw_chance_moon_gravity_one", "10", "抽奖者获得限时月球重力的概率（百分比）", FCVAR_NONE);
+	ChanceAverageHealth	= CreateConVar("l4d2_tank_draw_chance_average_health", "10", "平均生命值的概率（百分比）", FCVAR_NONE);
+	ChanceMoonGravityToggle = CreateConVar("l4d2_tank_draw_chance_moon_gravity_toggle", "5", "切换月球重力的概率（百分比）", FCVAR_NONE);
+	ChanceIncreaseGravity	= CreateConVar("l4d2_tank_draw_chance_increase_gravity", "10", "增加重力的概率（百分比）", FCVAR_NONE);
+	ChanceDecreaseHealth	= CreateConVar("l4d2_tank_draw_chance_decrease_health", "10", "减少生命值的概率（百分比）", FCVAR_NONE);
 
 	PrintToServer("[Tank Draw] Plugin loaded");
 	PrintToServer("[Tank Draw] debug mode: %d", L4D2TankDrawDebugMode.IntValue);
