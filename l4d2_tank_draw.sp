@@ -13,8 +13,9 @@
 ConVar g_hInfinitePrimaryAmmo;
 ConVar g_MeleeRange;
 ConVar MoonGravity;
-ConVar IsMoonGravity;
 ConVar MoonGravityOneShotTime;
+ConVar InfiniteMeeleRange;
+ConVar L4D2TankDrawDebugMode;
 
 public Plugin myinfo =
 {
@@ -26,14 +27,18 @@ public Plugin myinfo =
 
 }
 
-public void
-	OnPluginStart()
+int IsMoonGravity = 0;
+
+public void OnPluginStart()
 {
 	MoonGravity	       = CreateConVar("l4d2_tank_draw_moongravity", "0.1", "月球重力参数", false, false);
 	MoonGravityOneShotTime = CreateConVar("l4d2_tank_draw_moongravityoneshottime", "180", "限时月球重力秒数", false, false);
-	IsMoonGravity	       = CreateConVar("l4d2_tank_draw_ismoongravity", "0", "是否已经开启月球重力", PLUGIN_FLAG, true, 0.00, true, 1.00);
+	L4D2TankDrawDebugMode  = CreateConVar("l4d2_tank_draw_debug_mode", "0", "是否开启调试模式，修改后会影响抽奖结果，总是同一个结果", false, false);
+	InfiniteMeeleRange     = CreateConVar("l4d2_tank_draw_infinite_melee_range", "700", "默认为70，会自动恢复", false, false);
+
 	PrintToServer("[Tank Draw] Plugin loaded");
-	PrintToServer("[Tank Draw] maxclients: %d", MaxClients);
+	PrintToServer("[Tank Draw] debug mode: %d", L4D2TankDrawDebugMode.IntValue);
+
 	HookEvent("player_incapacitated", Event_PlayerDeath);
 	HookEvent("round_end", Event_Roundend);
 	HookEvent("finale_vehicle_leaving", Event_Roundend);
@@ -59,7 +64,7 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 	if (!StrEqual(weapon, "melee", false))
 	{
 		PrintToServer("[Tank Draw] No Melee weapon detected. Exiting event.");
-		PrintToChatAll("[Tank Draw] Tank不是被砍死的，停止抽奖");
+		TankDraw_PrintToChat(0, "Tank不是被砍死的，停止抽奖");
 		return Plugin_Continue;
 	}
 
@@ -78,12 +83,12 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 	char victimName[MAX_NAME_LENGTH], attackerName[MAX_NAME_LENGTH];
 	GetClientName(victim, victimName, sizeof(victimName));
 	GetClientName(attacker, attackerName, sizeof(attackerName));
-	PrintToChatAll("[Tank Draw] %s 被玩家 %s 用近战武器击杀，开始幸运抽奖", victimName, attackerName);
+	TankDraw_PrintToChat(0, "%s 被玩家 %s 用近战武器击杀，开始幸运抽奖", victimName, attackerName);
 
 	// Lucky draw logic
 	LuckyDraw(victim, attacker);
 
-	PrintToChatAll("[Tank Draw] 幸运抽奖结束");
+	TankDraw_PrintToChat(0, "幸运抽奖结束");
 
 	return Plugin_Continue;
 }
@@ -95,7 +100,8 @@ public Action Event_Roundend(Event event, const char[] name, bool dontBroadcast)
 	g_hInfinitePrimaryAmmo.IntValue = 0;
 	g_MeleeRange			= FindConVar("melee_range");
 	g_MeleeRange.IntValue		= 70;
-	SetConVarInt(IsMoonGravity, 0);
+
+	IsMoonGravity			= 0;
 	return Plugin_Continue;
 }
 
@@ -136,45 +142,61 @@ Action LuckyDraw(int victim, int attacker)
 	GetClientName(victim, victimName, sizeof(victimName));
 	GetClientName(attacker, attackerName, sizeof(attackerName));
 
-	PrintToChatAll("[Tank Draw] 幸运抽奖开始");
+	TankDraw_PrintToChat(0, "幸运抽奖开始");
 
-	int random = GetRandomInt(1, 100);
+	int random;
+
+	if (L4D2TankDrawDebugMode.IntValue == 1)
+	{
+		random = 101;
+	}
+	else {
+		random = GetRandomInt(1, 100);
+	}
 
 	switch (random)
 	{
+		// increate players health randomly
 		case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10:
 		{
 			int randomHealth = GetRandomInt(200, 500);
 			int health	 = GetClientHealth(attacker) + randomHealth;
 			SetEntityHealth(attacker, health);
-			PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：随机增加%d血量", attackerName, randomHealth);
+			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机增加 %d 血量", attackerName, randomHealth);
 		}
+		// infinite ammo
 		case 11, 12, 13, 14, 15, 16, 17, 18, 19, 20:
 		{
 			g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
 			if (g_hInfinitePrimaryAmmo.IntValue == 0)
 			{
 				g_hInfinitePrimaryAmmo.IntValue = 1;
-				PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：所有人无限子弹", attackerName);
+				TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有人无限子弹", attackerName);
 			}
 			else {
 				g_hInfinitePrimaryAmmo.IntValue = 0;
-				PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：关闭无限子弹", attackerName);
+				TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：关闭无限子弹", attackerName);
 			}
 		}
-		case 21, 22, 23, 24, 25:
+		// infinite melee range
+		case 21, 22, 23, 24, 25, 101:
 		{
 			g_MeleeRange = FindConVar("melee_range");
-			if (g_MeleeRange.IntValue == 70)
+			char default_range[16];
+			g_MeleeRange.GetDefault(default_range, sizeof(default_range));
+			int default_range_int = StringToInt(default_range);
+
+			if (g_MeleeRange.IntValue == default_range_int)
 			{
-				g_MeleeRange.IntValue = 700;
-				PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：无限近战", attackerName);
+				g_MeleeRange.IntValue = GetConVarInt(InfiniteMeeleRange);
+				TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：无限近战", attackerName);
 			}
 			else {
-				g_MeleeRange.IntValue = 70;
-				PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：关闭无限近战", attackerName);
+				g_MeleeRange.RestoreDefault();
+				TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：关闭无限近战", attackerName);
 			}
 		}
+		// limited time moon gravity for drawer
 		case 41, 42, 43, 44, 45, 46, 47, 48, 49, 50:
 		{
 			for (int i = 1; i <= MaxClients; i++)
@@ -185,15 +207,17 @@ Action LuckyDraw(int victim, int attacker)
 				}
 			}
 			CreateTimer(GetConVarFloat(MoonGravityOneShotTime), ResetALLGravity, attacker, TIMER_FLAG_NO_MAPCHANGE);
-			PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：所有人三分钟限时月球重力", attackerName);
+			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有人限时 %d 秒月球重力", attackerName, GetConVarInt(MoonGravityOneShotTime));
 		}
+		// limited time moon gravity for all
 		case 51, 52, 53, 54, 55, 56, 57, 58, 59, 60:
 		{
 			// set the attacker's gravity to 0.2 , several seconds later change it to 1, the time should only execute once
 			SetEntityGravity(attacker, GetConVarFloat(MoonGravity));
 			CreateTimer(GetConVarFloat(MoonGravityOneShotTime), ResetGravity, attacker, TIMER_FLAG_NO_MAPCHANGE);
-			PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：限时三分钟月球重力体验卡", attackerName);
+			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：限时 %d 秒月球重力体验卡", attackerName, GetConVarInt(MoonGravityOneShotTime));
 		}
+		// average all survivors' health
 		case 61, 62, 63, 64, 65, 66, 67, 68, 69, 70:
 		{
 			// sum all alive survivors' health, then set survivor's health to the average health
@@ -221,20 +245,20 @@ Action LuckyDraw(int victim, int attacker)
 					SetEntityHealth(i, averageHealth);
 				}
 			}
-			PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：所有人平均血量 %d", attackerName, averageHealth);
+			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有人平均血量 %d", attackerName, averageHealth);
 		}
-		// moon gravity
+		// moon gravity for one
 		case 71, 72, 73, 74, 75, 76, 77, 78, 79, 80:
 		{
 			SetEntityGravity(attacker, GetConVarFloat(MoonGravity));
-			PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：月球重力", attackerName);
+			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：月球重力", attackerName);
 		}
-		// all players get moon gravity
+		// all survivors toggle moon gravity
 		case 81, 82, 83, 84, 85, 86, 87, 88, 89, 90:
 		{
-			if (GetConVarInt(IsMoonGravity) == 0)
+			if (IsMoonGravity == 0)
 			{
-				SetConVarInt(IsMoonGravity, 1);
+				IsMoonGravity = 1;
 				for (int i = 1; i <= MaxClients; i++)
 				{
 					if (IsValidAliveClient(i))
@@ -242,10 +266,10 @@ Action LuckyDraw(int victim, int attacker)
 						SetEntityGravity(i, GetConVarFloat(MoonGravity));
 					}
 				}
-				PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：所有幸存者获得月球重力", attackerName);
+				TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有幸存者获得月球重力", attackerName);
 			}
 			else {
-				SetConVarInt(IsMoonGravity, 0);
+				IsMoonGravity = 0;
 				for (int i = 1; i <= MaxClients; i++)
 				{
 					if (IsValidAliveClient(i))
@@ -253,14 +277,16 @@ Action LuckyDraw(int victim, int attacker)
 						SetEntityGravity(i, 1.00);
 					}
 				}
-				PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：取消月球重力", attackerName);
+				TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：取消月球重力", attackerName);
 			}
 		}
+		// increase gravity for drawer
 		case 91, 92, 93, 94, 95:
 		{
 			SetEntityGravity(attacker, 2.0);
-			PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：获得2倍重力", attackerName);
+			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：获得2倍重力", attackerName);
 		}
+		// decrease drawer's health randomly
 		case 96, 97, 98, 99, 100:
 		{
 			int randomHealth = GetRandomInt(200, 500);
@@ -268,17 +294,17 @@ Action LuckyDraw(int victim, int attacker)
 			if (health > randomHealth)
 			{
 				SetEntityHealth(attacker, health - randomHealth);
-				PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：随机减少%d血量", attackerName, randomHealth);
+				TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机减少%d血量", attackerName, randomHealth);
 			}
 			else
 			{
 				SetEntityHealth(attacker, 1);
-				PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：随机减少%d血量，但由于血量过低，所以仅剩1血量", attackerName, randomHealth);
+				TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机减少%d血量，但由于血量过低，所以仅剩1血量", attackerName, randomHealth);
 			}
 		}
 		default:
 		{
-			PrintToChatAll("[Tank Draw] 非常遗憾，此次砍死tank没有中奖");
+			TankDraw_PrintToChat(0, "非常遗憾，此次砍死tank没有中奖");
 		}
 	}
 
@@ -290,7 +316,7 @@ Action ResetGravity(Handle timer, int client)
 	SetEntityGravity(client, 1.0);
 	char clientName[MAX_NAME_LENGTH];
 	GetClientName(client, clientName, sizeof(clientName));
-	PrintToChatAll("[Tank Draw] 玩家 %s 的重力恢复正常", clientName);
+	TankDraw_PrintToChat(0, "玩家 %s 的重力恢复正常", clientName);
 	KillTimer(timer);
 	return Plugin_Continue;
 }
@@ -304,7 +330,7 @@ Action ResetALLGravity(Handle timer, int client)
 			SetEntityGravity(i, 1.0);
 		}
 	}
-	PrintToChatAll("[Tank Draw] 所有玩家重力恢复正常");
+	TankDraw_PrintToChat(0, "所有玩家重力恢复正常");
 	KillTimer(timer);
 	return Plugin_Continue;
 }
@@ -385,4 +411,29 @@ bool IsValidClient(int client)
 bool IsValidAliveClient(int client)
 {
 	return (1 <= client <= MaxClients && IsClientInGame(client) && IsPlayerAlive(client) && (GetClientTeam(client) == 2));
+}
+
+/**
+ * Prints a formatted message with a [Tank Draw] prefix to chat.
+ *
+ * @param client    Client index to send the message to, or 0 for all players.
+ * @param format    Formatting rules.
+ * @param ...       Variable number of format parameters.
+ */
+stock void TankDraw_PrintToChat(int client = 0, const char[] format, any...)
+{
+	char buffer[254];
+	VFormat(buffer, sizeof(buffer), format, 3);
+
+	char message[254];
+	Format(message, sizeof(message), "\x04[Tank Draw]\x03 %s", buffer);
+
+	if (client == 0)
+	{
+		PrintToChatAll(message);
+	}
+	else if (IsClientInGame(client) && !IsFakeClient(client))
+	{
+		PrintToChat(client, message);
+	}
 }
