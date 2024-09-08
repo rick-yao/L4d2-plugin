@@ -135,19 +135,27 @@ Action LuckyDraw(int victim, int attacker)
 		case 11, 12, 13, 14, 15, 16, 17, 18, 19, 20:
 		{
 			g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
-			if (g_hInfinitePrimaryAmmo != null)
+			if (g_hInfinitePrimaryAmmo.IntValue == 0)
 			{
 				g_hInfinitePrimaryAmmo.IntValue = 1;
 				PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：所有人无限子弹", attackerName);
+			}
+			else {
+				g_hInfinitePrimaryAmmo.IntValue = 0;
+				PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：关闭无限子弹", attackerName);
 			}
 		}
 		case 21, 22, 23, 24, 25:
 		{
 			g_MeleeRange = FindConVar("melee_range");
-			if (g_MeleeRange != null)
+			if (g_MeleeRange.IntValue == 70)
 			{
 				g_MeleeRange.IntValue = 700;
 				PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：无限近战", attackerName);
+			}
+			else {
+				g_MeleeRange.IntValue = 70;
+				PrintToChatAll("[Tank Draw] 玩家 %s 的幸运抽奖结果为：关闭无限近战", attackerName);
 			}
 		}
 		case 41, 42, 43, 44, 45, 46, 47, 48, 49, 50:
