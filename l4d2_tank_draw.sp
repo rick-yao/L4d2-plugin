@@ -218,7 +218,10 @@ Action LuckyDraw(int victim, int attacker)
 					SetEntityGravity(i, GetConVarFloat(MoonGravity));
 				}
 			}
-			CreateTimer(GetConVarFloat(MoonGravityOneShotTime), ResetALLGravity, attacker, TIMER_FLAG_NO_MAPCHANGE);
+			StringMap data = new StringMap();
+			data.SetValue("client", attacker);
+			data.SetValue("resetAll", true);
+			CreateTimer(GetConVarFloat(MoonGravityOneShotTime), ResetGravity, data, TIMER_FLAG_NO_MAPCHANGE | TIMER_DATA_HNDL_CLOSE);
 			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有人限时 %d 秒月球重力", attackerName, GetConVarInt(MoonGravityOneShotTime));
 		}
 		// limited time moon gravity for all
@@ -226,7 +229,10 @@ Action LuckyDraw(int victim, int attacker)
 		{
 			// set the attacker's gravity , several seconds later change it to 1, the time should only execute once
 			SetEntityGravity(attacker, GetConVarFloat(MoonGravity));
-			CreateTimer(GetConVarFloat(MoonGravityOneShotTime), ResetGravity, attacker, TIMER_FLAG_NO_MAPCHANGE);
+			StringMap data = new StringMap();
+			data.SetValue("client", attacker);
+			data.SetValue("resetAll", false);
+			CreateTimer(GetConVarFloat(MoonGravityOneShotTime), ResetGravity, data, TIMER_FLAG_NO_MAPCHANGE | TIMER_DATA_HNDL_CLOSE);
 			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：限时 %d 秒月球重力体验卡", attackerName, GetConVarInt(MoonGravityOneShotTime));
 		}
 		// average all survivors' health
@@ -325,27 +331,36 @@ Action LuckyDraw(int victim, int attacker)
 	return Plugin_Continue;
 }
 
-Action ResetGravity(Handle timer, int client)
+Action ResetGravity(Handle timer, Handle hndl)
 {
-	SetEntityGravity(client, 1.0);
-	char clientName[MAX_NAME_LENGTH];
-	GetClientName(client, clientName, sizeof(clientName));
-	TankDraw_PrintToChat(0, "玩家 %s 的重力恢复正常", clientName);
-	KillTimer(timer);
-	return Plugin_Continue;
-}
+	StringMap data = view_as<StringMap>(hndl);
+	int	  client;
+	bool	  resetAll;
 
-Action ResetALLGravity(Handle timer, int client)
-{
-	for (int i = 1; i <= MaxClients; i++)
+	data.GetValue("client", client);
+	data.GetValue("resetAll", resetAll);
+
+	if (resetAll)
 	{
-		if (IsValidAliveClient(i))
+		for (int i = 1; i <= MaxClients; i++)
 		{
-			SetEntityGravity(i, 1.0);
+			if (IsValidAliveClient(i))
+			{
+				SetEntityGravity(i, 1.0);
+			}
+		}
+		TankDraw_PrintToChat(0, "所有玩家重力恢复正常");
+	}
+	else
+	{
+		if (IsValidAliveClient(client))
+		{
+			SetEntityGravity(client, 1.0);
+			TankDraw_PrintToChat(client, "你的重力恢复正常");
 		}
 	}
-	TankDraw_PrintToChat(0, "所有玩家重力恢复正常");
-	KillTimer(timer);
+
+	delete data;
 	return Plugin_Continue;
 }
 
