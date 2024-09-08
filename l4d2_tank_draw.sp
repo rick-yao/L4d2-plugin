@@ -18,6 +18,8 @@ ConVar InfiniteMeeleRange;
 ConVar L4D2TankDrawDebugMode;
 ConVar MinHealthIncrease;
 ConVar MaxHealthIncrease;
+ConVar MinHealthDecrease;
+ConVar MaxHealthDecrease;
 
 public Plugin myinfo =
 {
@@ -39,6 +41,8 @@ public void OnPluginStart()
 	InfiniteMeeleRange     = CreateConVar("l4d2_tank_draw_infinite_melee_range", "700", "默认为70，会自动恢复", false, false);
 	MinHealthIncrease      = CreateConVar("l4d2_tank_draw_min_health_increase", "200", "抽奖增加血量的最小值", false, false);
 	MaxHealthIncrease      = CreateConVar("l4d2_tank_draw_max_health_increase", "500", "抽奖增加血量的最大值", false, false);
+	MinHealthDecrease      = CreateConVar("l4d2_tank_draw_min_health_decrease", "200", "抽奖减少血量的最小值", false, false);
+	MaxHealthDecrease      = CreateConVar("l4d2_tank_draw_max_health_decrease", "500", "抽奖减少血量的最大值", false, false);
 
 	PrintToServer("[Tank Draw] Plugin loaded");
 	PrintToServer("[Tank Draw] debug mode: %d", L4D2TankDrawDebugMode.IntValue);
@@ -295,7 +299,9 @@ Action LuckyDraw(int victim, int attacker)
 		// decrease drawer's health randomly
 		case 96, 97, 98, 99, 100:
 		{
-			int randomHealth = GetRandomInt(200, 500);
+			int minDecrease	 = GetConVarInt(MinHealthDecrease);
+			int maxDecrease	 = GetConVarInt(MaxHealthDecrease);
+			int randomHealth = GetRandomInt(minDecrease, maxDecrease);
 			int health	 = GetClientHealth(attacker);
 			if (health > randomHealth)
 			{
