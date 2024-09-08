@@ -16,6 +16,8 @@ ConVar MoonGravity;
 ConVar MoonGravityOneShotTime;
 ConVar InfiniteMeeleRange;
 ConVar L4D2TankDrawDebugMode;
+ConVar MinHealthIncrease;
+ConVar MaxHealthIncrease;
 
 public Plugin myinfo =
 {
@@ -35,6 +37,8 @@ public void OnPluginStart()
 	MoonGravityOneShotTime = CreateConVar("l4d2_tank_draw_moongravityoneshottime", "180", "限时月球重力秒数", false, false);
 	L4D2TankDrawDebugMode  = CreateConVar("l4d2_tank_draw_debug_mode", "0", "是否开启调试模式，修改后会影响抽奖结果，总是同一个结果", false, false);
 	InfiniteMeeleRange     = CreateConVar("l4d2_tank_draw_infinite_melee_range", "700", "默认为70，会自动恢复", false, false);
+	MinHealthIncrease      = CreateConVar("l4d2_tank_draw_min_health_increase", "200", "抽奖增加血量的最小值", false, false);
+	MaxHealthIncrease      = CreateConVar("l4d2_tank_draw_max_health_increase", "500", "抽奖增加血量的最大值", false, false);
 
 	PrintToServer("[Tank Draw] Plugin loaded");
 	PrintToServer("[Tank Draw] debug mode: %d", L4D2TankDrawDebugMode.IntValue);
@@ -159,7 +163,9 @@ Action LuckyDraw(int victim, int attacker)
 		// increate players health randomly
 		case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10:
 		{
-			int randomHealth = GetRandomInt(200, 500);
+			int minHealth	 = GetConVarInt(MinHealthIncrease);
+			int maxHealth	 = GetConVarInt(MaxHealthIncrease);
+			int randomHealth = GetRandomInt(minHealth, maxHealth);
 			int health	 = GetClientHealth(attacker) + randomHealth;
 			SetEntityHealth(attacker, health);
 			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机增加 %d 血量", attackerName, randomHealth);
@@ -333,74 +339,6 @@ Action ResetALLGravity(Handle timer, int client)
 	TankDraw_PrintToChat(0, "所有玩家重力恢复正常");
 	KillTimer(timer);
 	return Plugin_Continue;
-}
-
-void CheatCommand(int client, char[] command, char[] arguments)
-{
-	if (!client) return;
-	int admindata = GetUserFlagBits(client);
-	SetUserFlagBits(client, ADMFLAG_ROOT);
-	int flags = GetCommandFlags(command);
-	SetCommandFlags(command, flags & ~FCVAR_CHEAT);
-	FakeClientCommand(client, "%s %s", command, arguments);
-	SetCommandFlags(command, flags);
-	SetUserFlagBits(client, admindata);
-}
-
-StringMap g_smItemNames;
-
-void	  InitializeItemNames()
-{
-	g_smItemNames = new StringMap();
-	g_smItemNames.SetString("Pistol", "pistol");
-	g_smItemNames.SetString("M16", "rifle");
-	g_smItemNames.SetString("AK47", "rifle_ak47");
-	g_smItemNames.SetString("SCAR", "rifle_desert");
-	g_smItemNames.SetString("Military", "sniper_military");
-	g_smItemNames.SetString("AWP", "sniper_awp");
-	g_smItemNames.SetString("Scout", "sniper_scout");
-	g_smItemNames.SetString("Launcher", "grenade_launcher");
-	g_smItemNames.SetString("M60", "rifle_m60");
-	g_smItemNames.SetString("Machete", "machete");
-	g_smItemNames.SetString("Katana", "katana");
-	g_smItemNames.SetString("Tonfa", "tonfa");
-	g_smItemNames.SetString("FireAxe", "fireaxe");
-	g_smItemNames.SetString("Knife", "knife");
-	g_smItemNames.SetString("Guitar", "guitar");
-	g_smItemNames.SetString("Pan", "melee");
-	g_smItemNames.SetString("CricketBat", "cricket_bat");
-	g_smItemNames.SetString("ChainSaw", "chainsaw");
-	g_smItemNames.SetString("Molotov", "molotov");
-	g_smItemNames.SetString("HealthKit", "first_aid_kit");
-	g_smItemNames.SetString("Defib", "defibrillator");
-	g_smItemNames.SetString("Adren", "adrenaline");
-	g_smItemNames.SetString("PitchFork", "pitchfork");
-	g_smItemNames.SetString("CrowBar", "crowbar");
-	g_smItemNames.SetString("Shovel", "shovel");
-}
-
-char[] GetRandomItem()
-{
-	char		  itemKey[32];
-	char		  itemValue[64];
-	ArrayList	  keys	   = new ArrayList(ByteCountToCells(32));
-
-	StringMapSnapshot snapshot = g_smItemNames.Snapshot();
-	int		  size	   = snapshot.Length;
-	for (int i = 0; i < size; i++)
-	{
-		snapshot.GetKey(i, itemKey, sizeof(itemKey));
-		keys.PushString(itemKey);
-	}
-
-	int randomIndex = GetRandomInt(0, size - 1);
-	keys.GetString(randomIndex, itemKey, sizeof(itemKey));
-	g_smItemNames.GetString(itemKey, itemValue, sizeof(itemValue));
-
-	delete snapshot;
-	delete keys;
-
-	return itemValue;
 }
 
 bool IsValidClient(int client)
