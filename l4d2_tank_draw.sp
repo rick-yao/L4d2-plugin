@@ -20,6 +20,7 @@ ConVar MinHealthIncrease;
 ConVar MaxHealthIncrease;
 ConVar MinHealthDecrease;
 ConVar MaxHealthDecrease;
+ConVar IncreasedGravity;
 
 public Plugin myinfo =
 {
@@ -35,10 +36,11 @@ int IsMoonGravity = 0;
 
 public void OnPluginStart()
 {
-	MoonGravity	       = CreateConVar("l4d2_tank_draw_moongravity", "0.1", "月球重力参数", false, false);
+	MoonGravity	       = CreateConVar("l4d2_tank_draw_moongravity", "0.1", "月球重力参数，正常值为1.0", false, false);
+	IncreasedGravity       = CreateConVar("l4d2_tank_draw_increased_gravity", "2.0", "抽奖增加重力的倍数，从1.0至3.0", PLUGIN_FLAG, true, 1.0, true, 3.0);
 	MoonGravityOneShotTime = CreateConVar("l4d2_tank_draw_moongravityoneshottime", "180", "限时月球重力秒数", false, false);
 	L4D2TankDrawDebugMode  = CreateConVar("l4d2_tank_draw_debug_mode", "0", "是否开启调试模式，修改后会影响抽奖结果，总是同一个结果", false, false);
-	InfiniteMeeleRange     = CreateConVar("l4d2_tank_draw_infinite_melee_range", "700", "默认为70，会自动恢复", false, false);
+	InfiniteMeeleRange     = CreateConVar("l4d2_tank_draw_infinite_melee_range", "700", "游戏默认为70，会自动恢复", false, false);
 	MinHealthIncrease      = CreateConVar("l4d2_tank_draw_min_health_increase", "200", "抽奖增加血量的最小值", false, false);
 	MaxHealthIncrease      = CreateConVar("l4d2_tank_draw_max_health_increase", "500", "抽奖增加血量的最大值", false, false);
 	MinHealthDecrease      = CreateConVar("l4d2_tank_draw_min_health_decrease", "200", "抽奖减少血量的最小值", false, false);
@@ -222,7 +224,7 @@ Action LuckyDraw(int victim, int attacker)
 		// limited time moon gravity for all
 		case 51, 52, 53, 54, 55, 56, 57, 58, 59, 60:
 		{
-			// set the attacker's gravity to 0.2 , several seconds later change it to 1, the time should only execute once
+			// set the attacker's gravity , several seconds later change it to 1, the time should only execute once
 			SetEntityGravity(attacker, GetConVarFloat(MoonGravity));
 			CreateTimer(GetConVarFloat(MoonGravityOneShotTime), ResetGravity, attacker, TIMER_FLAG_NO_MAPCHANGE);
 			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：限时 %d 秒月球重力体验卡", attackerName, GetConVarInt(MoonGravityOneShotTime));
@@ -293,8 +295,8 @@ Action LuckyDraw(int victim, int attacker)
 		// increase gravity for drawer
 		case 91, 92, 93, 94, 95:
 		{
-			SetEntityGravity(attacker, 2.0);
-			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：获得2倍重力", attackerName);
+			SetEntityGravity(attacker, GetConVarFloat(IncreasedGravity));
+			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：获得 %.1f 倍重力", attackerName, GetConVarFloat(IncreasedGravity));
 		}
 		// decrease drawer's health randomly
 		case 96, 97, 98, 99, 100:
