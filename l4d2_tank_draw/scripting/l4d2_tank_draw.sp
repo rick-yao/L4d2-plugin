@@ -356,6 +356,9 @@ Action LuckyDraw(int victim, int attacker)
 
 Action DecreaseHealth(Handle timer, int attacker)
 {
+	char attackerName[MAX_NAME_LENGTH];
+	GetClientName(attacker, attackerName, sizeof(attackerName));
+
 	int minDecrease	 = GetConVarInt(MinHealthDecrease);
 	int maxDecrease	 = GetConVarInt(MaxHealthDecrease);
 	int randomHealth = GetRandomInt(minDecrease, maxDecrease);
