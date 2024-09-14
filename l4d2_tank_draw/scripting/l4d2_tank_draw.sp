@@ -331,27 +331,33 @@ Action LuckyDraw(int victim, int attacker)
 	currentChance += chanceDecreaseHealth;
 	if (random <= currentChance)
 	{
-		// Decrease drawer's health randomly
-		int minDecrease	 = GetConVarInt(MinHealthDecrease);
-		int maxDecrease	 = GetConVarInt(MaxHealthDecrease);
-		int randomHealth = GetRandomInt(minDecrease, maxDecrease);
-		int health	 = GetClientHealth(attacker);
-		if (health > randomHealth)
-		{
-			SetEntityHealth(attacker, health - randomHealth);
-			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机减少%d血量", attackerName, randomHealth);
-		}
-		else
-		{
-			SetEntityHealth(attacker, 1);
-			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机减少%d血量，但由于血量过低，所以仅剩1血量", attackerName, randomHealth);
-		}
+		// Decrease drawer's health randomly, the timer is to use avoid the conflict with other plugins
+		// which will increase health after killing a tank.
+		CreateTimer(1.0, DecreaseHealth, attacker);
 		return Plugin_Continue;
 	}
 
 	// This shouldn't happen, but just in case
 	TankDraw_PrintToChat(0, "抽奖出现意外，没有中奖");
 	return Plugin_Continue;
+}
+
+Action DecreaseHealth(Handle timer, int attacker)
+{
+	int minDecrease	 = GetConVarInt(MinHealthDecrease);
+	int maxDecrease	 = GetConVarInt(MaxHealthDecrease);
+	int randomHealth = GetRandomInt(minDecrease, maxDecrease);
+	int health	 = GetClientHealth(attacker);
+	if (health > randomHealth)
+	{
+		SetEntityHealth(attacker, health - randomHealth);
+		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机减少%d血量", attackerName, randomHealth);
+	}
+	else
+	{
+		SetEntityHealth(attacker, 1);
+		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机减少%d血量，但由于血量过低，所以仅剩1血量", attackerName, randomHealth);
+	}
 }
 
 Action ResetGravity(Handle timer, Handle hndl)
