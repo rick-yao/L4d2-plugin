@@ -14,7 +14,7 @@ ConVar g_hInfinitePrimaryAmmo;
 ConVar g_MeleeRange;
 
 // Custom ConVars for the plugin
-ConVar EnableTankDraw;
+ConVar TankDrawEnable;
 ConVar ChanceNoPrice;
 ConVar ChanceIncreaseHealth;
 ConVar ChanceInfiniteAmmo;
@@ -52,7 +52,7 @@ int IsMoonGravity = 0;
 
 public void OnPluginStart()
 {
-	EnableTankDraw		 = CreateConVar("l4d2_tank_draw_enable", "1", "是否启用插件", PLUGIN_FLAG, true, 0.0, true, 1.0);
+	TankDrawEnable		 = CreateConVar("l4d2_tank_draw_enable", "1", "Tank抽奖插件开/关 [1=开|0=关].", PLUGIN_FLAG, true, 0.0, true, 1.0);
 	MoonGravity		 = CreateConVar("l4d2_tank_draw_moongravity", "0.1", "月球重力参数，正常值为1.0", false, false);
 	IncreasedGravity	 = CreateConVar("l4d2_tank_draw_increased_gravity", "2.0", "抽奖增加重力的倍数，从1.0至8.0", PLUGIN_FLAG, true, 1.0, true, 8.0);
 	MoonGravityOneShotTime	 = CreateConVar("l4d2_tank_draw_moongravityoneshottime", "180", "限时月球重力持续秒数", false, false);
@@ -79,12 +79,6 @@ public void OnPluginStart()
 	AutoExecConfig(true, "l4d2_tank_draw");
 
 	PrintToServer("[Tank Draw] Plugin loaded");
-
-	if (EnableTankDraw.IntValue == 0)
-	{
-		PrintToServer("[Tank Draw] Not Activated.");
-		return;
-	}
 	PrintToServer("[Tank Draw] debug mode: %d", L4D2TankDrawDebugMode.IntValue);
 
 	HookEvent("player_incapacitated", Event_PlayerIncapacitated);
@@ -97,6 +91,7 @@ public void OnPluginStart()
 
 public Action Event_PlayerIncapacitated(Event event, const char[] name, bool dontBroadcast)
 {
+	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
 	// Check if the victim is a Tank
 	int victim = GetClientOfUserId(event.GetInt("userid"));
 	if (!IsTank(victim))
@@ -143,6 +138,7 @@ public Action Event_PlayerIncapacitated(Event event, const char[] name, bool don
 
 public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast)
 {
+	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
 	// reset value when player died
 	int victim = GetClientOfUserId(event.GetInt("userid"));
 	PrintToServer("player dead... %d", victim);
@@ -154,6 +150,7 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 
 public Action Event_Roundend(Event event, const char[] name, bool dontBroadcast)
 {
+	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
 	// reset all changed server value
 	g_hInfinitePrimaryAmmo		= FindConVar("sv_infinite_ammo");
 	g_hInfinitePrimaryAmmo.IntValue = 0;
