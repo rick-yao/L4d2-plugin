@@ -73,7 +73,8 @@ public void OnPluginStart()
 	PrintToServer("[Tank Draw] Plugin loaded");
 	PrintToServer("[Tank Draw] debug mode: %d", L4D2TankDrawDebugMode.IntValue);
 
-	HookEvent("player_incapacitated", Event_PlayerDeath);
+	HookEvent("player_incapacitated", Event_PlayerIncapacitated);
+	HookEvent("player_death", Event_PlayerDeath);
 	HookEvent("round_end", Event_Roundend);
 	HookEvent("finale_vehicle_leaving", Event_Roundend);
 	HookEvent("mission_lost", Event_Roundend);
@@ -82,7 +83,7 @@ public void OnPluginStart()
 	AutoExecConfig(true, "l4d2_tank_draw");
 }
 
-public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast)
+public Action Event_PlayerIncapacitated(Event event, const char[] name, bool dontBroadcast)
 {
 	// Check if the victim is a Tank
 	int victim = GetClientOfUserId(event.GetInt("userid"));
@@ -125,6 +126,17 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 	TankDraw_PrintToChat(0, "幸运抽奖结束");
 
 	return Plugin_Continue;
+}
+
+public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast)
+{
+	// reset value when player died
+	int	  victim = GetClientOfUserId(GetEventInt(event, "userid"));
+
+	StringMap data	 = new StringMap();
+	data.SetValue("client", victim);
+	data.SetValue("resetAll", false);
+	ResetGravity(1.0, data);
 }
 
 public Action Event_Roundend(Event event, const char[] name, bool dontBroadcast)
@@ -395,7 +407,10 @@ Action ResetGravity(Handle timer, Handle hndl)
 
 bool IsValidClient(int client)
 {
-	return (1 <= client <= MaxClients && IsClientInGame(client));
+	if (client < 1 || client > MaxClients) return false;
+	if (!IsClientConnected(client)) return false;
+	if (!IsClientInGame(client)) return false;
+	return true;
 }
 
 bool IsValidAliveClient(int client)
