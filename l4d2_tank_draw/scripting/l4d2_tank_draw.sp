@@ -196,7 +196,7 @@ Action LuckyDraw(int victim, int attacker)
 	currentChance += chanceKillSingleSurvivor;
 	if (random <= currentChance)
 	{
-		ServerCommand("kill %s", attackerName);
+		ForcePlayerSuicide(attacker);
 		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：立刻死亡", attackerName);
 		return Plugin_Continue;
 	}
@@ -208,9 +208,7 @@ Action LuckyDraw(int victim, int attacker)
 		{
 			if (IsValidAliveClient(i))
 			{
-				char name[MAX_NAME_LENGTH];
-				GetClientName(i, name, sizeof(name));
-				ServerCommand("kill %s", name);
+				ForcePlayerSuicide(i);
 			}
 		}
 		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：团灭", attackerName);
