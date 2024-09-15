@@ -131,12 +131,11 @@ public Action Event_PlayerIncapacitated(Event event, const char[] name, bool don
 public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast)
 {
 	// reset value when player died
-	int	  victim = GetClientOfUserId(GetEventInt(event, "userid"));
+	int victim = GetClientOfUserId(event.GetInt("userid"));
 
-	StringMap data	 = new StringMap();
-	data.SetValue("client", victim);
-	data.SetValue("resetAll", false);
-	ResetGravity(1.0, data);
+	SetEntityGravity(victim, 1.0);
+
+	return Plugin_Continue;
 }
 
 public Action Event_Roundend(Event event, const char[] name, bool dontBroadcast)
@@ -345,7 +344,7 @@ Action LuckyDraw(int victim, int attacker)
 	{
 		// Decrease drawer's health randomly, the timer is to use avoid the conflict with other plugins
 		// which will increase health after killing a tank.
-		CreateTimer(1.0, DecreaseHealth, attacker);
+		CreateTimer(2.0, DecreaseHealth, attacker);
 		return Plugin_Continue;
 	}
 
@@ -373,6 +372,8 @@ Action DecreaseHealth(Handle timer, int attacker)
 		SetEntityHealth(attacker, 1);
 		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机减少%d血量，但由于血量过低，所以仅剩1血量", attackerName, randomHealth);
 	}
+
+	return Plugin_Continue;
 }
 
 Action ResetGravity(Handle timer, Handle hndl)
