@@ -14,6 +14,7 @@ ConVar g_hInfinitePrimaryAmmo;
 ConVar g_MeleeRange;
 
 // Custom ConVars for the plugin
+ConVar EnableTankDraw;
 ConVar ChanceNoPrice;
 ConVar ChanceIncreaseHealth;
 ConVar ChanceInfiniteAmmo;
@@ -51,6 +52,7 @@ int IsMoonGravity = 0;
 
 public void OnPluginStart()
 {
+	EnableTankDraw		 = CreateConVar("l4d2_tank_draw_enable", "1", "是否启用插件", PLUGIN_FLAG, true, 0, true, 1);
 	MoonGravity		 = CreateConVar("l4d2_tank_draw_moongravity", "0.1", "月球重力参数，正常值为1.0", false, false);
 	IncreasedGravity	 = CreateConVar("l4d2_tank_draw_increased_gravity", "2.0", "抽奖增加重力的倍数，从1.0至8.0", PLUGIN_FLAG, true, 1.0, true, 8.0);
 	MoonGravityOneShotTime	 = CreateConVar("l4d2_tank_draw_moongravityoneshottime", "180", "限时月球重力持续秒数", false, false);
@@ -74,7 +76,15 @@ public void OnPluginStart()
 	ChanceKillAllSurvivor	 = CreateConVar("l4d2_tank_draw_chance_kill_all_survivor", "10", "团灭概率", FCVAR_NONE);
 	ChanceKillSingleSurvivor = CreateConVar("l4d2_tank_draw_chance_kill_single_survivor", "10", "单人死亡概率", FCVAR_NONE);
 
+	AutoExecConfig(true, "l4d2_tank_draw");
+
 	PrintToServer("[Tank Draw] Plugin loaded");
+
+	if (EnableTankDraw.IntValue == 0)
+	{
+		PrintToServer("[Tank Draw] Not Activated.");
+		return;
+	}
 	PrintToServer("[Tank Draw] debug mode: %d", L4D2TankDrawDebugMode.IntValue);
 
 	HookEvent("player_incapacitated", Event_PlayerIncapacitated);
@@ -83,8 +93,6 @@ public void OnPluginStart()
 	HookEvent("finale_vehicle_leaving", Event_Roundend);
 	HookEvent("mission_lost", Event_Roundend);
 	HookEvent("map_transition", Event_Roundend);
-
-	AutoExecConfig(true, "l4d2_tank_draw");
 }
 
 public Action Event_PlayerIncapacitated(Event event, const char[] name, bool dontBroadcast)
