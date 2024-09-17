@@ -163,10 +163,14 @@ public Action Event_Roundend(Event event, const char[] name, bool dontBroadcast)
 {
 	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
 	// reset all changed server value
-	g_hInfinitePrimaryAmmo		= FindConVar("sv_infinite_ammo");
-	g_hInfinitePrimaryAmmo.IntValue = 0;
-	g_MeleeRange			= FindConVar("melee_range");
-	g_MeleeRange.IntValue		= 70;
+	g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
+	g_hInfinitePrimaryAmmo.RestoreDefault();
+
+	g_MeleeRange = FindConVar("melee_range");
+	g_MeleeRange.RestoreDefault();
+
+	g_WorldGravity = FindConVar("sv_gravity");
+	g_WorldGravity.RestoreDefault();
 
 	return Plugin_Continue;
 }
