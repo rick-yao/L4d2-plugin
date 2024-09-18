@@ -94,10 +94,13 @@ public Plugin myinfo =
 
 	HookEvent("player_incapacitated", Event_PlayerIncapacitated);
 	HookEvent("player_death", Event_PlayerDeath);
-	HookEvent("round_end", Event_Roundend);
-	HookEvent("finale_vehicle_leaving", Event_Roundend);
-	HookEvent("mission_lost", Event_Roundend);
-	HookEvent("map_transition", Event_Roundend);
+
+	HookEvent("round_end", Event_Roundend, EventHookMode_Pre);
+	HookEvent("finale_vehicle_leaving", Event_Roundend, EventHookMode_Pre);
+	HookEvent("mission_lost", Event_Roundend, EventHookMode_Pre);
+	HookEvent("map_transition", Event_Roundend, EventHookMode_Pre);
+	HookEvent("finale_win", Event_Roundend, EventHookMode_Pre);
+	HookEvent("mission_lost", Event_Roundend, EventHookMode_Pre);
 }
 
 public Action Event_PlayerIncapacitated(Event event, const char[] name, bool dontBroadcast)
