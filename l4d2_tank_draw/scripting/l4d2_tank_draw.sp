@@ -58,7 +58,7 @@ public Plugin myinfo =
 
 	// 单人限时重力
 	SingleMoonGravity		  = CreateConVar("l4d2_tank_draw_single_moon_gravity", "0.1", "单人月球重力参数，人物正常重力值为1", false, false);
-	LimitedTimeWorldMoonGravityOne	  = CreateConVar("l4d2_tank_draw_limited_time_world_moon_gravity_one", "180", "单人限时世界重力改为月球重力持续秒数", false, false);
+	LimitedTimeWorldMoonGravityOne	  = CreateConVar("l4d2_tank_draw_limited_time_world_moon_gravity_one", "180", "单人限时月球重力持续秒数", false, false);
 	ChanceMoonGravityOneLimitedTime	  = CreateConVar("l4d2_tank_draw_chance_moon_gravity_one_limited_time", "10", "抽奖者单人获得限时月球重力的概率", FCVAR_NONE);
 	// 世界重力
 	WorldMoonGravity		  = CreateConVar("l4d2_tank_draw_world_moon_gravity", "80", "月球重力时世界重力参数，世界重力正常值为800", false, false);
@@ -243,7 +243,7 @@ Action LuckyDraw(int victim, int attacker)
 		data.SetValue("client", attacker);
 		data.SetValue("resetAll", false);
 		CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityOne), ResetGravity, data);
-		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：限时 %d 秒月球重力体验卡", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityOne));
+		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：单人限时 %d 秒月球重力体验卡", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityOne));
 		return Plugin_Continue;
 	}
 
