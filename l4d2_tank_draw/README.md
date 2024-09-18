@@ -12,27 +12,22 @@ The plugin includes the following possible outcomes:
 2. Increase health randomly
 3. Toggle infinite ammo for all players
 4. Toggle infinite melee range for all players
-5. Limited-time moon gravity for all players
+5. Limited-time world gravity to moon gravity
 6. Limited-time moon gravity for the lucky player
 7. Average health for all survivors
-8. Toggle moon gravity for all survivors
+8. Toggle world gravity to moon gravity
 9. Increase gravity for the lucky player
 10. Decrease health randomly for the lucky player
+11. Kill the lucky player
+12. Kill all players
 
 ## Configuration
 
-The plugin is highly configurable. You can adjust the following settings:
-
-- Chances for each prize outcome
-- Moon gravity
-- Duration of limited-time effects
-- Minimum and maximum health increases/decreases
-- Increased gravity multiplier
-- Infinite melee range value
+The plugin is highly configurable.
 
 All these settings can be modified through ConVars, which can be found and adjusted in the plugin's configuration file.
 
-To customize the plugin, look for the `l4d2_tank_draw.cfg` file in your SourceMod `configs/` directory after first running the plugin on your server.
+To customize the plugin, look for the `l4d2_tank_draw.cfg` file in your SourceMod `addons/sourcemod/configs/` directory after first running the plugin on your server.
 
 ## Installation
 
