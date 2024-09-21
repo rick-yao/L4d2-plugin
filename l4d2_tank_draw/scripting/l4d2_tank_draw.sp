@@ -4,7 +4,7 @@
 #include <sourcemod>
 #include <sdktools>
 
-#define PLUGIN_VERSION "1.0"
+#define PLUGIN_VERSION "1.1"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
 #define COMMAND_FILTER COMMAND_FILTER_CONNECTED | COMMAND_FILTER_NO_BOTS
 
@@ -29,6 +29,7 @@ ConVar ChanceIncreaseGravity;
 ConVar ChanceDecreaseHealth;
 ConVar ChanceKillAllSurvivor;
 ConVar ChanceKillSingleSurvivor;
+ConVar ChanceClearAllSurvivorHealth;
 
 ConVar SingleMoonGravity;
 ConVar LimitedTimeWorldMoonGravityTimer;
@@ -86,6 +87,7 @@ public Plugin myinfo =
 	ChanceAverageHealth		  = CreateConVar("l4d2_tank_draw_chance_average_health", "10", "平均生命值的概率", FCVAR_NONE);
 	ChanceKillAllSurvivor		  = CreateConVar("l4d2_tank_draw_chance_kill_all_survivor", "10", "团灭概率", FCVAR_NONE);
 	ChanceKillSingleSurvivor	  = CreateConVar("l4d2_tank_draw_chance_kill_single_survivor", "10", "单人死亡概率", FCVAR_NONE);
+	ChanceClearAllSurvivorHealth	  = CreateConVar("l4d2_tank_draw_chance_clear_all_survivor_health", "10", "清空所有人血量概率", FCVAR_NONE);
 
 	AutoExecConfig(true, "l4d2_tank_draw");
 
@@ -192,8 +194,9 @@ Action LuckyDraw(int victim, int attacker)
 	int chanceMoonGravityOneLimitedTime   = ChanceMoonGravityOneLimitedTime.IntValue;
 	int chanceWorldMoonGravityToggle      = ChanceWorldMoonGravityToggle.IntValue;
 	int chanceIncreaseGravity	      = ChanceIncreaseGravity.IntValue;
+	int chanceClearAllSurvivorHealth      = ChanceClearAllSurvivorHealth.IntValue;
 
-	int totalChance			      = chanceNoPrice + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
+	int totalChance			      = chanceNoPrice + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
 	totalChance += chanceLimitedTimeWorldMoonGravity + chanceMoonGravityOneLimitedTime + chanceWorldMoonGravityToggle + chanceIncreaseGravity;
 
 	if (totalChance == 0)
@@ -357,7 +360,7 @@ Action LuckyDraw(int victim, int attacker)
 	{
 		// Average all survivors' health
 		int health = 0;
-		for (int i = 0; i <= MaxClients; i++)
+		for (int i = 1; i <= MaxClients; i++)
 		{
 			if (IsValidAliveClient(i))
 			{
@@ -365,7 +368,7 @@ Action LuckyDraw(int victim, int attacker)
 			}
 		}
 		int numOfAliveClient = 0;
-		for (int i = 0; i <= MaxClients; i++)
+		for (int i = 1; i <= MaxClients; i++)
 		{
 			if (IsValidAliveClient(i))
 			{
@@ -373,7 +376,7 @@ Action LuckyDraw(int victim, int attacker)
 			}
 		}
 		int averageHealth = RoundToNearest(float(health) / float(numOfAliveClient));
-		for (int i = 0; i <= MaxClients; i++)
+		for (int i = 1; i <= MaxClients; i++)
 		{
 			if (IsValidAliveClient(i))
 			{
@@ -390,6 +393,23 @@ Action LuckyDraw(int victim, int attacker)
 		// Decrease drawer's health randomly, the timer is to use avoid the conflict with other plugins
 		// which will increase health after killing a tank.
 		CreateTimer(2.0, DecreaseHealth, attacker);
+		return Plugin_Continue;
+	}
+
+	currentChance += chanceClearAllSurvivorHealth;
+	if (random <= currentChance)
+	{
+		for (int i = 1; i <= MaxClients; i++)
+		{
+			if (IsValidAliveClient(i))
+			{
+				if (!IsPlayerIncapacitatedAtAll(i))
+				{
+					SetEntityHealth(i, 1);
+				}
+			}
+		}
+		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有人清空血量", attackerName);
 		return Plugin_Continue;
 	}
 
@@ -530,4 +550,19 @@ Action ResetWorldGravity(Handle timer, int initValue)
 	g_WorldGravity.RestoreDefault();
 
 	return Plugin_Continue;
+}
+
+bool IsPlayerIncapacitated(int client)
+{
+	return (GetEntProp(client, Prop_Send, "m_isIncapacitated", 1) == 1);
+}
+
+bool IsPlayerIncapacitatedAtAll(int client)
+{
+	return (IsPlayerIncapacitated(client) || IsHangingFromLedge(client));
+}
+
+bool IsHangingFromLedge(int client)
+{
+	return (GetEntProp(client, Prop_Send, "m_isHangingFromLedge", 1) == 1 || GetEntProp(client, Prop_Send, "m_isFallingFromLedge", 1) == 1);
 }
