@@ -100,7 +100,6 @@ public Plugin myinfo =
 	HookEvent("mission_lost", Event_Roundend, EventHookMode_Pre);
 	HookEvent("map_transition", Event_Roundend, EventHookMode_Pre);
 	HookEvent("finale_win", Event_Roundend, EventHookMode_Pre);
-	HookEvent("mission_lost", Event_Roundend, EventHookMode_Pre);
 }
 
 public Action Event_PlayerIncapacitated(Event event, const char[] name, bool dontBroadcast)
