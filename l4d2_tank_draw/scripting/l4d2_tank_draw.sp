@@ -48,10 +48,9 @@ public Plugin myinfo =
 	name	    = "L4D2 Tank Draw",
 	description = "Face your destiny after killing a tank",
 	version	    = PLUGIN_VERSION,
+};
 
-
-} public void
-	OnPluginStart()
+public void OnPluginStart()
 {
 	TankDrawEnable			  = CreateConVar("l4d2_tank_draw_enable", "1", "Tank抽奖插件开/关 [1=开|0=关].", PLUGIN_FLAG, true, 0.0, true, 1.0);
 	L4D2TankDrawDebugMode		  = CreateConVar("l4d2_tank_draw_debug_mode", "0", "是否开启调试模式，修改后tank被击杀即可抽奖", false, false);
@@ -175,6 +174,20 @@ public Action Event_Roundend(Event event, const char[] name, bool dontBroadcast)
 	g_WorldGravity.RestoreDefault();
 
 	return Plugin_Continue;
+}
+
+public void OnMapEnd()
+{
+	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
+	// reset all changed server value
+	g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
+	g_hInfinitePrimaryAmmo.RestoreDefault();
+
+	g_MeleeRange = FindConVar("melee_range");
+	g_MeleeRange.RestoreDefault();
+
+	g_WorldGravity = FindConVar("sv_gravity");
+	g_WorldGravity.RestoreDefault();
 }
 
 Action LuckyDraw(int victim, int attacker)
