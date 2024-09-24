@@ -180,7 +180,7 @@ public Action Event_Roundend(Event event, const char[] name, bool dontBroadcast)
 
 public void OnMapEnd()
 {
-	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
+	if (TankDrawEnable.IntValue == 0) { return; }
 	// reset all changed server value
 	g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
 	g_hInfinitePrimaryAmmo.RestoreDefault();
