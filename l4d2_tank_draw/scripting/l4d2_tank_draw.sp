@@ -80,9 +80,9 @@ public void OnPluginStart()
 	MinHealthIncrease		  = CreateConVar("l4d2_tank_draw_min_health_increase", "200", "抽奖增加血量的最小值", false, false);
 	MaxHealthIncrease		  = CreateConVar("l4d2_tank_draw_max_health_increase", "500", "抽奖增加血量的最大值", false, false);
 
-	ChanceDecreaseHealth		  = CreateConVar("l4d2_tank_draw_chance_decrease_health", "10", "减少生命值的概率", FCVAR_NONE);
-	MinHealthDecrease		  = CreateConVar("l4d2_tank_draw_min_health_decrease", "200", "抽奖减少血量的最小值", false, false);
-	MaxHealthDecrease		  = CreateConVar("l4d2_tank_draw_max_health_decrease", "500", "抽奖减少血量的最大值", false, false);
+	ChanceDecreaseHealth		  = CreateConVar("l4d2_tank_draw_chance_decrease_health", "10", "抽奖受到伤害的概率", FCVAR_NONE);
+	MinHealthDecrease		  = CreateConVar("l4d2_tank_draw_min_health_decrease", "200", "抽奖受到伤害的最小值", false, false);
+	MaxHealthDecrease		  = CreateConVar("l4d2_tank_draw_max_health_decrease", "500", "抽奖受到伤害的最大值", false, false);
 
 	ChanceNoPrice			  = CreateConVar("l4d2_tank_draw_chance_no_price", "20", "没有奖励的概率", FCVAR_NONE);
 	ChanceInfiniteAmmo		  = CreateConVar("l4d2_tank_draw_chance_infinite_ammo", "10", "无限弹药的概率", FCVAR_NONE);
@@ -191,9 +191,9 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 	g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
 	if (g_hInfinitePrimaryAmmo.IntValue == 1)
 	{
-		int random		      = GetRandomInt(1, 100);
-		int chanceKillSurvivorMolotov = ChanceKillSurvivorMolotov.IntValue;
-		if (random <= chanceKillSurvivorMolotov)
+		int random			= GetRandomInt(1, 100);
+		int chanceDisarmSurvivorMolotov = ChanceDisarmSurvivorMolotov.IntValue;
+		if (random <= chanceDisarmSurvivorMolotov)
 		{
 			int attacker = GetClientOfUserId(event.GetInt("userid"));
 			DisarmPlayer(attacker);
