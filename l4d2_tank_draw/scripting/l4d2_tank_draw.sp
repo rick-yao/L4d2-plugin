@@ -31,6 +31,8 @@ ConVar ChanceKillAllSurvivor;
 ConVar ChanceKillSingleSurvivor;
 ConVar ChanceClearAllSurvivorHealth;
 
+ConVar ChanceKillSurvivorMolotov;
+
 ConVar SingleMoonGravity;
 ConVar LimitedTimeWorldMoonGravityTimer;
 ConVar InfiniteMeeleRange;
@@ -88,6 +90,8 @@ public void OnPluginStart()
 	ChanceKillSingleSurvivor	  = CreateConVar("l4d2_tank_draw_chance_kill_single_survivor", "10", "单人死亡概率", FCVAR_NONE);
 	ChanceClearAllSurvivorHealth	  = CreateConVar("l4d2_tank_draw_chance_clear_all_survivor_health", "10", "清空所有人血量概率", FCVAR_NONE);
 
+	ChanceKillSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_chance_kill_survivor_molotov", "30", "无限弹药时，玩家乱扔火时立刻死亡概率（百分比，0为关闭）", FCVAR_NONE);
+
 	AutoExecConfig(true, "l4d2_tank_draw");
 
 	PrintToServer("[Tank Draw] Plugin loaded");
@@ -95,6 +99,8 @@ public void OnPluginStart()
 
 	HookEvent("player_incapacitated", Event_PlayerIncapacitated);
 	HookEvent("player_death", Event_PlayerDeath);
+
+	HookEvent("molotov_thrown", Event_Molotov);
 
 	HookEvent("round_end", Event_Roundend, EventHookMode_Pre);
 	HookEvent("finale_vehicle_leaving", Event_Roundend, EventHookMode_Pre);
@@ -175,6 +181,28 @@ public Action Event_Roundend(Event event, const char[] name, bool dontBroadcast)
 	g_WorldGravity = FindConVar("sv_gravity");
 	g_WorldGravity.RestoreDefault();
 
+	return Plugin_Continue;
+}
+
+public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
+{
+	// randomly kill player when infinite ammo is active
+	g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
+	if (g_hInfinitePrimaryAmmo.IntValue == 1)
+	{
+		int random		      = GetRandomInt(1, 100);
+		int chanceKillSurvivorMolotov = ChanceKillSurvivorMolotov.IntValue;
+		if (random <= chanceKillSurvivorMolotov)
+		{
+			int attacker = GetClientOfUserId(event.GetInt("userid"));
+			ForcePlayerSuicide(attacker);
+
+			char attackerName[MAX_NAME_LENGTH];
+			GetClientName(attacker, attackerName, sizeof(attackerName));
+			TankDraw_PrintToChat(0, "玩家 %s 乱扔火，处死", attackerName);
+			return Plugin_Continue;
+		}
+	}
 	return Plugin_Continue;
 }
 
@@ -341,7 +369,7 @@ Action LuckyDraw(int victim, int attacker)
 			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有人无限子弹", attackerName);
 		}
 		else {
-			g_hInfinitePrimaryAmmo.IntValue = 0;
+			g_hInfinitePrimaryAmmo.RestoreDefault();
 			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：关闭无限子弹", attackerName);
 		}
 		return Plugin_Continue;
