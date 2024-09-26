@@ -31,6 +31,8 @@ ConVar ChanceDecreaseHealth;
 ConVar ChanceKillAllSurvivor;
 ConVar ChanceKillSingleSurvivor;
 ConVar ChanceClearAllSurvivorHealth;
+ConVar ChanceDisarmAllSurvivor;
+ConVar ChanceDisarmSingleSurvivor;
 
 ConVar ChanceDisarmSurvivorMolotov;
 ConVar ChanceKillSurvivorMolotov;
@@ -91,6 +93,8 @@ public void OnPluginStart()
 	ChanceKillAllSurvivor		  = CreateConVar("l4d2_tank_draw_chance_kill_all_survivor", "10", "团灭概率", FCVAR_NONE);
 	ChanceKillSingleSurvivor	  = CreateConVar("l4d2_tank_draw_chance_kill_single_survivor", "10", "单人死亡概率", FCVAR_NONE);
 	ChanceClearAllSurvivorHealth	  = CreateConVar("l4d2_tank_draw_chance_clear_all_survivor_health", "10", "清空所有人血量概率", FCVAR_NONE);
+	ChanceDisarmAllSurvivor		  = CreateConVar("l4d2_tank_draw_chance_disarm_all_survivor", "10", "所有人缴械概率", FCVAR_NONE);
+	ChanceDisarmSingleSurvivor	  = CreateConVar("l4d2_tank_draw_chance_disarm_single_survivor", "10", "单人缴械概率", FCVAR_NONE);
 
 	ChanceDisarmSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_chance_disarm_survivor_molotov", "30", "无限弹药时，玩家乱扔火时缴械概率（百分比，0为关闭）", FCVAR_NONE);
 	ChanceKillSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_chance_kill_survivor_molotov", "30", "无限弹药时，玩家乱扔火时处死概率（百分比，0为关闭）", FCVAR_NONE);
@@ -243,6 +247,8 @@ Action LuckyDraw(int victim, int attacker)
 	int chanceDecreaseHealth	      = ChanceDecreaseHealth.IntValue;
 	int chanceKillAllSurvivor	      = ChanceKillAllSurvivor.IntValue;
 	int chanceKillSingleSurvivor	      = ChanceKillSingleSurvivor.IntValue;
+	int chanceDisarmAllSurvivor	      = ChanceDisarmAllSurvivor.IntValue;
+	int chanceDisarmSingleSurvivor	      = ChanceDisarmSingleSurvivor.IntValue;
 
 	int chanceLimitedTimeWorldMoonGravity = ChanceLimitedTimeWorldMoonGravity.IntValue;
 	int chanceMoonGravityOneLimitedTime   = ChanceMoonGravityOneLimitedTime.IntValue;
@@ -250,7 +256,7 @@ Action LuckyDraw(int victim, int attacker)
 	int chanceIncreaseGravity	      = ChanceIncreaseGravity.IntValue;
 	int chanceClearAllSurvivorHealth      = ChanceClearAllSurvivorHealth.IntValue;
 
-	int totalChance			      = chanceNoPrice + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
+	int totalChance			      = chanceNoPrice + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
 	totalChance += chanceLimitedTimeWorldMoonGravity + chanceMoonGravityOneLimitedTime + chanceWorldMoonGravityToggle + chanceIncreaseGravity;
 
 	if (totalChance == 0)
@@ -481,6 +487,27 @@ Action LuckyDraw(int victim, int attacker)
 		return Plugin_Continue;
 	}
 
+	currentChance += chanceDisarmAllSurvivor;
+	if (random <= currentChance)
+	{
+		for (int i = 1; i <= MaxClients; i++)
+		{
+			if (IsValidAliveClient(i))
+			{
+				DisarmPlayer(i);
+			}
+		}
+		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有人缴械", attackerName);
+		return Plugin_Continue;
+	}
+
+	currentChance += chanceDisarmSingleSurvivor;
+	if (random <= currentChance)
+	{
+		DisarmPlayer(attacker);
+		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：单人缴械", attackerName);
+		return Plugin_Continue;
+	}
 	// This shouldn't happen, but just in case
 	TankDraw_PrintToChat(0, "抽奖出现意外，没有中奖");
 	return Plugin_Continue;
