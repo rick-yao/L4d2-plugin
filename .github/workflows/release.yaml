@@ -1,0 +1,32 @@
+name: Build and Release SourceMod Plugin
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup SourceMod
+        run: |
+          wget --input-file=https://sm.alliedmods.net/smdrop/${{ secrets.SOURCEMOD_VERSION }}/${{ secrets.SOURCEMOD_FILENAME }}
+          tar -xzf sourcemod-*.tar.gz
+
+      - name: Build plugin
+        run: |
+          mkdir -p build
+          addons/sourcemod/scripting/spcomp l4d2_tank_draw/scripting/l4d2_tank_draw.sp -o build/l4d2_tank_draw.smx
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: false
+          files: |
+            build/*.smx
+          generate_release_notes: true
