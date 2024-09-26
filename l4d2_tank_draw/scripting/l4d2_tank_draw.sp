@@ -33,6 +33,7 @@ ConVar ChanceKillSingleSurvivor;
 ConVar ChanceClearAllSurvivorHealth;
 
 ConVar ChanceDisarmSurvivorMolotov;
+ConVar ChanceKillSurvivorMolotov;
 
 ConVar SingleMoonGravity;
 ConVar LimitedTimeWorldMoonGravityTimer;
@@ -92,6 +93,7 @@ public void OnPluginStart()
 	ChanceClearAllSurvivorHealth	  = CreateConVar("l4d2_tank_draw_chance_clear_all_survivor_health", "10", "清空所有人血量概率", FCVAR_NONE);
 
 	ChanceDisarmSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_chance_disarm_survivor_molotov", "30", "无限弹药时，玩家乱扔火时缴械概率（百分比，0为关闭）", FCVAR_NONE);
+	ChanceKillSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_chance_kill_survivor_molotov", "30", "无限弹药时，玩家乱扔火时处死概率（百分比，0为关闭）", FCVAR_NONE);
 
 	AutoExecConfig(true, "l4d2_tank_draw");
 
@@ -191,16 +193,26 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 	g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
 	if (g_hInfinitePrimaryAmmo.IntValue == 1)
 	{
-		int random			= GetRandomInt(1, 100);
-		int chanceDisarmSurvivorMolotov = ChanceDisarmSurvivorMolotov.IntValue;
+		int  random			 = GetRandomInt(1, 100);
+		int  chanceDisarmSurvivorMolotov = ChanceDisarmSurvivorMolotov.IntValue;
+		int  chanceKillSurvivorMolotov	 = ChanceKillSurvivorMolotov.IntValue;
+
+		int  attacker			 = GetClientOfUserId(event.GetInt("userid"));
+		char attackerName[MAX_NAME_LENGTH];
+		GetClientName(attacker, attackerName, sizeof(attackerName));
+
 		if (random <= chanceDisarmSurvivorMolotov)
 		{
-			int attacker = GetClientOfUserId(event.GetInt("userid"));
 			DisarmPlayer(attacker);
 
-			char attackerName[MAX_NAME_LENGTH];
-			GetClientName(attacker, attackerName, sizeof(attackerName));
 			TankDraw_PrintToChat(0, "玩家 %s 乱扔火，缴械", attackerName);
+			return Plugin_Continue;
+		}
+		if (random <= chanceDisarmSurvivorMolotov + chanceKillSurvivorMolotov)
+		{
+			ForcePlayerSuicide(attacker);
+
+			TankDraw_PrintToChat(0, "玩家 %s 乱扔火，立刻处死", attackerName);
 			return Plugin_Continue;
 		}
 	}
