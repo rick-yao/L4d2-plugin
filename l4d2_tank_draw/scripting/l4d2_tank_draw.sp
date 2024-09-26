@@ -451,13 +451,12 @@ Action LuckyDraw(int victim, int attacker)
 	currentChance += chanceDecreaseHealth;
 	if (random <= currentChance)
 	{
-		int   minDecrease  = GetConVarInt(MinHealthDecrease);
-		int   maxDecrease  = GetConVarInt(MaxHealthDecrease);
-		int   randomHealth = GetRandomInt(minDecrease, maxDecrease);
-		int   health	   = GetClientHealth(attacker);
-		float bufferHealth = GetEntPropFloat(attacker, Prop_Send, "m_healthBuffer");
+		int minDecrease	 = GetConVarInt(MinHealthDecrease);
+		int maxDecrease	 = GetConVarInt(MaxHealthDecrease);
+		int randomHealth = GetRandomInt(minDecrease, maxDecrease);
+		int health	 = GetClientHealth(attacker);
 
-		if (float(health) > float(randomHealth) + bufferHealth)
+		if (health > randomHealth)
 		{
 			SDKHooks_TakeDamage(attacker, attacker, attacker, float(randomHealth), DMG_GENERIC);
 			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机受到 %d 伤害", attackerName, randomHealth);
