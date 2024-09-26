@@ -480,6 +480,7 @@ Action LuckyDraw(int victim, int attacker)
 			{
 				if (!IsPlayerIncapacitatedAtAll(i))
 				{
+					SetEntPropFloat(i, Prop_Send, "m_healthBuffer", 0.0);
 					SetEntityHealth(i, 1);
 				}
 			}
