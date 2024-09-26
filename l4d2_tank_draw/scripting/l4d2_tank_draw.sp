@@ -4,7 +4,7 @@
 #include <sourcemod>
 #include <sdktools>
 
-#define PLUGIN_VERSION "1.1"
+#define PLUGIN_VERSION "1.1.0"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
 #define COMMAND_FILTER COMMAND_FILTER_CONNECTED | COMMAND_FILTER_NO_BOTS
 
