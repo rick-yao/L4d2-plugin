@@ -30,4 +30,4 @@ jobs:
           files: |
             build/*.smx
           generate_release_notes: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
