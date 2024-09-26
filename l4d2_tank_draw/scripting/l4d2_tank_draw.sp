@@ -238,7 +238,7 @@ Action LuckyDraw(int victim, int attacker)
 	int chanceIncreaseGravity	      = ChanceIncreaseGravity.IntValue;
 	int chanceClearAllSurvivorHealth      = ChanceClearAllSurvivorHealth.IntValue;
 
-	int totalChance			      = chanceNoPrice + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
+	int totalChance			      = chanceNoPrice + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
 	totalChance += chanceLimitedTimeWorldMoonGravity + chanceMoonGravityOneLimitedTime + chanceWorldMoonGravityToggle + chanceIncreaseGravity;
 
 	if (totalChance == 0)
@@ -252,7 +252,8 @@ Action LuckyDraw(int victim, int attacker)
 	GetClientName(attacker, attackerName, sizeof(attackerName));
 	TankDraw_PrintToChat(0, "幸运抽奖开始");
 
-	int random	  = GetRandomInt(1, totalChance);
+	int random = GetRandomInt(1, totalChance);
+	PrintToServer("total chance: %d, random: %d", totalChance, random);
 
 	int currentChance = 0;
 
