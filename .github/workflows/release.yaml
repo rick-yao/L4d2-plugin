@@ -15,7 +15,7 @@ jobs:
 
       - name: Setup SourceMod
         run: |
-          wget --input-file=https://sm.alliedmods.net/smdrop/${{ secrets.SOURCEMOD_VERSION }}/${{ secrets.SOURCEMOD_FILENAME }}
+          wget https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6968-linux.tar.gz
           tar -xzf sourcemod-*.tar.gz
 
       - name: Build plugin
