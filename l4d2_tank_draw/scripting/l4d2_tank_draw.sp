@@ -448,9 +448,18 @@ Action LuckyDraw(int victim, int attacker)
 		int minDecrease	 = GetConVarInt(MinHealthDecrease);
 		int maxDecrease	 = GetConVarInt(MaxHealthDecrease);
 		int randomHealth = GetRandomInt(minDecrease, maxDecrease);
+		int health	 = GetClientHealth(attacker);
 
-		SDKHooks_TakeDamage(attacker, attacker, attacker, float(randomHealth), DMG_GENERIC);
-		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机受到 %d 伤害", attackerName, randomHealth);
+		if (health > randomHealth)
+		{
+			SDKHooks_TakeDamage(attacker, attacker, attacker, float(randomHealth), DMG_GENERIC);
+			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机受到 %d 伤害", attackerName, randomHealth);
+		}
+		else
+		{
+			SDKHooks_TakeDamage(attacker, attacker, attacker, float(health - 1), DMG_GENERIC);
+			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机受到 %d 伤害，但由于血量过低，所以仅承受 %d 伤害", attackerName, randomHealth, health - 1);
+		}
 
 		return Plugin_Continue;
 	}
