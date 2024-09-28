@@ -5,7 +5,7 @@
 #include <sdktools>
 #include <sdkhooks>
 
-#define PLUGIN_VERSION "1.3.0"
+#define PLUGIN_VERSION "1.4.0"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
 #define COMMAND_FILTER COMMAND_FILTER_CONNECTED | COMMAND_FILTER_NO_BOTS
 
@@ -111,7 +111,6 @@ public void OnPluginStart()
 
 	HookEvent("round_end", Event_Roundend, EventHookMode_Pre);
 	HookEvent("finale_vehicle_leaving", Event_Roundend, EventHookMode_Pre);
-	HookEvent("mission_lost", Event_Roundend, EventHookMode_Pre);
 	HookEvent("map_transition", Event_Roundend, EventHookMode_Pre);
 	HookEvent("finale_win", Event_Roundend, EventHookMode_Pre);
 
