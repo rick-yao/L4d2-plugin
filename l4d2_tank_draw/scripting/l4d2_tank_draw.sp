@@ -146,25 +146,36 @@ public Action Event_PlayerIncapacitated(Event event, const char[] name, bool don
 			return Plugin_Continue;
 		}
 
-		// now the attacker is a valid alive client and the weapon is a melee weapon
+		// now the attacker is a valid client and the weapon is a melee weapon
 		// so we can make the tank draw
 		PrintToServer("[Tank Draw] Event_PlayerDeath triggered. Victim: %d, Attacker: %d, weapon: %s", victim, attacker, weapon);
 
 		char victimName[MAX_NAME_LENGTH], attackerName[MAX_NAME_LENGTH];
 		GetClientName(victim, victimName, sizeof(victimName));
 		GetClientName(attacker, attackerName, sizeof(attackerName));
-		TankDraw_PrintToChat(0, "%s 被玩家 %s 用近战武器击杀，开始幸运抽奖", victimName, attackerName);
+		TankDraw_PrintToChat(0, _, "%s 被玩家 %s 用近战武器击杀，开始幸运抽奖", victimName, attackerName);
 
 		// Lucky draw logic
 		LuckyDraw(victim, attacker);
 
-		TankDraw_PrintToChat(0, "幸运抽奖结束");
+		TankDraw_PrintToChat(0, _, "幸运抽奖结束");
 
 		return Plugin_Continue;
 	}
 	else {
 		PrintToServer("[Tank Draw] No Melee weapon detected. Exiting event.");
-		TankDraw_PrintToChat(0, "Tank不是被砍死的，停止抽奖");
+		int  attacker = GetClientOfUserId(event.GetInt("attacker"));
+		char attackerName[MAX_NAME_LENGTH];
+		GetClientName(attacker, attackerName, sizeof(attackerName));
+
+		if (!IsValidAliveClient(attacker))
+		{
+			TankDraw_PrintToChat(0, true, "Tank 被 %s 杀死，取消抽奖", attackerName);
+			PrintToServer("[Tank Draw] Attacker is not a valid alive client. Exiting event.");
+			return Plugin_Continue;
+		}
+
+		TankDraw_PrintToChat(0, true, "Tank被 %s 击杀，但不是近战武器，停止抽奖", attackerName);
 		return Plugin_Continue;
 	}
 }
@@ -215,14 +226,14 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 		{
 			DisarmPlayer(attacker);
 
-			TankDraw_PrintToChat(0, "玩家 %s 乱扔火，缴械", attackerName);
+			TankDraw_PrintToChat(0, true, "玩家 %s 乱扔火，缴械", attackerName);
 			return Plugin_Continue;
 		}
 		if (random <= chanceDisarmSurvivorMolotov + chanceKillSurvivorMolotov)
 		{
 			ForcePlayerSuicide(attacker);
 
-			TankDraw_PrintToChat(0, "玩家 %s 乱扔火，立刻处死", attackerName);
+			TankDraw_PrintToChat(0, true, "玩家 %s 乱扔火，立刻处死", attackerName);
 			return Plugin_Continue;
 		}
 	}
@@ -274,7 +285,7 @@ Action LuckyDraw(int victim, int attacker)
 	char victimName[MAX_NAME_LENGTH], attackerName[MAX_NAME_LENGTH];
 	GetClientName(victim, victimName, sizeof(victimName));
 	GetClientName(attacker, attackerName, sizeof(attackerName));
-	TankDraw_PrintToChat(0, "幸运抽奖开始");
+	TankDraw_PrintToChat(0, _, "幸运抽奖开始");
 
 	int random = GetRandomInt(1, totalChance);
 	PrintToServer("total chance: %d, random: %d", totalChance, random);
@@ -285,7 +296,7 @@ Action LuckyDraw(int victim, int attacker)
 	currentChance += chanceNoPrice;
 	if (random <= currentChance)
 	{
-		TankDraw_PrintToChat(0, "非常遗憾，此次砍死tank没有中奖");
+		TankDraw_PrintToChat(0, true, "非常遗憾，此次砍死tank没有中奖");
 		return Plugin_Continue;
 	}
 
@@ -302,7 +313,7 @@ Action LuckyDraw(int victim, int attacker)
 
 		CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityTimer), ResetWorldGravity, default_gravity_int);
 
-		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：限时 %d 秒世界重力改为月球重力", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityTimer));
+		TankDraw_PrintToChat(0, true, "玩家 %s 的幸运抽奖结果为：限时 %d 秒世界重力改为月球重力", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityTimer));
 		return Plugin_Continue;
 	}
 
@@ -315,7 +326,7 @@ Action LuckyDraw(int victim, int attacker)
 		data.SetValue("client", attacker);
 		data.SetValue("resetAll", false);
 		CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityOne), ResetGravity, data);
-		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：单人限时 %d 秒月球重力体验卡", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityOne));
+		TankDraw_PrintToChat(0, true, "玩家 %s 的幸运抽奖结果为：单人限时 %d 秒月球重力体验卡", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityOne));
 		return Plugin_Continue;
 	}
 
@@ -331,11 +342,11 @@ Action LuckyDraw(int victim, int attacker)
 		if (g_WorldGravity.IntValue == default_gravity_int)
 		{
 			g_WorldGravity.IntValue = WorldMoonGravity.IntValue;
-			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：世界重力改为月球重力", attackerName);
+			TankDraw_PrintToChat(0, true, "玩家 %s 的幸运抽奖结果为：世界重力改为月球重力", attackerName);
 		}
 		else {
 			g_WorldGravity.RestoreDefault();
-			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：恢复世界重力", attackerName);
+			TankDraw_PrintToChat(0, true, "玩家 %s 的幸运抽奖结果为：恢复世界重力", attackerName);
 		}
 		return Plugin_Continue;
 	}
@@ -345,7 +356,7 @@ Action LuckyDraw(int victim, int attacker)
 	if (random <= currentChance)
 	{
 		SetEntityGravity(attacker, GetConVarFloat(IncreasedGravity));
-		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：获得 %.1f 倍重力", attackerName, GetConVarFloat(IncreasedGravity));
+		TankDraw_PrintToChat(0, true, "玩家 %s 的幸运抽奖结果为：获得 %.1f 倍重力", attackerName, GetConVarFloat(IncreasedGravity));
 		return Plugin_Continue;
 	}
 
@@ -353,7 +364,7 @@ Action LuckyDraw(int victim, int attacker)
 	if (random <= currentChance)
 	{
 		ForcePlayerSuicide(attacker);
-		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：立刻死亡", attackerName);
+		TankDraw_PrintToChat(0, true, "玩家 %s 的幸运抽奖结果为：立刻死亡", attackerName);
 		return Plugin_Continue;
 	}
 
@@ -367,7 +378,7 @@ Action LuckyDraw(int victim, int attacker)
 				ForcePlayerSuicide(i);
 			}
 		}
-		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：团灭", attackerName);
+		TankDraw_PrintToChat(0, true, "玩家 %s 的幸运抽奖结果为：团灭", attackerName);
 		return Plugin_Continue;
 	}
 
@@ -380,7 +391,7 @@ Action LuckyDraw(int victim, int attacker)
 		int randomHealth = GetRandomInt(minHealth, maxHealth);
 		int health	 = GetClientHealth(attacker) + randomHealth;
 		SetEntityHealth(attacker, health);
-		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机增加 %d 血量", attackerName, randomHealth);
+		TankDraw_PrintToChat(0, true, "玩家 %s 的幸运抽奖结果为：随机增加 %d 血量", attackerName, randomHealth);
 		return Plugin_Continue;
 	}
 
@@ -392,11 +403,11 @@ Action LuckyDraw(int victim, int attacker)
 		if (g_hInfinitePrimaryAmmo.IntValue == 0)
 		{
 			g_hInfinitePrimaryAmmo.IntValue = 1;
-			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有人无限子弹", attackerName);
+			TankDraw_PrintToChat(0, true, "玩家 %s 的幸运抽奖结果为：所有人无限子弹", attackerName);
 		}
 		else {
 			g_hInfinitePrimaryAmmo.RestoreDefault();
-			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：关闭无限子弹", attackerName);
+			TankDraw_PrintToChat(0, true, "玩家 %s 的幸运抽奖结果为：关闭无限子弹", attackerName);
 		}
 		return Plugin_Continue;
 	}
@@ -413,11 +424,11 @@ Action LuckyDraw(int victim, int attacker)
 		if (g_MeleeRange.IntValue == default_range_int)
 		{
 			g_MeleeRange.IntValue = GetConVarInt(InfiniteMeeleRange);
-			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：无限近战", attackerName);
+			TankDraw_PrintToChat(0, true, "玩家 %s 的幸运抽奖结果为：无限近战", attackerName);
 		}
 		else {
 			g_MeleeRange.RestoreDefault();
-			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：关闭无限近战", attackerName);
+			TankDraw_PrintToChat(0, true, "玩家 %s 的幸运抽奖结果为：关闭无限近战", attackerName);
 		}
 		return Plugin_Continue;
 	}
@@ -450,7 +461,7 @@ Action LuckyDraw(int victim, int attacker)
 				SetEntityHealth(i, averageHealth);
 			}
 		}
-		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有人平均血量 %d", attackerName, averageHealth);
+		TankDraw_PrintToChat(0, true, "玩家 %s 的幸运抽奖结果为：所有人平均血量 %d", attackerName, averageHealth);
 		return Plugin_Continue;
 	}
 
@@ -465,13 +476,13 @@ Action LuckyDraw(int victim, int attacker)
 		if (health > randomHealth)
 		{
 			SDKHooks_TakeDamage(attacker, attacker, attacker, float(randomHealth), DMG_GENERIC);
-			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机受到 %d 伤害", attackerName, randomHealth);
+			TankDraw_PrintToChat(0, true, "玩家 %s 的幸运抽奖结果为：随机受到 %d 伤害", attackerName, randomHealth);
 		}
 		else
 		{
 			SetEntPropFloat(attacker, Prop_Send, "m_healthBuffer", 0.0);
 			SDKHooks_TakeDamage(attacker, attacker, attacker, float(health) - 1, DMG_GENERIC);
-			TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：随机受到 %d 伤害，但由于血量过低，所以清空虚血并承受 %d 伤害", attackerName, randomHealth, health - 1);
+			TankDraw_PrintToChat(0, true, "玩家 %s 的幸运抽奖结果为：随机受到 %d 伤害，但由于血量过低，所以清空虚血并承受 %d 伤害", attackerName, randomHealth, health - 1);
 		}
 
 		return Plugin_Continue;
@@ -491,7 +502,7 @@ Action LuckyDraw(int victim, int attacker)
 				}
 			}
 		}
-		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有人清空血量", attackerName);
+		TankDraw_PrintToChat(0, true, "玩家 %s 的幸运抽奖结果为：所有人清空血量", attackerName);
 		return Plugin_Continue;
 	}
 
@@ -505,7 +516,7 @@ Action LuckyDraw(int victim, int attacker)
 				DisarmPlayer(i);
 			}
 		}
-		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：所有人缴械", attackerName);
+		TankDraw_PrintToChat(0, true, "玩家 %s 的幸运抽奖结果为：所有人缴械", attackerName);
 		return Plugin_Continue;
 	}
 
@@ -513,11 +524,11 @@ Action LuckyDraw(int victim, int attacker)
 	if (random <= currentChance)
 	{
 		DisarmPlayer(attacker);
-		TankDraw_PrintToChat(0, "玩家 %s 的幸运抽奖结果为：单人缴械", attackerName);
+		TankDraw_PrintToChat(0, true, "玩家 %s 的幸运抽奖结果为：单人缴械", attackerName);
 		return Plugin_Continue;
 	}
 	// This shouldn't happen, but just in case
-	TankDraw_PrintToChat(0, "抽奖出现意外，没有中奖");
+	TankDraw_PrintToChat(0, true, "抽奖出现意外，没有中奖");
 	return Plugin_Continue;
 }
 
@@ -532,6 +543,7 @@ Action ResetGravity(Handle timer, Handle hndl)
 
 	if (resetAll)
 	{
+		TankDraw_PrintToChat(0, true, "所有玩家重力恢复正常");
 		for (int i = 1; i <= MaxClients; i++)
 		{
 			if (IsValidAliveClient(i))
@@ -539,14 +551,16 @@ Action ResetGravity(Handle timer, Handle hndl)
 				SetEntityGravity(i, 1.0);
 			}
 		}
-		TankDraw_PrintToChat(0, "所有玩家重力恢复正常");
 	}
 	else
 	{
 		if (IsValidAliveClient(client))
 		{
+			char clientName[MAX_NAME_LENGTH];
+			GetClientName(client, clientName, sizeof(clientName));
+			TankDraw_PrintToChat(0, true, "玩家 %s 重力恢复正常", clientName);
+
 			SetEntityGravity(client, 1.0);
-			TankDraw_PrintToChat(client, "你的重力恢复正常");
 		}
 	}
 
@@ -574,13 +588,22 @@ bool IsValidAliveClient(int client)
  * @param format    Formatting rules.
  * @param ...       Variable number of format parameters.
  */
-stock void TankDraw_PrintToChat(int client = 0, const char[] format, any...)
+stock void TankDraw_PrintToChat(int client = 0, bool isHint = false, const char[] format, any...)
 {
 	char buffer[254];
-	VFormat(buffer, sizeof(buffer), format, 3);
+	VFormat(buffer, sizeof(buffer), format, 4);
 
 	char message[254];
 	FormatEx(message, sizeof(message), "\x04[Tank Draw]\x03 %s", buffer);
+
+	if (isHint && (client == 0))
+	{
+		PrintHintTextToAll("[Tank Draw] %s", buffer);
+	}
+	if (isHint && (client != 0) && IsValidClient(client))
+	{
+		PrintHintText(client, "[Tank Draw] %s", buffer);
+	}
 
 	if (client == 0)
 	{
@@ -628,6 +651,8 @@ Action ResetWorldGravity(Handle timer, int initValue)
 	g_WorldGravity = FindConVar("sv_gravity");
 
 	g_WorldGravity.RestoreDefault();
+
+	TankDraw_PrintToChat(0, true, "世界重力恢复正常");
 
 	return Plugin_Continue;
 }
