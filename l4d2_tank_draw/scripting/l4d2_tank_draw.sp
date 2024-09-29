@@ -112,7 +112,6 @@ public void OnPluginStart()
 
 	HookEvent("molotov_thrown", Event_Molotov);
 
-	HookEvent("round_end", Event_Roundend, EventHookMode_Pre);
 	HookEvent("finale_vehicle_leaving", Event_Roundend, EventHookMode_Pre);
 	HookEvent("map_transition", Event_Roundend, EventHookMode_Pre);
 	HookEvent("finale_win", Event_Roundend, EventHookMode_Pre);
