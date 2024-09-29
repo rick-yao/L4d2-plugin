@@ -18,12 +18,11 @@ jobs:
           wget https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6968-linux.tar.gz
           tar -xzf sourcemod-*.tar.gz
           git clone https://github.com/Bara/Multi-Colors.git
-          cp -r Multi-Colors/addons sourcemod-1.11.0-git6968-linux
 
       - name: Build plugin
         run: |
           mkdir -p build
-          addons/sourcemod/scripting/spcomp l4d2_tank_draw/scripting/l4d2_tank_draw.sp -o build/l4d2_tank_draw.smx
+          addons/sourcemod/scripting/spcomp l4d2_tank_draw/scripting/l4d2_tank_draw.sp -o build/l4d2_tank_draw.smx -iC ./Multi-Colors/addons/sourcemod/scripting/include
 
       - name: Release
         uses: softprops/action-gh-release@v2
