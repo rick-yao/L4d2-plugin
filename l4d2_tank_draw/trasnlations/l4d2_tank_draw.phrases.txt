@@ -219,7 +219,7 @@
     "TankDrawResult_AverageHealth"
     {
         "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}All survivors' average health is {olive}%d{lightgreen}."
-        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}所有人平均血量 {olive}%d{lightgreen}"
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}所有人平均血量 %d"
     }
 
     "TankDrawResult_AverageHealth_NoColor"
@@ -291,7 +291,7 @@
     "TankDraw_MolotovDisarmMsg"
     {
         "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen} threw a Molotov recklessly and was disarmed."
-        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 随意扔燃烧弹，缴械"
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 随意扔燃烧弹，{olive}缴械"
     }
 
     "TankDraw_MolotovDisarmMsg_NoColor"
@@ -303,7 +303,7 @@
     "TankDraw_MolotovDeathMsg"
     {
         "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen} threw a Molotov recklessly and was killed."
-        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 随意扔燃烧弹，立刻处决"
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 随意扔燃烧弹，{olive}立刻处决"
     }
 
     "TankDraw_MolotovDeathMsg_NoColor"
