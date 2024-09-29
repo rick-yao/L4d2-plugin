@@ -5,7 +5,7 @@
 #include <sdktools>
 #include <sdkhooks>
 
-#define PLUGIN_VERSION "1.4.0"
+#define PLUGIN_VERSION "1.4.1"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
 #define COMMAND_FILTER COMMAND_FILTER_CONNECTED | COMMAND_FILTER_NO_BOTS
 
@@ -580,7 +580,7 @@ stock void TankDraw_PrintToChat(int client = 0, const char[] format, any...)
 	VFormat(buffer, sizeof(buffer), format, 3);
 
 	char message[254];
-	Format(message, sizeof(message), "\x04[Tank Draw]\x03 %s", buffer);
+	FormatEx(message, sizeof(message), "\x04[Tank Draw]\x03 %s", buffer);
 
 	if (client == 0)
 	{
@@ -665,7 +665,7 @@ public Action MenuFunc_MainMenu(int client, int args)
 	Handle menu = CreateMenu(MenuHandler_MainMenu);
 	char   line[1024];
 
-	Format(line, sizeof(line), "抽奖调试菜单");
+	FormatEx(line, sizeof(line), "抽奖调试菜单");
 	SetMenuTitle(menu, line);
 	AddMenuItem(menu, "item0", "杀死tank");
 	DisplayMenu(menu, client, MENU_TIME_FOREVER);
@@ -693,11 +693,11 @@ public Action MenuFunc_KillTank(int client)
 	Menu menu = CreateMenu(MenuHandler_KillTank);
 	char line[1024];
 
-	Format(line, sizeof(line), "杀死tank");
+	FormatEx(line, sizeof(line), "杀死tank");
 	SetMenuTitle(menu, line);
 
 	char dis[1024];
-	Format(dis, sizeof(dis), "杀死所有tank");
+	FormatEx(dis, sizeof(dis), "杀死所有tank");
 
 	menu.AddItem("kill all tank", dis);
 	menu.ExitBackButton = true;
