@@ -461,26 +461,21 @@ Action LuckyDraw(int victim, int attacker)
 	if (random <= currentChance)
 	{
 		// Average all survivors' health
-		int health = 0;
-		for (int i = 1; i <= MaxClients; i++)
-		{
-			if (IsValidAliveClient(i))
-			{
-				health += GetClientHealth(i);
-			}
-		}
+		int health	     = 0;
 		int numOfAliveClient = 0;
 		for (int i = 1; i <= MaxClients; i++)
 		{
-			if (IsValidAliveClient(i))
+			if (IsValidAliveClient(i) && !IsPlayerIncapacitatedAtAll(i))
 			{
+				health += GetClientHealth(i);
 				numOfAliveClient++;
 			}
 		}
+
 		int averageHealth = RoundToNearest(float(health) / float(numOfAliveClient));
 		for (int i = 1; i <= MaxClients; i++)
 		{
-			if (IsValidAliveClient(i))
+			if (IsValidAliveClient(i) && !IsPlayerIncapacitatedAtAll(i))
 			{
 				SetEntityHealth(i, averageHealth);
 			}
