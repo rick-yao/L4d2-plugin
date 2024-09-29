@@ -255,7 +255,7 @@
     "TankDrawResult_ClearAllSurvivorHealth"
     {
         "en"    "{yellow}[Tank Draw] {olive}%s{lightgreen} caused all survivors' health to be reset to {olive}1."
-        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果： 所有人清空血量"
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果： {olive}所有人清空血量"
     }
 
     "TankDrawResult_ClearAllSurvivorHealth_NoColor"
