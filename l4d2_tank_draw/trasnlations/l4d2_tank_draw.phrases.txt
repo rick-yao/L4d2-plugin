@@ -1,0 +1,386 @@
+"Phrases"
+{
+    "TankDraw_StartDraw"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen} was killed by {olive}%s{lightgreen} with a melee weapon, starting the lucky draw."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}%s 被玩家 {olive}%s{lightgreen} 用近战武器击杀，开始幸运抽奖"
+    }
+
+    "TankDraw_StartDraw_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s was killed by %s with a melee weapon, starting the lucky draw."
+        "chi"   "[坦克抽奖] %s 被玩家 %s 用近战武器击杀，开始幸运抽奖"
+    }
+
+    "TankDraw_DrawDone"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}The lucky draw has ended."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}幸运抽奖结束"
+    }
+
+    "TankDraw_DrawDone_NoColor"
+    {
+        "en"    "[Tank Draw] The lucky draw has ended."
+        "chi"   "[坦克抽奖] 幸运抽奖结束"
+    }
+
+    "TankDraw_NotKilledByHuman"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}The Tank was killed by {olive}%s{lightgreen}, the draw has been canceled."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}Tank 被 {olive}%s{lightgreen} 杀死，取消抽奖"
+    }
+
+    "TankDraw_NotKilledByHuman_NoColor"
+    {
+        "en"    "[Tank Draw] The Tank was killed by %s, the draw has been canceled."
+        "chi"   "[坦克抽奖] Tank 被 %s 杀死，取消抽奖"
+    }
+
+    "TankDraw_NotByMelee"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Tank was killed by {olive}%s{lightgreen}, but it was not a melee weapon, stopping the draw."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}Tank 被 {olive}%s{lightgreen} 击杀，但不是近战武器，停止抽奖"
+    }
+
+    "TankDraw_NotByMelee_NoColor"
+    {
+        "en"    "[Tank Draw] Tank was killed by %s, but it was not a melee weapon, stopping the draw."
+        "chi"   "[坦克抽奖] Tank 被 %s 击杀，但不是近战武器，停止抽奖"
+    }
+
+    "TankDraw_SomeThingWrong"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Unexpected issue occurred, nobody won the draw."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}抽奖出现意外，没有中奖"
+    }
+
+    "TankDraw_SomeThingWrong_NoColor"
+    {
+        "en"    "[Tank Draw] Unexpected issue occurred, nobody won the draw."
+        "chi"   "[坦克抽奖] 抽奖出现意外，没有中奖"
+    }
+
+    "TankDrawResult_NoPrize"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Unfortunately, {olive}%s{lightgreen} did not win this time."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}非常遗憾，{olive}%s{lightgreen} 没有中奖"
+    }
+
+    "TankDrawResult_NoPrize_NoColor"
+    {
+        "en"    "[Tank Draw] Unfortunately, %s did not win this time."
+        "chi"   "[坦克抽奖] 非常遗憾，%s 没有中奖"
+    }
+
+    "TankDrawResult_LimitedMoonGravity"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Limited time of %d seconds with moon gravity."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive} %d 秒限时月球重力"
+    }
+
+    "TankDrawResult_LimitedMoonGravity_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Limited time of %d seconds with moon gravity."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： %d 秒限时月球重力"
+    }
+
+    "TankDrawResult_SingleMoonGravity"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Single limited time of %d seconds moon gravity experience."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}单人 %d 秒月球重力体验卡"
+    }
+
+    "TankDrawResult_SingleMoonGravity_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Single limited time of %d seconds moon gravity experience."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 单人 %d 秒月球重力体验卡"
+    }
+
+    "TankDrawResult_EnableMoonGravity"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}World gravity changed to moon gravity."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}月球重力"
+    }
+
+    "TankDrawResult_EnableMoonGravity_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: World gravity changed to moon gravity."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 月球重力"
+    }
+
+    "TankDrawResult_DisableMoonGravity"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}World gravity has been restored."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}恢复世界重力"
+    }
+
+    "TankDrawResult_DisableMoonGravity_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: World gravity has been restored."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 恢复世界重力"
+    }
+
+    "TankDrawResult_IncreaseGravity"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Gained %.1f times gravity."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}获得 %.1f 倍重力"
+    }
+
+    "TankDrawResult_IncreaseGravity_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Gained %.1f times gravity."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 获得 %.1f 倍重力"
+    }
+
+    "TankDrawResult_KillSingleSurvivor"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Instant death."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}立刻死亡"
+    }
+
+    "TankDrawResult_KillSingleSurvivor_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Instant death."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 立刻死亡"
+    }
+
+    "TankDrawResult_KillAllSurvivors"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Team wipe."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}团灭"
+    }
+
+    "TankDrawResult_KillAllSurvivors_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Team wipe."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 团灭"
+    }
+
+    "TankDrawResult_IncreaseHealth"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Randomly increased %d health."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}随机增加 %d 生命值"
+    }
+
+    "TankDrawResult_IncreaseHealth_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Randomly increased %d health."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 随机增加 %d 生命值"
+    }
+
+    "TankDrawResult_EnableInfiniteAmmo"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Everyone has infinite ammo."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}开启无限子弹"
+    }
+
+    "TankDrawResult_EnableInfiniteAmmo_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Everyone has infinite ammo."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 开启无限子弹"
+    }
+
+    "TankDrawResult_DisableInfiniteAmmo"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Disable Infinite ammo."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}关闭无限子弹"
+    }
+
+    "TankDrawResult_DisableInfiniteAmmo_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Disable Infinite ammo."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 关闭无限子弹"
+    }
+
+    "TankDrawResult_EnableInfiniteMelee"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Infinite melee range."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}开启无限近战"
+    }
+
+    "TankDrawResult_EnableInfiniteMelee_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Infinite melee range."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 开启无限近战"
+    }
+
+    "TankDrawResult_DisableInfiniteMelee"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Disable infinite melee range."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}关闭无限近战"
+    }
+
+    "TankDrawResult_DisableInfiniteMelee_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Disable infinite melee range."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 关闭无限近战"
+    }
+
+    "TankDrawResult_AverageHealth"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}All survivors' average health is {olive}%d{lightgreen}."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}所有人平均血量 {olive}%d{lightgreen}"
+    }
+
+    "TankDrawResult_AverageHealth_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: All survivors' average health is %d."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 所有人平均血量 %d"
+    }
+
+    "TankDrawResult_DecreaseHealth"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Randomly decreased health by %d."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}随机受到 %d 伤害"
+    }
+
+    "TankDrawResult_DecreaseHealth_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Randomly decreased health by %d."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 随机受到 %d 伤害"
+    }
+
+    "TankDrawResult_DecreaseHealthNotEnough"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Randomly received {olive}%d{lightgreen} damage, but due to low health, health buffer was cleared and received {olive}%d{lightgreen} damage."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}随机受到 {olive}%d{lightgreen} 伤害，但由于血量过低，清空虚血并承受 {olive}%d{lightgreen} 伤害"
+    }
+
+    "TankDrawResult_DecreaseHealthNotEnough_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Randomly received %d damage, but due to low health, health buffer was cleared and received %d damage."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 随机受到 %d 伤害，但由于血量过低，清空虚血并承受 %d 伤害"
+    }
+
+    "TankDrawResult_ClearAllSurvivorHealth"
+    {
+        "en"    "{yellow}[Tank Draw] {olive}%s{lightgreen} caused all survivors' health to be reset to {olive}1."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果： 所有人清空血量"
+    }
+
+    "TankDrawResult_ClearAllSurvivorHealth_NoColor"
+    {
+        "en"    "[Tank Draw] %s caused all survivors' health to be reset to 1."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 所有人清空血量"
+    }
+
+    "TankDrawResult_DisarmAllSurvivors"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Everyone got disarmed."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}所有人缴械"
+    }
+
+    "TankDrawResult_DisarmAllSurvivors_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Everyone got disarmed."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 所有人缴械"
+    }
+
+    "TankDrawResult_DisarmSingleSurvivor"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Disarmed."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果： {olive}单人缴械"
+    }
+
+    "TankDrawResult_DisarmSingleSurvivor_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Disarmed."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 单人缴械"
+    }
+
+    "TankDraw_MolotovDisarmMsg"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen} threw a Molotov recklessly and was disarmed."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 随意扔燃烧弹，缴械"
+    }
+
+    "TankDraw_MolotovDisarmMsg_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s threw a Molotov recklessly and was disarmed."
+        "chi"   "[坦克抽奖] 玩家 %s 随意扔燃烧弹，缴械"
+    }
+
+    "TankDraw_MolotovDeathMsg"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen} threw a Molotov recklessly and was killed."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 随意扔燃烧弹，立刻处决"
+    }
+
+    "TankDraw_MolotovDeathMsg_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s threw a Molotov recklessly and was killed."
+        "chi"   "[坦克抽奖] 玩家 %s 随意扔燃烧弹，立刻处决"
+    }
+
+    "TankDraw_DebugMode"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Debug mode is {olive}ON."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}调试模式已{olive}开启{lightgreen}"
+    }
+
+    "TankDraw_DebugMode_NoColor"
+    {
+        "en"    "[Tank Draw] Debug mode is ON."
+        "chi"   "[坦克抽奖] 调试模式已开启"
+    }
+
+    "TankDraw_DebugModeOff"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Debug mode is {olive}OFF."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}调试模式已{olive}关闭{lightgreen}"
+    }
+
+    "TankDraw_DebugModeOff_NoColor"
+    {
+        "en"    "[Tank Draw] Debug mode is OFF."
+        "chi"   "[坦克抽奖] 调试模式已关闭"
+    }
+
+    "TankDraw_GravityReset"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Resetting all players' gravity to normal."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}恢复所有玩家的重力为正常值"
+    }
+
+    "TankDraw_GravityReset_NoColor"
+    {
+        "en"    "[Tank Draw] Resetting all players' gravity to normal."
+        "chi"   "[坦克抽奖] 恢复所有玩家的重力为正常值"
+    }
+
+    "TankDraw_GravityResetSingle"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s gravity has been reset to normal."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 重力恢复正常"
+    }
+
+    "TankDraw_GravityResetSingle_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's gravity has been reset to normal."
+        "chi"   "[坦克抽奖] 玩家 %s 重力恢复正常"
+    }
+
+    "TankDraw_WorldGravityReset"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Restoring world gravity to default."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}世界重力恢复正常"
+    }
+
+    "TankDraw_WorldGravityReset_NoColor"
+    {
+        "en"    "[Tank Draw] Restoring world gravity to default."
+        "chi"   "[坦克抽奖] 世界重力恢复正常"
+    }
+
+    "TankDraw_EventVictimNotTank"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Event ended: Victim was not a Tank."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}事件结束：受害者不是Tank"
+    }
+
+    "TankDraw_EventVictimNotTank_NoColor"
+    {
+        "en"    "[Tank Draw] Event ended: Victim was not a Tank."
+        "chi"   "[坦克抽奖] 事件结束：受害者不是Tank"
+    }
+}
