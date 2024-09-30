@@ -22,7 +22,7 @@ jobs:
       - name: Build plugin
         run: |
           mkdir -p build
-          addons/sourcemod/scripting/spcomp l4d2_tank_draw/scripting/l4d2_tank_draw.sp -o build/l4d2_tank_draw.smx -iC ./Multi-Colors/addons/sourcemod/scripting/include
+          addons/sourcemod/scripting/spcomp64 l4d2_tank_draw/scripting/l4d2_tank_draw.sp -o build/l4d2_tank_draw.smx -i ./Multi-Colors/addons/sourcemod/scripting/include
 
       - name: Release
         uses: softprops/action-gh-release@v2
