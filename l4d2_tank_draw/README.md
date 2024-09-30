@@ -35,8 +35,9 @@ To customize the plugin, look for the `l4d2_tank_draw.cfg` file in your SourceMo
 ## Installation
 
 1. Place the `l4d2_tank_draw.smx` file in your `addons/sourcemod/plugins/` directory.
-2. Restart your server or load the plugin using the `sm plugins load` command.
-3. The plugin will automatically create its configuration file (`l4d2_tank_draw.cfg`) in the `addons/sourcemod/configs/` directory after first run.
+2. Put l4d2_tank_draw/translations/l4d2_tank_draw.phrases.txt inside `addons/sourcemod/translations/` directory.
+3. Restart your server or load the plugin using the `sm plugins load` command.
+4. The plugin will automatically create its configuration file (`l4d2_tank_draw.cfg`) in the `addons/sourcemod/configs/` directory after first run.
 
 Enjoy the excitement of random prizes after taking down a Tank with melee weapons!
 

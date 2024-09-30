@@ -35,8 +35,9 @@
 ## 安装
 
 1. 将 `l4d2_tank_draw.smx` 文件放入 `addons/sourcemod/plugins/` 目录。
-2. 重启您的服务器，或使用 `sm plugins load` 命令加载插件。
-3. 插件在首次运行后会自动创建其配置文件 (`l4d2_tank_draw.cfg`)，可在 `addons/sourcemod/configs/` 目录下找到。
+2. 将 `l4d2_tank_draw/translations/l4d2_tank_draw.phrases.txt` 文件放入 `addons/sourcemod/translations/` 目录。
+3. 重启您的服务器，或使用 `sm plugins load` 命令加载插件。
+4. 插件在首次运行后会自动创建其配置文件 (`l4d2_tank_draw.cfg`)，可在 `addons/sourcemod/configs/` 目录下找到。
 
 尽情享受近战击杀坦克后触发的随机奖品吧！
 
