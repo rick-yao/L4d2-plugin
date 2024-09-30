@@ -6,9 +6,9 @@ This SourceMod plugin for Left 4 Dead 2 adds a "lucky draw" feature that trigger
 
 ## Possible Prizes
 
-The plugin includes the following possible outcomes:
+The plugin includes the following possible prizes:
 
-1. No prize (bad luck)
+1. No prize
 2. Increase health randomly
 3. Toggle infinite ammo for all players
 4. Toggle infinite melee range for all players
@@ -17,9 +17,12 @@ The plugin includes the following possible outcomes:
 7. Average health for all survivors
 8. Toggle world gravity to moon gravity
 9. Increase gravity for the lucky player
-10. Decrease health randomly for the lucky player
+10. Take damage randomly to the lucky player
 11. Kill the lucky player
 12. Kill all players
+13. Clear all players' health
+14. Disarm all players
+15. Disarm lucky player
 
 ## Configuration
 
@@ -36,3 +39,11 @@ To customize the plugin, look for the `l4d2_tank_draw.cfg` file in your SourceMo
 3. The plugin will automatically create its configuration file (`l4d2_tank_draw.cfg`) in the `addons/sourcemod/configs/` directory after first run.
 
 Enjoy the excitement of random prizes after taking down a Tank with melee weapons!
+
+#### NOTE
+
+Since infinite ammo is also applied to molotov, so I added a mechanism to randomly disarm/kill player if the player throw molotov when infinite ammo is on.
+
+#### Other language
+
+[简体中文](/l4d2_tank_draw/README_CN.md)
