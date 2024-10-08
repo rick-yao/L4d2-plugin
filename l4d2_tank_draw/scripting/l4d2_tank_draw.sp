@@ -13,42 +13,48 @@
 #define Z_TANK	       8
 
 // built-in convar
-ConVar g_hInfinitePrimaryAmmo;
-ConVar g_MeleeRange;
-ConVar g_WorldGravity;
+ConVar
+	g_hInfinitePrimaryAmmo,
+	g_MeleeRange,
+	g_WorldGravity;
 
 // Custom ConVars for the plugin
-ConVar TankDrawEnable;
-ConVar ChanceNoPrice;
-ConVar ChanceIncreaseHealth;
-ConVar ChanceInfiniteAmmo;
-ConVar ChanceInfiniteMelee;
-ConVar ChanceLimitedTimeWorldMoonGravity;
-ConVar ChanceMoonGravityOneLimitedTime;
-ConVar ChanceAverageHealth;
-ConVar ChanceWorldMoonGravityToggle;
-ConVar ChanceIncreaseGravity;
-ConVar ChanceDecreaseHealth;
-ConVar ChanceKillAllSurvivor;
-ConVar ChanceKillSingleSurvivor;
-ConVar ChanceClearAllSurvivorHealth;
-ConVar ChanceDisarmAllSurvivor;
-ConVar ChanceDisarmSingleSurvivor;
+ConVar
+	TankDrawEnable,
+	ChanceNoPrice,
+	ChanceIncreaseHealth,
+	ChanceInfiniteAmmo,
+	ChanceInfiniteMelee,
+	ChanceLimitedTimeWorldMoonGravity,
+	ChanceMoonGravityOneLimitedTime,
+	ChanceAverageHealth,
+	ChanceWorldMoonGravityToggle,
+	ChanceIncreaseGravity,
+	ChanceDecreaseHealth,
+	ChanceKillAllSurvivor,
+	ChanceKillSingleSurvivor,
+	ChanceClearAllSurvivorHealth,
+	ChanceDisarmAllSurvivor,
+	ChanceDisarmSingleSurvivor,
 
-ConVar ChanceDisarmSurvivorMolotov;
-ConVar ChanceKillSurvivorMolotov;
+	ChanceDisarmSurvivorMolotov,
+	ChanceKillSurvivorMolotov,
 
-ConVar SingleMoonGravity;
-ConVar LimitedTimeWorldMoonGravityTimer;
-ConVar InfiniteMeeleRange;
-ConVar L4D2TankDrawDebugMode;
-ConVar MinHealthIncrease;
-ConVar MaxHealthIncrease;
-ConVar MinHealthDecrease;
-ConVar MaxHealthDecrease;
-ConVar IncreasedGravity;
-ConVar WorldMoonGravity;
-ConVar LimitedTimeWorldMoonGravityOne;
+	SingleMoonGravity,
+	LimitedTimeWorldMoonGravityTimer,
+	InfiniteMeeleRange,
+	L4D2TankDrawDebugMode,
+	MinHealthIncrease,
+	MaxHealthIncrease,
+	MinHealthDecrease,
+	MaxHealthDecrease,
+	IncreasedGravity,
+	WorldMoonGravity,
+	LimitedTimeWorldMoonGravityOne;
+
+Handle
+	g_SingleGravityTimer[MAXPLAYERS],
+	g_WorldGravityTimer;
 
 public Plugin myinfo =
 {
@@ -197,6 +203,9 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 public Action Event_Roundend(Event event, const char[] name, bool dontBroadcast)
 {
 	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
+	// reset all timer
+	ResetAllTimer();
+
 	// reset all changed server value
 	g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
 	g_hInfinitePrimaryAmmo.RestoreDefault();
@@ -247,6 +256,9 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 public void OnMapEnd()
 {
 	if (TankDrawEnable.IntValue == 0) { return; }
+	// reset all timer
+	ResetAllTimer();
+
 	// reset all changed server value
 	g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
 	g_hInfinitePrimaryAmmo.RestoreDefault();
@@ -316,7 +328,8 @@ Action LuckyDraw(int victim, int attacker)
 
 		g_WorldGravity.IntValue = WorldMoonGravity.IntValue;
 
-		CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityTimer), ResetWorldGravity, default_gravity_int);
+		delete g_WorldGravityTimer;
+		g_WorldGravityTimer = CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityTimer), ResetWorldGravity, default_gravity_int);
 		CPrintToChatAll("%t", "TankDrawResult_LimitedMoonGravity", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityTimer));
 		PrintHintTextToAll("%t", "TankDrawResult_LimitedMoonGravity_NoColor", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityTimer));
 
@@ -328,10 +341,13 @@ Action LuckyDraw(int victim, int attacker)
 	if (random <= currentChance)
 	{
 		SetEntityGravity(attacker, GetConVarFloat(SingleMoonGravity));
+
 		StringMap data = new StringMap();
 		data.SetValue("client", attacker);
 		data.SetValue("resetAll", false);
-		CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityOne), ResetGravity, data);
+
+		delete g_SingleGravityTimer[attacker];
+		g_SingleGravityTimer[attacker] = CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityOne), ResetGravity, data);
 		CPrintToChatAll("%t", "TankDrawResult_SingleMoonGravity", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityOne));
 		PrintHintTextToAll("%t", "TankDrawResult_SingleMoonGravity_NoColor", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityOne));
 
@@ -680,6 +696,19 @@ void DisarmPlayer(int client)
 			RemoveEntity(weapon);
 		}
 	}
+}
+
+void ResetAllTimer()
+{
+	// reset single gravity timer
+	static int i;
+	for (i = 0; i <= MAXPLAYERS; i++)
+	{
+		delete g_SingleGravityTimer[i];
+	}
+
+	// reset world gravity timer
+	delete g_WorldGravityTimer;
 }
 
 public Action MenuFunc_MainMenu(int client, int args)
