@@ -162,7 +162,7 @@ public Action Event_PlayerIncapacitated(Event event, const char[] name, bool don
 		int attacker = GetClientOfUserId(event.GetInt("attacker"));
 		if (!IsValidAliveClient(attacker))
 		{
-			PrintToServer("[Tank Draw] Attacker is not a valid alive client. Exiting event.");
+			PrintToServer("[Tank Draw] Attacker %d is not a valid alive client. Exiting event.", attacker);
 			return Plugin_Continue;
 		}
 
@@ -339,17 +339,21 @@ Action LuckyDraw(int victim, int attacker)
 		if (IsValidAliveClient(attacker))
 		{
 			EnableGodMode(attacker);
-			delete g_SingleGodModeTimer[attacker];
+			if (g_SingleGodModeTimer[attacker])
+			{
+				delete g_SingleGodModeTimer[attacker];
+			}
 			g_SingleGodModeTimer[attacker] = CreateTimer(GetConVarFloat(LimitedTimeSingleGodModeTimer), DisableGodMode, attacker);
 
-			CPrintToChatAll("%t", "TankDrawResult_SingleLimitedTimeGodMode", attackerName);
-			PrintHintTextToAll("%t", "TankDrawResult_SingleLimitedTimeGodMode_NoColor", attackerName);
+			CPrintToChatAll("%t", "TankDrawResult_SingleLimitedTimeGodMode", attackerName, GetConVarInt(LimitedTimeSingleGodModeTimer));
+			PrintHintTextToAll("%t", "TankDrawResult_SingleLimitedTimeGodMode_NoColor", attackerName, GetConVarInt(LimitedTimeSingleGodModeTimer));
 		}
 
 		return Plugin_Continue;
 	}
 
 	// limited time all god mode
+	currentChance += chanceLimitedTimeAllGodMode;
 	if (random <= currentChance)
 	{
 		for (int i = 1; i <= MaxClients; i++)
@@ -359,11 +363,14 @@ Action LuckyDraw(int victim, int attacker)
 				EnableGodMode(i);
 			}
 		}
-		delete g_AllGodModeTimer;
+		if (g_AllGodModeTimer)
+		{
+			delete g_AllGodModeTimer;
+		}
 		g_AllGodModeTimer = CreateTimer(GetConVarFloat(LimitedTimeAllGodModeTimer), DisableGodMode, 0);
 
-		CPrintToChatAll("%t", "TankDrawResult_AllLimitedTimeGodMode", attackerName);
-		PrintHintTextToAll("%t", "TankDrawResult_AllLimitedTimeGodMode_NoColor", attackerName);
+		CPrintToChatAll("%t", "TankDrawResult_AllLimitedTimeGodMode", attackerName, GetConVarInt(LimitedTimeAllGodModeTimer));
+		PrintHintTextToAll("%t", "TankDrawResult_AllLimitedTimeGodMode_NoColor", attackerName, GetConVarInt(LimitedTimeAllGodModeTimer));
 
 		return Plugin_Continue;
 	}
@@ -379,7 +386,10 @@ Action LuckyDraw(int victim, int attacker)
 
 		g_WorldGravity.IntValue = WorldMoonGravity.IntValue;
 
-		delete g_WorldGravityTimer;
+		if (g_WorldGravityTimer)
+		{
+			delete g_WorldGravityTimer;
+		}
 		g_WorldGravityTimer = CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityTimer), ResetWorldGravity, default_gravity_int);
 		CPrintToChatAll("%t", "TankDrawResult_LimitedMoonGravity", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityTimer));
 		PrintHintTextToAll("%t", "TankDrawResult_LimitedMoonGravity_NoColor", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityTimer));
@@ -393,7 +403,10 @@ Action LuckyDraw(int victim, int attacker)
 	{
 		SetEntityGravity(attacker, GetConVarFloat(SingleMoonGravity));
 
-		delete g_SingleGravityTimer[attacker];
+		if (g_SingleGravityTimer[attacker])
+		{
+			delete g_SingleGravityTimer[attacker];
+		}
 		g_SingleGravityTimer[attacker] = CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityOne), ResetSingleGravity, attacker);
 		CPrintToChatAll("%t", "TankDrawResult_SingleMoonGravity", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityOne));
 		PrintHintTextToAll("%t", "TankDrawResult_SingleMoonGravity_NoColor", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityOne));
@@ -429,8 +442,8 @@ Action LuckyDraw(int victim, int attacker)
 	if (random <= currentChance)
 	{
 		SetEntityGravity(attacker, GetConVarFloat(IncreasedGravity));
-		CPrintToChatAll("%t", "TankDrawResult_IncreaseGravity", attackerName, GetConVarFloat(IncreasedGravity));
-		PrintHintTextToAll("%t", "TankDrawResult_IncreaseGravity_NoColor", attackerName, GetConVarFloat(IncreasedGravity));
+		CPrintToChatAll("%t", "TankDrawResult_IncreaseGravity", attackerName, GetConVarInt(IncreasedGravity));
+		PrintHintTextToAll("%t", "TankDrawResult_IncreaseGravity_NoColor", attackerName, GetConVarInt(IncreasedGravity));
 
 		return Plugin_Continue;
 	}
@@ -633,6 +646,8 @@ Action ResetSingleGravity(Handle timer, int client)
 		PrintHintTextToAll("%t", "TankDraw_GravityResetSingle_NoColor", clientName);
 
 		SetEntityGravity(client, 1.0);
+
+		g_SingleGravityTimer[client] = null;
 	}
 
 	return Plugin_Continue;
@@ -691,6 +706,8 @@ Action ResetWorldGravity(Handle timer, int initValue)
 	CPrintToChatAll("%t", "TankDraw_WorldGravityReset");
 	PrintHintTextToAll("%t", "TankDraw_WorldGravityReset_NoColor");
 
+	g_WorldGravityTimer = null;
+
 	return Plugin_Continue;
 }
 
@@ -736,18 +753,20 @@ Action DisableGodMode(Handle timer, int iTarget)
 		SetEntityFlags(iTarget, flags & ~FL_GODMODE);
 		CPrintToChatAll("%t", "TankDraw_GodModeResetSingle", GetName(iTarget));
 		PrintHintTextToAll("%t", "TankDraw_GodModeResetSingle_NoColor", GetName(iTarget));
+		g_SingleGodModeTimer[iTarget] = null;
 	}
 	else {
 		for (int i = 1; i <= MaxClients; i++)
 		{
 			if (IsValidClient(i))
 			{
-				int flags = GetEntityFlags(iTarget);
-				SetEntityFlags(iTarget, flags & ~FL_GODMODE);
+				int flags = GetEntityFlags(i);
+				SetEntityFlags(i, flags & ~FL_GODMODE);
 			}
 		}
 		CPrintToChatAll("%t", "TankDraw_GodModeResetAll");
 		PrintHintTextToAll("%t", "TankDraw_GodModeResetAll_NoColor");
+		g_AllGodModeTimer = null;
 	}
 	return Plugin_Continue;
 }
@@ -758,14 +777,26 @@ void ResetAllTimer()
 	static int i;
 	for (i = 0; i <= MAXPLAYERS; i++)
 	{
-		delete g_SingleGravityTimer[i];
-		delete g_SingleGodModeTimer[i];
+		if (g_SingleGodModeTimer[i])
+		{
+			delete g_SingleGodModeTimer[i];
+		}
+		if (g_SingleGravityTimer[i])
+		{
+			delete g_SingleGravityTimer[i];
+		}
 	}
 
 	// reset world gravity timer
-	delete g_WorldGravityTimer;
+	if (g_WorldGravityTimer)
+	{
+		delete g_WorldGravityTimer;
+	}
 	// reset god mode for all timer
-	delete g_AllGodModeTimer;
+	if (g_AllGodModeTimer)
+	{
+		delete g_AllGodModeTimer;
+	}
 }
 
 char[] GetName(int client)
