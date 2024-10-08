@@ -342,12 +342,8 @@ Action LuckyDraw(int victim, int attacker)
 	{
 		SetEntityGravity(attacker, GetConVarFloat(SingleMoonGravity));
 
-		StringMap data = new StringMap();
-		data.SetValue("client", attacker);
-		data.SetValue("resetAll", false);
-
 		delete g_SingleGravityTimer[attacker];
-		g_SingleGravityTimer[attacker] = CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityOne), ResetGravity, data);
+		g_SingleGravityTimer[attacker] = CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityOne), ResetSingleGravity, attacker);
 		CPrintToChatAll("%t", "TankDrawResult_SingleMoonGravity", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityOne));
 		PrintHintTextToAll("%t", "TankDrawResult_SingleMoonGravity_NoColor", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityOne));
 
@@ -576,41 +572,18 @@ Action LuckyDraw(int victim, int attacker)
 	return Plugin_Continue;
 }
 
-Action ResetGravity(Handle timer, Handle hndl)
+Action ResetSingleGravity(Handle timer, int client)
 {
-	StringMap data = view_as<StringMap>(hndl);
-	int	  client;
-	bool	  resetAll;
-
-	data.GetValue("client", client);
-	data.GetValue("resetAll", resetAll);
-
-	if (resetAll)
+	if (IsValidClient(client))
 	{
-		CPrintToChatAll("%t", "TankDraw_GravityReset");
-		PrintHintTextToAll("%t", "TankDraw_GravityReset_NoColor");
-		for (int i = 1; i <= MaxClients; i++)
-		{
-			if (IsValidAliveClient(i))
-			{
-				SetEntityGravity(i, 1.0);
-			}
-		}
-	}
-	else
-	{
-		if (IsValidAliveClient(client))
-		{
-			char clientName[MAX_NAME_LENGTH];
-			GetClientName(client, clientName, sizeof(clientName));
-			CPrintToChatAll("%t", "TankDraw_GravityResetSingle", clientName);
-			PrintHintTextToAll("%t", "TankDraw_GravityResetSingle_NoColor", clientName);
+		char clientName[MAX_NAME_LENGTH];
+		GetClientName(client, clientName, sizeof(clientName));
+		CPrintToChatAll("%t", "TankDraw_GravityResetSingle", clientName);
+		PrintHintTextToAll("%t", "TankDraw_GravityResetSingle_NoColor", clientName);
 
-			SetEntityGravity(client, 1.0);
-		}
+		SetEntityGravity(client, 1.0);
 	}
 
-	delete data;
 	return Plugin_Continue;
 }
 
