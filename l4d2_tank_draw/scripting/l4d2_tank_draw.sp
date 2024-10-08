@@ -442,8 +442,8 @@ Action LuckyDraw(int victim, int attacker)
 	if (random <= currentChance)
 	{
 		SetEntityGravity(attacker, GetConVarFloat(IncreasedGravity));
-		CPrintToChatAll("%t", "TankDrawResult_IncreaseGravity", attackerName, GetConVarInt(IncreasedGravity));
-		PrintHintTextToAll("%t", "TankDrawResult_IncreaseGravity_NoColor", attackerName, GetConVarInt(IncreasedGravity));
+		CPrintToChatAll("%t", "TankDrawResult_IncreaseGravity", attackerName, GetConVarFloat(IncreasedGravity));
+		PrintHintTextToAll("%t", "TankDrawResult_IncreaseGravity_NoColor", attackerName, GetConVarFloat(IncreasedGravity));
 
 		return Plugin_Continue;
 	}
