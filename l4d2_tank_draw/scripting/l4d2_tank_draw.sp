@@ -36,10 +36,14 @@ ConVar
 	ChanceClearAllSurvivorHealth,
 	ChanceDisarmAllSurvivor,
 	ChanceDisarmSingleSurvivor,
+	ChanceLimitedTimeAllGodMode,
+	ChanceLimitedTimeSingleGodMode,
 
 	ChanceDisarmSurvivorMolotov,
 	ChanceKillSurvivorMolotov,
 
+	LimitedTimeSingleGodModeTimer,
+	LimitedTimeAllGodModeTimer,
 	SingleMoonGravity,
 	LimitedTimeWorldMoonGravityTimer,
 	InfiniteMeeleRange,
@@ -54,7 +58,9 @@ ConVar
 
 Handle
 	g_SingleGravityTimer[MAXPLAYERS],
-	g_WorldGravityTimer;
+	g_WorldGravityTimer,
+	g_SingleGodModeTimer[MAXPLAYERS],
+	g_AllGodModeTimer;
 
 public Plugin myinfo =
 {
@@ -106,6 +112,13 @@ public void OnPluginStart()
 	ChanceDisarmSingleSurvivor	  = CreateConVar("l4d2_tank_draw_chance_disarm_single_survivor", "10", "单人缴械概率 / Probability of disarming a single survivor", FCVAR_NONE);
 	ChanceDisarmSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_chance_disarm_survivor_molotov", "30", "无限弹药时，玩家乱扔火时缴械概率（百分比，0为关闭） / Probability of disarming a survivor when throwing molotovs recklessly with infinite ammo (percentage, 0 to disable)", FCVAR_NONE);
 	ChanceKillSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_chance_kill_survivor_molotov", "30", "无限弹药时，玩家乱扔火时处死概率（百分比，0为关闭） / Probability of killing a survivor when throwing molotovs recklessly with infinite ammo (percentage, 0 to disable)", FCVAR_NONE);
+
+	// single god mode
+	ChanceLimitedTimeSingleGodMode	  = CreateConVar("l4d2_tank_draw_chance_limited_time_single_god_mode", "30", "单人限时无敌概率 / Probability of single player god mode", FCVAR_NONE);
+	LimitedTimeSingleGodModeTimer	  = CreateConVar("l4d2_tank_draw_limited_time_single_god_mode_timer", "180", "单人限时无敌持续秒数 / Duration in seconds of limited time single player god mode", false, false);
+	// all god mode
+	ChanceLimitedTimeAllGodMode	  = CreateConVar("l4d2_tank_draw_chance_limited_time_all_god_mode", "30", "全体限时无敌概率 / Probability of all player god mode", FCVAR_NONE);
+	LimitedTimeAllGodModeTimer	  = CreateConVar("l4d2_tank_draw_limited_time_all_god_mode_timer", "180", "全体限时无敌持续秒数 / Duration in seconds of limited time all player god mode", false, false);
 
 	AutoExecConfig(true, "l4d2_tank_draw");
 
@@ -282,6 +295,8 @@ Action LuckyDraw(int victim, int attacker)
 	int chanceKillSingleSurvivor	      = ChanceKillSingleSurvivor.IntValue;
 	int chanceDisarmAllSurvivor	      = ChanceDisarmAllSurvivor.IntValue;
 	int chanceDisarmSingleSurvivor	      = ChanceDisarmSingleSurvivor.IntValue;
+	int chanceLimitedTimeSingleGodMode    = ChanceLimitedTimeSingleGodMode.IntValue;
+	int chanceLimitedTimeAllGodMode	      = ChanceLimitedTimeAllGodMode.IntValue;
 
 	int chanceLimitedTimeWorldMoonGravity = ChanceLimitedTimeWorldMoonGravity.IntValue;
 	int chanceMoonGravityOneLimitedTime   = ChanceMoonGravityOneLimitedTime.IntValue;
@@ -289,7 +304,7 @@ Action LuckyDraw(int victim, int attacker)
 	int chanceIncreaseGravity	      = ChanceIncreaseGravity.IntValue;
 	int chanceClearAllSurvivorHealth      = ChanceClearAllSurvivorHealth.IntValue;
 
-	int totalChance			      = chanceNoPrice + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
+	int totalChance			      = chanceNoPrice + chanceLimitedTimeSingleGodMode + chanceLimitedTimeAllGodMode + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
 	totalChance += chanceLimitedTimeWorldMoonGravity + chanceMoonGravityOneLimitedTime + chanceWorldMoonGravityToggle + chanceIncreaseGravity;
 
 	if (totalChance == 0)
@@ -313,6 +328,42 @@ Action LuckyDraw(int victim, int attacker)
 	{
 		CPrintToChatAll("%t", "TankDrawResult_NoPrize", attackerName);
 		PrintHintTextToAll("%t", "TankDrawResult_NoPrize_NoColor", attackerName);
+
+		return Plugin_Continue;
+	}
+
+	// limited time single god mode
+	currentChance += chanceLimitedTimeSingleGodMode;
+	if (random <= currentChance)
+	{
+		if (IsValidAliveClient(attacker))
+		{
+			EnableGodMode(attacker);
+			delete g_SingleGodModeTimer[attacker];
+			g_SingleGodModeTimer[attacker] = CreateTimer(GetConVarFloat(LimitedTimeSingleGodModeTimer), DisableGodMode, attacker);
+
+			CPrintToChatAll("%t", "TankDrawResult_SingleLimitedTimeGodMode", attackerName);
+			PrintHintTextToAll("%t", "TankDrawResult_SingleLimitedTimeGodMode_NoColor", attackerName);
+		}
+
+		return Plugin_Continue;
+	}
+
+	// limited time all god mode
+	if (random <= currentChance)
+	{
+		for (int i = 1; i <= MaxClients; i++)
+		{
+			if (IsValidAliveClient(i))
+			{
+				EnableGodMode(i);
+			}
+		}
+		delete g_AllGodModeTimer;
+		g_AllGodModeTimer = CreateTimer(GetConVarFloat(LimitedTimeAllGodModeTimer), DisableGodMode, 0);
+
+		CPrintToChatAll("%t", "TankDrawResult_AllLimitedTimeGodMode", attackerName);
+		PrintHintTextToAll("%t", "TankDrawResult_AllLimitedTimeGodMode_NoColor", attackerName);
 
 		return Plugin_Continue;
 	}
@@ -671,6 +722,36 @@ void DisarmPlayer(int client)
 	}
 }
 
+void EnableGodMode(int iTarget)
+{
+	int flags = GetEntityFlags(iTarget);
+	SetEntityFlags(iTarget, flags | FL_GODMODE);
+}
+
+Action DisableGodMode(Handle timer, int iTarget)
+{
+	if (iTarget != 0)
+	{
+		int flags = GetEntityFlags(iTarget);
+		SetEntityFlags(iTarget, flags & ~FL_GODMODE);
+		CPrintToChatAll("%t", "TankDraw_GodModeResetSingle", GetName(iTarget));
+		PrintHintTextToAll("%t", "TankDraw_GodModeResetSingle_NoColor", GetName(iTarget));
+	}
+	else {
+		for (int i = 1; i <= MaxClients; i++)
+		{
+			if (IsValidClient(i))
+			{
+				int flags = GetEntityFlags(iTarget);
+				SetEntityFlags(iTarget, flags & ~FL_GODMODE);
+			}
+		}
+		CPrintToChatAll("%t", "TankDraw_GodModeResetAll");
+		PrintHintTextToAll("%t", "TankDraw_GodModeResetAll_NoColor");
+	}
+	return Plugin_Continue;
+}
+
 void ResetAllTimer()
 {
 	// reset single gravity timer
@@ -678,10 +759,20 @@ void ResetAllTimer()
 	for (i = 0; i <= MAXPLAYERS; i++)
 	{
 		delete g_SingleGravityTimer[i];
+		delete g_SingleGodModeTimer[i];
 	}
 
 	// reset world gravity timer
 	delete g_WorldGravityTimer;
+	// reset god mode for all timer
+	delete g_AllGodModeTimer;
+}
+
+char[] GetName(int client)
+{
+	char clientName[MAX_NAME_LENGTH];
+	GetClientName(client, clientName, sizeof(clientName));
+	return clientName;
 }
 
 public Action MenuFunc_MainMenu(int client, int args)
