@@ -774,8 +774,7 @@ Action DisableGodMode(Handle timer, int iTarget)
 void ResetAllTimer()
 {
 	// reset single gravity timer
-	static int i;
-	for (i = 0; i <= MAXPLAYERS; i++)
+	for (int i = 1; i <= MaxClients; i++)
 	{
 		if (g_SingleGodModeTimer[i])
 		{
