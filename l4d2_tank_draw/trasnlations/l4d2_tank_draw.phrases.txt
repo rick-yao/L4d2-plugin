@@ -84,6 +84,30 @@
         "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： %d 秒限时月球重力"
     }
 
+    "TankDrawResult_SingleLimitedTimeGodMode"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Limited time of %d seconds of god mode."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive} %d 秒单人限时无敌"
+    }
+
+    "TankDrawResult_SingleLimitedTimeGodMode_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Limited time of %d seconds of god mode."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： %d 秒单人限时无敌"
+    }
+
+    "TankDrawResult_AllLimitedTimeGodMode"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Limited time of %d seconds of god mode for all."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive} 所有人 %d 秒限时无敌"
+    }
+
+    "TankDrawResult_AllLimitedTimeGodMode_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Limited time of %d seconds of god mode for all."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 所有人 %d 秒限时无敌"
+    }
+
     "TankDrawResult_SingleMoonGravity"
     {
         "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Single limited time of %d seconds moon gravity experience."
@@ -382,5 +406,29 @@
     {
         "en"    "[Tank Draw] Event ended: Victim was not a Tank."
         "chi"   "[坦克抽奖] 事件结束：受害者不是Tank"
+    }
+
+    "TankDraw_GodModeResetSingle"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s god mode has been disabled."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 关闭无敌模式"
+    }
+
+    "TankDraw_GodModeResetSingle_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's god mode has been disabled."
+        "chi"   "[坦克抽奖] 玩家 %s 关闭无敌模式"
+    }
+
+    "TankDraw_GodModeResetAll"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}All god mode has been disabled."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}全体关闭无敌模式"
+    }
+
+    "TankDraw_GodModeResetAll_NoColor"
+    {
+        "en"    "[Tank Draw] All god mode has been disabled."
+        "chi"   "[坦克抽奖] 全体关闭无敌模式"
     }
 }
