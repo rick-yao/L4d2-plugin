@@ -353,6 +353,7 @@ Action LuckyDraw(int victim, int attacker)
 	}
 
 	// limited time all god mode
+	currentChance += chanceLimitedTimeAllGodMode;
 	if (random <= currentChance)
 	{
 		for (int i = 1; i <= MaxClients; i++)
@@ -759,8 +760,8 @@ Action DisableGodMode(Handle timer, int iTarget)
 		{
 			if (IsValidClient(i))
 			{
-				int flags = GetEntityFlags(iTarget);
-				SetEntityFlags(iTarget, flags & ~FL_GODMODE);
+				int flags = GetEntityFlags(i);
+				SetEntityFlags(i, flags & ~FL_GODMODE);
 			}
 		}
 		CPrintToChatAll("%t", "TankDraw_GodModeResetAll");
@@ -835,7 +836,6 @@ public int MenuHandler_MainMenu(Handle menu, MenuAction action, int client, int 
 
 public Action MenuFunc_KillTank(int client)
 {
-	PrintToServer("%d menu attcker1", client);
 	Menu menu = CreateMenu(MenuHandler_KillTank);
 	char line[1024];
 
@@ -854,7 +854,6 @@ public Action MenuFunc_KillTank(int client)
 
 public int MenuHandler_KillTank(Handle menu, MenuAction action, int client, int item)
 {
-	PrintToServer("%d menu attcker", client);
 	if (action == MenuAction_Select)
 	{
 		switch (item)
