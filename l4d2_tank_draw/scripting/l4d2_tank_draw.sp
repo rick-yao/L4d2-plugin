@@ -62,45 +62,44 @@ public void OnPluginStart()
 {
 	LoadTranslations("l4d2_tank_draw.phrases");
 
-	TankDrawEnable			  = CreateConVar("l4d2_tank_draw_enable", "1", "Tank抽奖插件开/关 [1=开|0=关].", PLUGIN_FLAG, true, 0.0, true, 1.0);
-	L4D2TankDrawDebugMode		  = CreateConVar("l4d2_tank_draw_debug_mode", "0", "是否开启调试模式，修改后tank被击杀即可抽奖", false, false);
+	TankDrawEnable			  = CreateConVar("l4d2_tank_draw_enable", "1", "Tank抽奖插件开/关 [1=开|0=关]。 / Tank draw plugin on/off [1=on|0=off].", PLUGIN_FLAG, true, 0.0, true, 1.0);
+	L4D2TankDrawDebugMode		  = CreateConVar("l4d2_tank_draw_debug_mode", "0", "是否开启调试模式，修改后tank被击杀即可抽奖，使用!x开启击杀tank菜单 / Enable debug mode, draw after tank is killed when enabled, use !x open kill tank menu", false, false);
 
-	// 单人限时重力
-	SingleMoonGravity		  = CreateConVar("l4d2_tank_draw_single_moon_gravity", "0.1", "单人月球重力参数，人物正常重力值为1", false, false);
-	LimitedTimeWorldMoonGravityOne	  = CreateConVar("l4d2_tank_draw_limited_time_world_moon_gravity_one", "180", "单人限时月球重力持续秒数", false, false);
-	ChanceMoonGravityOneLimitedTime	  = CreateConVar("l4d2_tank_draw_chance_moon_gravity_one_limited_time", "10", "抽奖者单人获得限时月球重力的概率", FCVAR_NONE);
-	// 世界重力
-	WorldMoonGravity		  = CreateConVar("l4d2_tank_draw_world_moon_gravity", "80", "月球重力时世界重力参数，世界重力正常值为800", false, false);
-	ChanceWorldMoonGravityToggle	  = CreateConVar("l4d2_tank_draw_chance_world_moon_gravity_toggle", "5", "世界重力切换为月球重力的概率", FCVAR_NONE);
-	// 世界限时月球重力
-	LimitedTimeWorldMoonGravityTimer  = CreateConVar("l4d2_tank_draw_limited_time_world_moon_gravity_timer", "180", "限时世界重力改为月球重力持续秒数", false, false);
-	ChanceLimitedTimeWorldMoonGravity = CreateConVar("l4d2_tank_draw_chance_limited_time_world_moon_gravity", "10", "获得限时世界重力改为月球重力的概率", FCVAR_NONE);
-	// 增加单人重力
-	IncreasedGravity		  = CreateConVar("l4d2_tank_draw_increased_gravity", "2.0", "抽奖增加单人重力的倍数，从1.0至8.0", PLUGIN_FLAG, true, 1.0, true, 8.0);
-	ChanceIncreaseGravity		  = CreateConVar("l4d2_tank_draw_chance_increase_gravity", "10", "增加单人重力的概率", FCVAR_NONE);
+	// 单人限时重力 / Single player limited time gravity
+	SingleMoonGravity		  = CreateConVar("l4d2_tank_draw_single_moon_gravity", "0.1", "单人月球重力参数，人物正常重力值为1 / Single player moon gravity parameter, normal gravity is 1", false, false);
+	LimitedTimeWorldMoonGravityOne	  = CreateConVar("l4d2_tank_draw_limited_time_world_moon_gravity_one", "180", "单人限时月球重力持续秒数 / Duration in seconds for single player limited time moon gravity", false, false);
+	ChanceMoonGravityOneLimitedTime	  = CreateConVar("l4d2_tank_draw_chance_moon_gravity_one_limited_time", "10", "抽奖者单人获得限时月球重力的概率 / Probability of single player getting limited time moon gravity", FCVAR_NONE);
 
-	InfiniteMeeleRange		  = CreateConVar("l4d2_tank_draw_infinite_melee_range", "700", "无限近战范围，游戏默认为70，重复抽取会自动恢复默认值", false, false);
-	ChanceInfiniteMelee		  = CreateConVar("l4d2_tank_draw_chance_infinite_melee", "5", "无限近战范围的概率", FCVAR_NONE);
+	// 世界重力 / World gravity
+	WorldMoonGravity		  = CreateConVar("l4d2_tank_draw_world_moon_gravity", "80", "月球重力时世界重力参数，世界重力正常值为800 / World gravity parameter for moon gravity, normal world gravity is 800", false, false);
+	ChanceWorldMoonGravityToggle	  = CreateConVar("l4d2_tank_draw_chance_world_moon_gravity_toggle", "5", "世界重力切换为月球重力的概率 / Probability of toggling world gravity to moon gravity", FCVAR_NONE);
 
-	ChanceIncreaseHealth		  = CreateConVar("l4d2_tank_draw_chance_increase_health", "10", "增加生命值的概率", FCVAR_NONE);
-	MinHealthIncrease		  = CreateConVar("l4d2_tank_draw_min_health_increase", "200", "抽奖增加血量的最小值", false, false);
-	MaxHealthIncrease		  = CreateConVar("l4d2_tank_draw_max_health_increase", "500", "抽奖增加血量的最大值", false, false);
+	// 世界限时月球重力 / World limited time moon gravity
+	LimitedTimeWorldMoonGravityTimer  = CreateConVar("l4d2_tank_draw_limited_time_world_moon_gravity_timer", "180", "限时世界重力改为月球重力持续秒数 / Duration in seconds for limited time world moon gravity", false, false);
+	ChanceLimitedTimeWorldMoonGravity = CreateConVar("l4d2_tank_draw_chance_limited_time_world_moon_gravity", "10", "获得限时世界重力改为月球重力的概率 / Probability of getting limited time world moon gravity", FCVAR_NONE);
 
-	ChanceDecreaseHealth		  = CreateConVar("l4d2_tank_draw_chance_decrease_health", "10", "抽奖受到伤害的概率", FCVAR_NONE);
-	MinHealthDecrease		  = CreateConVar("l4d2_tank_draw_min_health_decrease", "200", "抽奖受到伤害的最小值", false, false);
-	MaxHealthDecrease		  = CreateConVar("l4d2_tank_draw_max_health_decrease", "500", "抽奖受到伤害的最大值", false, false);
+	// 增加单人重力 / Increase single player gravity
+	IncreasedGravity		  = CreateConVar("l4d2_tank_draw_increased_gravity", "2.0", "抽奖增加单人重力的倍数，从1.0至8.0 / Multiplier for increasing single player gravity, from 1.0 to 8.0", PLUGIN_FLAG, true, 1.0, true, 8.0);
+	ChanceIncreaseGravity		  = CreateConVar("l4d2_tank_draw_chance_increase_gravity", "10", "增加单人重力的概率 / Probability of increasing single player gravity", FCVAR_NONE);
 
-	ChanceNoPrice			  = CreateConVar("l4d2_tank_draw_chance_no_price", "20", "没有奖励的概率", FCVAR_NONE);
-	ChanceInfiniteAmmo		  = CreateConVar("l4d2_tank_draw_chance_infinite_ammo", "10", "无限弹药的概率", FCVAR_NONE);
-	ChanceAverageHealth		  = CreateConVar("l4d2_tank_draw_chance_average_health", "10", "平均生命值的概率", FCVAR_NONE);
-	ChanceKillAllSurvivor		  = CreateConVar("l4d2_tank_draw_chance_kill_all_survivor", "10", "团灭概率", FCVAR_NONE);
-	ChanceKillSingleSurvivor	  = CreateConVar("l4d2_tank_draw_chance_kill_single_survivor", "10", "单人死亡概率", FCVAR_NONE);
-	ChanceClearAllSurvivorHealth	  = CreateConVar("l4d2_tank_draw_chance_clear_all_survivor_health", "10", "清空所有人血量概率", FCVAR_NONE);
-	ChanceDisarmAllSurvivor		  = CreateConVar("l4d2_tank_draw_chance_disarm_all_survivor", "10", "所有人缴械概率", FCVAR_NONE);
-	ChanceDisarmSingleSurvivor	  = CreateConVar("l4d2_tank_draw_chance_disarm_single_survivor", "10", "单人缴械概率", FCVAR_NONE);
-
-	ChanceDisarmSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_chance_disarm_survivor_molotov", "30", "无限弹药时，玩家乱扔火时缴械概率（百分比，0为关闭）", FCVAR_NONE);
-	ChanceKillSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_chance_kill_survivor_molotov", "30", "无限弹药时，玩家乱扔火时处死概率（百分比，0为关闭）", FCVAR_NONE);
+	InfiniteMeeleRange		  = CreateConVar("l4d2_tank_draw_infinite_melee_range", "700", "无限近战范围，游戏默认为70，重复抽取会自动恢复默认值 / Infinite melee range, game default is 70, repeated draws will restore default value", false, false);
+	ChanceInfiniteMelee		  = CreateConVar("l4d2_tank_draw_chance_infinite_melee", "5", "无限近战范围的概率 / Probability of infinite melee range", FCVAR_NONE);
+	ChanceIncreaseHealth		  = CreateConVar("l4d2_tank_draw_chance_increase_health", "10", "增加生命值的概率 / Probability of increasing health", FCVAR_NONE);
+	MinHealthIncrease		  = CreateConVar("l4d2_tank_draw_min_health_increase", "200", "抽奖增加血量的最小值 / Minimum value for health increase", false, false);
+	MaxHealthIncrease		  = CreateConVar("l4d2_tank_draw_max_health_increase", "500", "抽奖增加血量的最大值 / Maximum value for health increase", false, false);
+	ChanceDecreaseHealth		  = CreateConVar("l4d2_tank_draw_chance_decrease_health", "10", "抽奖受到伤害的概率 / Probability of receiving damage", FCVAR_NONE);
+	MinHealthDecrease		  = CreateConVar("l4d2_tank_draw_min_health_decrease", "200", "抽奖受到伤害的最小值 / Minimum value for health decrease", false, false);
+	MaxHealthDecrease		  = CreateConVar("l4d2_tank_draw_max_health_decrease", "500", "抽奖受到伤害的最大值 / Maximum value for health decrease", false, false);
+	ChanceNoPrice			  = CreateConVar("l4d2_tank_draw_chance_no_price", "20", "没有奖励的概率 / Probability of no reward", FCVAR_NONE);
+	ChanceInfiniteAmmo		  = CreateConVar("l4d2_tank_draw_chance_infinite_ammo", "10", "无限弹药的概率 / Probability of infinite ammo", FCVAR_NONE);
+	ChanceAverageHealth		  = CreateConVar("l4d2_tank_draw_chance_average_health", "10", "平均生命值的概率 / Probability of average health", FCVAR_NONE);
+	ChanceKillAllSurvivor		  = CreateConVar("l4d2_tank_draw_chance_kill_all_survivor", "10", "团灭概率 / Probability of killing all survivors", FCVAR_NONE);
+	ChanceKillSingleSurvivor	  = CreateConVar("l4d2_tank_draw_chance_kill_single_survivor", "10", "单人死亡概率 / Probability of killing a single survivor", FCVAR_NONE);
+	ChanceClearAllSurvivorHealth	  = CreateConVar("l4d2_tank_draw_chance_clear_all_survivor_health", "10", "清空所有人血量概率 / Probability of clearing all survivors' health", FCVAR_NONE);
+	ChanceDisarmAllSurvivor		  = CreateConVar("l4d2_tank_draw_chance_disarm_all_survivor", "10", "所有人缴械概率 / Probability of disarming all survivors", FCVAR_NONE);
+	ChanceDisarmSingleSurvivor	  = CreateConVar("l4d2_tank_draw_chance_disarm_single_survivor", "10", "单人缴械概率 / Probability of disarming a single survivor", FCVAR_NONE);
+	ChanceDisarmSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_chance_disarm_survivor_molotov", "30", "无限弹药时，玩家乱扔火时缴械概率（百分比，0为关闭） / Probability of disarming a survivor when throwing molotovs recklessly with infinite ammo (percentage, 0 to disable)", FCVAR_NONE);
+	ChanceKillSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_chance_kill_survivor_molotov", "30", "无限弹药时，玩家乱扔火时处死概率（百分比，0为关闭） / Probability of killing a survivor when throwing molotovs recklessly with infinite ammo (percentage, 0 to disable)", FCVAR_NONE);
 
 	AutoExecConfig(true, "l4d2_tank_draw");
 
@@ -119,7 +118,7 @@ public void OnPluginStart()
 	if (L4D2TankDrawDebugMode.IntValue == 1)
 	{
 		PrintToServer("调试菜单打开,debug menu on");
-		RegConsoleCmd("sm_x", MenuFunc_MainMenu, "打开调试菜单");
+		RegConsoleCmd("sm_x", MenuFunc_MainMenu, "打开调试菜单 / open debug menu");
 		HookEvent("tank_killed", Event_PlayerIncapacitated);
 	}
 }
@@ -283,7 +282,7 @@ Action LuckyDraw(int victim, int attacker)
 
 	if (totalChance == 0)
 	{
-		PrintToServer("所有概率总和为0，跳过抽奖");
+		PrintToServer("所有概率总和为0，跳过抽奖 / total change equals to 0, do not draw");
 		return Plugin_Continue;
 	}
 
@@ -300,7 +299,6 @@ Action LuckyDraw(int victim, int attacker)
 	currentChance += chanceNoPrice;
 	if (random <= currentChance)
 	{
-		// TankDraw_PrintToChat(0, true, "非常遗憾，此次砍死tank没有中奖");
 		CPrintToChatAll("%t", "TankDrawResult_NoPrize", attackerName);
 		PrintHintTextToAll("%t", "TankDrawResult_NoPrize_NoColor", attackerName);
 
@@ -689,9 +687,9 @@ public Action MenuFunc_MainMenu(int client, int args)
 	Handle menu = CreateMenu(MenuHandler_MainMenu);
 	char   line[1024];
 
-	FormatEx(line, sizeof(line), "抽奖调试菜单");
+	FormatEx(line, sizeof(line), "抽奖调试菜单 / tank draw debug menu");
 	SetMenuTitle(menu, line);
-	AddMenuItem(menu, "item0", "杀死tank");
+	AddMenuItem(menu, "item0", "杀死tank / kill tank");
 	DisplayMenu(menu, client, MENU_TIME_FOREVER);
 
 	return Plugin_Continue;
@@ -717,11 +715,11 @@ public Action MenuFunc_KillTank(int client)
 	Menu menu = CreateMenu(MenuHandler_KillTank);
 	char line[1024];
 
-	FormatEx(line, sizeof(line), "杀死tank");
+	FormatEx(line, sizeof(line), "杀死tank / kill tank");
 	SetMenuTitle(menu, line);
 
 	char dis[1024];
-	FormatEx(dis, sizeof(dis), "杀死所有tank");
+	FormatEx(dis, sizeof(dis), "杀死所有tank / kill all tank");
 
 	menu.AddItem("kill all tank", dis);
 	menu.ExitBackButton = true;
