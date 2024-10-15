@@ -1,0 +1,61 @@
+"Phrases"
+{
+    "TankTrigger_WitchNotKilledByHuman"
+    {
+        "en"    "{yellow}[Tank Trigger] {lightgreen}Witch is not killed by human, stop spawning lucky tank."
+        "chi"   "{yellow}[幸运Tank] {lightgreen}Witch不是被人类杀死，停止刷新幸运Tank"
+    }
+
+    "TankTrigger_WitchNotKilledByHuman_NoColor"
+    {
+        "en"    "[Tank Trigger] Witch is not killed by human, stop spawning lucky tank."
+        "chi"   "[幸运Tank] Witch不是被人类杀死，停止刷新幸运Tank"
+    }
+    
+    "TankTrigger_WitchKilledSpawnTank"
+    {
+        "en"    "{yellow}[Tank Trigger] {lightgreen}Witch is killed by Player {olive}%s {lightgreen},spawning lucky tank."
+        "chi"   "{yellow}[幸运Tank] {lightgreen}Witch被玩家 {olive}%s{lightgreen} 杀死，获得幸运Tank"
+    }
+
+    "TankTrigger_WitchKilledSpawnTank_NoColor"
+    {
+        "en"    "[Tank Trigger] Witch is killed by Player %s ,spawning lucky tank."
+        "chi"   "[幸运Tank] Witch被玩家 %s 杀死，获得幸运Tank"
+    }
+    
+    "TankTrigger_CarNotTriggeredByHuman"
+    {
+        "en"    "{yellow}[Tank Trigger] {lightgreen}Car is not triggered by human, stop spawning lucky tank."
+        "chi"   "{yellow}[幸运Tank] {lightgreen}车辆不是被人类触发，停止刷新幸运Tank"
+    }
+
+    "TankTrigger_CarNotTriggeredByHuman_NoColor"
+    {
+        "en"    "[Tank Trigger] Car is not triggered by human, stop spawning lucky tank."
+        "chi"   "[幸运Tank] 车辆不是被人类触发，停止刷新幸运Tank"
+    }
+
+    "TankTrigger_CarTriggeredSpawnTank"
+    {
+        "en"    "{yellow}[Tank Trigger] {lightgreen}Car is triggered by Player {olive}%s {lightgreen},spawning lucky tank."
+        "chi"   "{yellow}[幸运Tank] {lightgreen}汽车被玩家 {olive}%s{lightgreen} 激活，获得幸运Tank"
+    }
+
+    "TankTrigger_CarTriggeredSpawnTank_NoColor"
+    {
+        "en"    "[Tank Trigger] Car is triggered by Player %s ,spawning lucky tank."
+        "chi"   "[幸运Tank] 汽车被玩家 %s 激活，获得幸运Tank"
+    }
+    
+    "TankTrigger_TankSpawnSuccess"
+    {
+        "en"    "{yellow}[Tank Trigger] {lightgreen}Spawn lucky tank successfully"
+        "chi"   "{yellow}[幸运Tank] {lightgreen}召唤幸运Tank成功"
+    }
+    "TankTrigger_TankSpawnSuccess_NoColor"
+    {
+        "en"    "[Tank Trigger] Spawn lucky tank successfully"
+        "chi"   "[幸运Tank] 召唤幸运Tank成功"
+    }
+}
