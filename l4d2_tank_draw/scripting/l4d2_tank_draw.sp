@@ -38,6 +38,7 @@ ConVar
 	ChanceDisarmSingleSurvivor,
 	ChanceLimitedTimeAllGodMode,
 	ChanceLimitedTimeSingleGodMode,
+	ChanceDisableGlow,
 
 	ChanceDisarmSurvivorMolotov,
 	ChanceKillSurvivorMolotov,
@@ -54,7 +55,8 @@ ConVar
 	MaxHealthDecrease,
 	IncreasedGravity,
 	WorldMoonGravity,
-	LimitedTimeWorldMoonGravityOne;
+	LimitedTimeWorldMoonGravityOne,
+	DisableGlow;
 
 Handle
 	g_SingleGravityTimer[MAXPLAYERS],
@@ -120,6 +122,10 @@ public void OnPluginStart()
 	ChanceLimitedTimeAllGodMode	  = CreateConVar("l4d2_tank_draw_chance_limited_time_all_god_mode", "30", "全体限时无敌概率 / Probability of all player god mode", FCVAR_NONE);
 	LimitedTimeAllGodModeTimer	  = CreateConVar("l4d2_tank_draw_limited_time_all_god_mode_timer", "180", "全体限时无敌持续秒数 / Duration in seconds of limited time all player god mode", false, false);
 
+	// disable glow
+	ChanceDisableGlow		  = CreateConVar("l4d2_tank_draw_chance_disable_glow", "30", "取消所有人物光亮概率 / Probability of disable all survivors glow", false, false);
+	DisableGlow			  = CreateConVar("l4d2_tank_draw_disable_glow", "0", "取消所有人物光亮 / Disable all survivors glow", false, false);
+
 	AutoExecConfig(true, "l4d2_tank_draw");
 
 	PrintToServer("[Tank Draw] Plugin loaded");
@@ -144,6 +150,7 @@ public void OnPluginStart()
 
 public Action Event_PlayerIncapacitated(Event event, const char[] name, bool dontBroadcast)
 {
+	PrintToServer("Event_PlayerIncapacitated");
 	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
 	// Check if the victim is a Tank
 	int victim = GetClientOfUserId(event.GetInt("userid"));
@@ -297,6 +304,7 @@ Action LuckyDraw(int victim, int attacker)
 	int chanceDisarmSingleSurvivor	      = ChanceDisarmSingleSurvivor.IntValue;
 	int chanceLimitedTimeSingleGodMode    = ChanceLimitedTimeSingleGodMode.IntValue;
 	int chanceLimitedTimeAllGodMode	      = ChanceLimitedTimeAllGodMode.IntValue;
+	int chanceDisableGlow		      = ChanceDisableGlow.IntValue;
 
 	int chanceLimitedTimeWorldMoonGravity = ChanceLimitedTimeWorldMoonGravity.IntValue;
 	int chanceMoonGravityOneLimitedTime   = ChanceMoonGravityOneLimitedTime.IntValue;
@@ -304,7 +312,7 @@ Action LuckyDraw(int victim, int attacker)
 	int chanceIncreaseGravity	      = ChanceIncreaseGravity.IntValue;
 	int chanceClearAllSurvivorHealth      = ChanceClearAllSurvivorHealth.IntValue;
 
-	int totalChance			      = chanceNoPrice + chanceLimitedTimeSingleGodMode + chanceLimitedTimeAllGodMode + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
+	int totalChance			      = chanceNoPrice + chanceDisableGlow + chanceLimitedTimeSingleGodMode + chanceLimitedTimeAllGodMode + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
 	totalChance += chanceLimitedTimeWorldMoonGravity + chanceMoonGravityOneLimitedTime + chanceWorldMoonGravityToggle + chanceIncreaseGravity;
 
 	if (totalChance == 0)
@@ -329,6 +337,37 @@ Action LuckyDraw(int victim, int attacker)
 		CPrintToChatAll("%t", "TankDrawResult_NoPrize", attackerName);
 		PrintHintTextToAll("%t", "TankDrawResult_NoPrize_NoColor", attackerName);
 
+		return Plugin_Continue;
+	}
+
+	currentChance += chanceDisableGlow;
+	if (random <= currentChance)
+	{
+		PrintToChatAll("max: %d", MaxClients);
+		if (GetConVarInt(DisableGlow) == 0)
+		{
+			DisableGlow.IntValue = 1;
+			PrintToChatAll("disable glow");
+			for (int i = 1; i <= MaxClients; i++)
+			{
+				if (IsValidAliveClient(i))
+				{
+					char name[MAX_NAME_LENGTH];
+					GetClientName(i, name, sizeof(name));
+					PrintToChatAll("%d %s: %d", i, name, GetEntProp(i, Prop_Send, "m_bSurvivorGlowEnabled"));
+					SetEntProp(i, Prop_Send, "m_bSurvivorGlowEnabled", 0);
+					PrintToChatAll("disable glow success");
+				}
+			}
+		}
+		else {
+			DisableGlow.IntValue = 0;
+			for (int i = 1; i <= MaxClients; i++)
+			{
+				SetEntProp(i, Prop_Send, "m_bSurvivorGlowEnabled", 1);
+			}
+			PrintToChatAll("restore glow");
+		}
 		return Plugin_Continue;
 	}
 
