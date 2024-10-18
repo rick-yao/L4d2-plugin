@@ -7,6 +7,13 @@
 
 #define PLUGIN_VERSION "0.1"
 
+#define Z_SMOKER       1
+#define Z_BOOMER       2
+#define Z_HUNTER       3
+#define Z_SPITTER      4
+#define Z_JOCKEY       5
+#define Z_CHARGER      6
+
 ConVar
 	ChanceCarAlarm,
 	ChanceWitchKilled;
@@ -97,6 +104,27 @@ void SpawnTank(float pos[3])
 	{
 		CPrintToChatAll("%t", "TankTrigger_TankSpawnSuccess");
 	}
+	else
+	{
+		// Tank spawn failed, kill a random Jockey and try again
+		int entity = FindRandomSpecialInfected();
+		if (entity != -1)
+		{
+			ForcePlayerSuicide(entity);
+
+			// Try spawning the Tank again
+			bool IsSuccess;
+			IsSuccess = L4D2_SpawnTank(pos, NULL_VECTOR) > 0;
+			if (IsSuccess)
+			{
+				CPrintToChatAll("%t", "TankTrigger_TankSpawnSuccess");
+			}
+		}
+		else
+		{
+			CPrintToChatAll("%t", "TankTrigger_TankSpawnFailed");
+		}
+	}
 }
 
 bool IsValidClient(int client)
@@ -105,4 +133,30 @@ bool IsValidClient(int client)
 	if (!IsClientConnected(client)) return false;
 	if (!IsClientInGame(client)) return false;
 	return true;
+}
+
+// Helper function to find a random special infected (excluding Tank and Witch)
+int FindRandomSpecialInfected()
+{
+	int[] candidates   = new int[MaxClients];
+	int candidateCount = 0;
+
+	for (int i = 1; i <= MaxClients; i++)
+	{
+		if (IsClientInGame(i) && GetClientTeam(i) == 3)	       // 3 is the infected team
+		{
+			int zombieClass = GetEntProp(i, Prop_Send, "m_zombieClass");
+			if (zombieClass >= Z_SMOKER && zombieClass <= Z_CHARGER)
+			{
+				candidates[candidateCount++] = i;
+			}
+		}
+	}
+
+	if (candidateCount > 0)
+	{
+		return candidates[GetRandomInt(0, candidateCount - 1)];
+	}
+
+	return -1;
 }

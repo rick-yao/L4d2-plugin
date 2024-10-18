@@ -53,9 +53,22 @@
         "en"    "{yellow}[Tank Trigger] {lightgreen}Spawn lucky tank successfully"
         "chi"   "{yellow}[幸运Tank] {lightgreen}召唤幸运Tank成功"
     }
+
     "TankTrigger_TankSpawnSuccess_NoColor"
     {
         "en"    "[Tank Trigger] Spawn lucky tank successfully"
         "chi"   "[幸运Tank] 召唤幸运Tank成功"
+    }
+
+    "TankTrigger_TankSpawnFailed"
+    {
+        "en"    "{yellow}[Tank Trigger] {lightgreen}Spawn lucky tank failed"
+        "chi"   "{yellow}[幸运Tank] {lightgreen}召唤幸运Tank失败"
+    }
+
+    "TankTrigger_TankSpawnFailed_NoColor"
+    {
+        "en"    "[Tank Trigger] Spawn lucky tank failed"
+        "chi"   "[幸运Tank] 召唤幸运Tank失败"
     }
 }
