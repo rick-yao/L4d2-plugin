@@ -131,6 +131,7 @@ public void OnPluginStart()
 		PrintToServer("调试菜单打开,debug menu on");
 		RegConsoleCmd("sm_x", MenuFunc_MainMenu, "打开调试菜单 / open debug menu");
 		HookEvent("tank_killed", Event_PlayerIncapacitated);
+		UnhookEvent("player_incapacitated", Event_PlayerIncapacitated);
 	}
 }
 
