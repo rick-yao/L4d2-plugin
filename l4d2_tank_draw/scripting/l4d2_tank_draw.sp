@@ -5,6 +5,7 @@
 #include <sdktools>
 #include <sdkhooks>
 #include <multicolors>
+#include <left4dhooks>
 
 #define PLUGIN_VERSION "2.1.1"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
@@ -38,6 +39,7 @@ ConVar
 	ChanceDisarmSingleSurvivor,
 	ChanceLimitedTimeAllGodMode,
 	ChanceLimitedTimeSingleGodMode,
+	ChanceReviveAllDead,
 
 	ChanceDisarmSurvivorMolotov,
 	ChanceKillSurvivorMolotov,
@@ -112,6 +114,7 @@ public void OnPluginStart()
 	ChanceDisarmSingleSurvivor	  = CreateConVar("l4d2_tank_draw_chance_disarm_single_survivor", "10", "单人缴械概率 / Probability of disarming a single survivor", FCVAR_NONE);
 	ChanceDisarmSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_chance_disarm_survivor_molotov", "30", "无限弹药时，玩家乱扔火时缴械概率（百分比，0为关闭） / Probability of disarming a survivor when throwing molotovs recklessly with infinite ammo (percentage, 0 to disable)", FCVAR_NONE);
 	ChanceKillSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_chance_kill_survivor_molotov", "30", "无限弹药时，玩家乱扔火时处死概率（百分比，0为关闭） / Probability of killing a survivor when throwing molotovs recklessly with infinite ammo (percentage, 0 to disable)", FCVAR_NONE);
+	ChanceReviveAllDead		  = CreateConVar("l4d2_tank_draw_chance_revive_all_dead", "30", "全体复活概率 / Probability of reviving all dead", FCVAR_NONE);
 
 	// single god mode
 	ChanceLimitedTimeSingleGodMode	  = CreateConVar("l4d2_tank_draw_chance_limited_time_single_god_mode", "30", "单人限时无敌概率 / Probability of single player god mode", FCVAR_NONE);
@@ -303,8 +306,9 @@ Action LuckyDraw(int victim, int attacker)
 	int chanceWorldMoonGravityToggle      = ChanceWorldMoonGravityToggle.IntValue;
 	int chanceIncreaseGravity	      = ChanceIncreaseGravity.IntValue;
 	int chanceClearAllSurvivorHealth      = ChanceClearAllSurvivorHealth.IntValue;
+	int chanceReviveAllDead		      = ChanceReviveAllDead.IntValue;
 
-	int totalChance			      = chanceNoPrice + chanceLimitedTimeSingleGodMode + chanceLimitedTimeAllGodMode + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
+	int totalChance			      = chanceNoPrice + chanceReviveAllDead + chanceLimitedTimeSingleGodMode + chanceLimitedTimeAllGodMode + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
 	totalChance += chanceLimitedTimeWorldMoonGravity + chanceMoonGravityOneLimitedTime + chanceWorldMoonGravityToggle + chanceIncreaseGravity;
 
 	if (totalChance == 0)
@@ -329,6 +333,35 @@ Action LuckyDraw(int victim, int attacker)
 		CPrintToChatAll("%t", "TankDrawResult_NoPrize", attackerName);
 		PrintHintTextToAll("%t", "TankDrawResult_NoPrize_NoColor", attackerName);
 
+		return Plugin_Continue;
+	}
+	currentChance += chanceReviveAllDead;
+	if (random <= currentChance)
+	{
+		if (!IsValidAliveClient(attacker))
+		{
+			CPrintToChatAll("%t", "TankDraw_SomeThingWrong");
+			PrintHintTextToAll("%t", "TankDraw_SomeThingWrong_NoColor");
+			return Plugin_Continue;
+		}
+
+		float fPos[3];
+		GetClientAbsOrigin(attacker, fPos);
+
+		for (int i = 1; i <= MaxClients; i++)
+		{
+			if (IsValidDeadClient(i))
+			{
+				L4D_RespawnPlayer(i);
+				TeleportEntity(i, fPos, NULL_VECTOR, NULL_VECTOR);
+				CheatCommand(i, "give", "pain_pills");
+				CheatCommand(i, "give", "rifle");
+				SetEntityHealth(i, 100);
+			}
+		}
+
+		CPrintToChatAll("%t", "TankDraw_ReviveAllDead", attackerName);
+		PrintHintTextToAll("%t", "TankDraw_ReviveAllDead_NoColor", attackerName);
 		return Plugin_Continue;
 	}
 
@@ -666,6 +699,11 @@ bool IsValidAliveClient(int client)
 	return (1 <= client <= MaxClients && IsClientInGame(client) && IsPlayerAlive(client) && (GetClientTeam(client) == 2));
 }
 
+bool IsValidDeadClient(int client)
+{
+	return (1 <= client <= MaxClients && IsClientInGame(client) && !IsPlayerAlive(client) && (GetClientTeam(client) == 2));
+}
+
 bool IsTank(int client)
 {
 	// Check if the client is valid and in-game
@@ -870,4 +908,16 @@ public int MenuHandler_KillTank(Handle menu, MenuAction action, int client, int 
 		}
 	}
 	return 0;
+}
+
+void CheatCommand(int client, const char[] sCommand, const char[] sArguments = "")
+{
+	static int iFlagBits, iCmdFlags;
+	iFlagBits = GetUserFlagBits(client);
+	iCmdFlags = GetCommandFlags(sCommand);
+	SetUserFlagBits(client, ADMFLAG_ROOT);
+	SetCommandFlags(sCommand, iCmdFlags & ~FCVAR_CHEAT);
+	FakeClientCommand(client, "%s %s", sCommand, sArguments);
+	SetUserFlagBits(client, iFlagBits);
+	SetCommandFlags(sCommand, iCmdFlags);
 }
