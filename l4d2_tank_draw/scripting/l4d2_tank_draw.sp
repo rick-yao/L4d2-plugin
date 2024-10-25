@@ -38,6 +38,7 @@ ConVar
 	ChanceDisarmAllSurvivor,
 	ChanceDisarmSingleSurvivor,
 	ChanceReviveAllDead,
+	ChanceNewTank,
 
 	ChanceDisarmSurvivorMolotov,
 	ChanceKillSurvivorMolotov,
@@ -111,6 +112,7 @@ public void OnPluginStart()
 	ChanceDisarmSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_chance_disarm_survivor_molotov", "30", "无限弹药时，玩家乱扔火时缴械概率（百分比，0为关闭） / Probability of disarming a survivor when throwing molotovs recklessly with infinite ammo (percentage, 0 to disable)", FCVAR_NONE);
 	ChanceKillSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_chance_kill_survivor_molotov", "30", "无限弹药时，玩家乱扔火时处死概率（百分比，0为关闭） / Probability of killing a survivor when throwing molotovs recklessly with infinite ammo (percentage, 0 to disable)", FCVAR_NONE);
 	ChanceReviveAllDead		  = CreateConVar("l4d2_tank_draw_chance_revive_all_dead", "30", "全体复活概率 / Probability of reviving all dead", FCVAR_NONE);
+	ChanceNewTank			  = CreateConVar("l4d2_tank_draw_chance_new_tank", "30", "获得tank概率 / Probability of a tank", FCVAR_NONE);
 
 	AutoExecConfig(true, "l4d2_tank_draw");
 
@@ -286,6 +288,7 @@ Action LuckyDraw(int victim, int attacker)
 	int chanceKillSingleSurvivor	      = ChanceKillSingleSurvivor.IntValue;
 	int chanceDisarmAllSurvivor	      = ChanceDisarmAllSurvivor.IntValue;
 	int chanceDisarmSingleSurvivor	      = ChanceDisarmSingleSurvivor.IntValue;
+	int chanceNewTank		      = ChanceNewTank.IntValue;
 
 	int chanceLimitedTimeWorldMoonGravity = ChanceLimitedTimeWorldMoonGravity.IntValue;
 	int chanceMoonGravityOneLimitedTime   = ChanceMoonGravityOneLimitedTime.IntValue;
@@ -294,7 +297,7 @@ Action LuckyDraw(int victim, int attacker)
 	int chanceClearAllSurvivorHealth      = ChanceClearAllSurvivorHealth.IntValue;
 	int chanceReviveAllDead		      = ChanceReviveAllDead.IntValue;
 
-	int totalChance			      = chanceNoPrice + chanceReviveAllDead + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
+	int totalChance			      = chanceNoPrice + chanceReviveAllDead + chanceNewTank + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
 	totalChance += chanceLimitedTimeWorldMoonGravity + chanceMoonGravityOneLimitedTime + chanceWorldMoonGravityToggle + chanceIncreaseGravity;
 
 	if (totalChance == 0)
@@ -321,6 +324,33 @@ Action LuckyDraw(int victim, int attacker)
 
 		return Plugin_Continue;
 	}
+
+	currentChance += chanceNewTank;
+	if (random <= currentChance)
+	{
+		if (!IsValidAliveClient(attacker))
+		{
+			CPrintToChatAll("%t", "TankDraw_SomeThingWrong");
+			PrintHintTextToAll("%t", "TankDraw_SomeThingWrong_NoColor");
+			return Plugin_Continue;
+		}
+
+		float fPos[3];
+		GetClientAbsOrigin(attacker, fPos);
+
+		bool IsSuccess = TrySpawnTank(fPos, 10);
+
+		CPrintToChatAll("%t", "TankDraw_NewTank", attackerName);
+		PrintHintTextToAll("%t", "TankDraw_NewTank_NoColor", attackerName);
+
+		if (!IsSuccess)
+		{
+			CPrintToChatAll("%t", "Tank_NewTankFailed");
+		}
+
+		return Plugin_Continue;
+	}
+
 	currentChance += chanceReviveAllDead;
 	if (random <= currentChance)
 	{
@@ -824,4 +854,27 @@ void CheatCommand(int client, const char[] sCommand, const char[] sArguments = "
 	FakeClientCommand(client, "%s %s", sCommand, sArguments);
 	SetUserFlagBits(client, iFlagBits);
 	SetCommandFlags(sCommand, iCmdFlags);
+}
+
+bool TrySpawnTank(const float pos[3], int maxRetries = 3)
+{
+	int  attempts  = 1;
+	bool IsSuccess = false;
+
+	while (attempts <= maxRetries && !IsSuccess)
+	{
+		IsSuccess = L4D2_SpawnTank(pos, NULL_VECTOR) > 0;
+
+		if (IsSuccess)
+		{
+			PrintToServer("[Tank Draw] Successfully spawned Tank at position: %.1f, %.1f, %.1f", pos[0], pos[1], pos[2]);
+			PrintToServer("[Tank Draw] Successfully spawned Tank at %d attempts", attempts);
+			return true;
+		}
+
+		attempts++;
+	}
+
+	PrintToServer("[Tank Draw] Failed to spawn Tank after %d attempts", maxRetries);
+	return false;
 }
