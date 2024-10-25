@@ -98,32 +98,14 @@ public Action Event_Spawn(Event event, const char[] name, bool dontBroadcast)
 
 void SpawnTank(float pos[3])
 {
-	bool SpawnSuccess;
-	SpawnSuccess = L4D2_SpawnTank(pos, NULL_VECTOR) > 0;
+	bool SpawnSuccess = TrySpawnTank(pos, 10);
 	if (SpawnSuccess)
 	{
 		CPrintToChatAll("%t", "TankTrigger_TankSpawnSuccess");
 	}
 	else
 	{
-		// Tank spawn failed, kill a random Jockey and try again
-		int entity = FindRandomSpecialInfected();
-		if (entity != -1)
-		{
-			ForcePlayerSuicide(entity);
-
-			// Try spawning the Tank again
-			bool IsSuccess;
-			IsSuccess = L4D2_SpawnTank(pos, NULL_VECTOR) > 0;
-			if (IsSuccess)
-			{
-				CPrintToChatAll("%t", "TankTrigger_TankSpawnSuccess");
-			}
-		}
-		else
-		{
-			CPrintToChatAll("%t", "TankTrigger_TankSpawnFailed");
-		}
+		CPrintToChatAll("%t", "TankTrigger_TankSpawnFailed");
 	}
 }
 
@@ -135,28 +117,25 @@ bool IsValidClient(int client)
 	return true;
 }
 
-// Helper function to find a random special infected (excluding Tank and Witch)
-int FindRandomSpecialInfected()
+bool TrySpawnTank(const float pos[3], int maxRetries = 3)
 {
-	int[] candidates   = new int[MaxClients];
-	int candidateCount = 0;
+	int  attempts  = 1;
+	bool IsSuccess = false;
 
-	for (int i = 1; i <= MaxClients; i++)
+	while (attempts <= maxRetries && !IsSuccess)
 	{
-		if (IsClientInGame(i) && GetClientTeam(i) == 3)	       // 3 is the infected team
+		IsSuccess = L4D2_SpawnTank(pos, NULL_VECTOR) > 0;
+
+		if (IsSuccess)
 		{
-			int zombieClass = GetEntProp(i, Prop_Send, "m_zombieClass");
-			if (zombieClass >= Z_SMOKER && zombieClass <= Z_CHARGER)
-			{
-				candidates[candidateCount++] = i;
-			}
+			PrintToServer("[Tank Spawner] Successfully spawned Tank at position: %.1f, %.1f, %.1f", pos[0], pos[1], pos[2]);
+			PrintToServer("[Tank Spawner] Successfully spawned Tank at %d attempts", attempts);
+			return true;
 		}
+
+		attempts++;
 	}
 
-	if (candidateCount > 0)
-	{
-		return candidates[GetRandomInt(0, candidateCount - 1)];
-	}
-
-	return -1;
+	PrintToServer("[Tank Spawner] Failed to spawn Tank after %d attempts", maxRetries);
+	return false;
 }
