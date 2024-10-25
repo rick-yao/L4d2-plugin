@@ -443,4 +443,28 @@
         "en"    "[Tank Draw] Player %s's lucky draw result: Revive all dead survivors."
         "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 复活全体"
     }
+
+    "TankDraw_NewTank"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}A lucky Tank."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive} 幸运Tank"
+    }
+
+    "TankDraw_NewTank_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: A lucky Tank."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果：幸运Tank"
+    }
+    
+    "Tank_NewTankFailed"
+    {
+        "en"    "{yellow}[Tank Draw] Spawn Tank failed."   
+        "chi"   "{yellow}[坦克抽奖] 生成Tank失败"
+    }
+
+    "Tank_NewTankFailed_NoColor"
+    {
+        "en"    "[Tank Draw] Spawn Tank failed."   
+        "chi"   "[坦克抽奖] 生成Tank失败"
+    }
 }
