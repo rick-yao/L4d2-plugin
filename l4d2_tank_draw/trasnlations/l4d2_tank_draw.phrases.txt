@@ -431,4 +431,16 @@
         "en"    "[Tank Draw] All god mode has been disabled."
         "chi"   "[坦克抽奖] 全体关闭无敌模式"
     }
+
+    "TankDraw_ReviveAllDead"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Revive all dead survivors."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive} 复活全体"
+    }
+
+    "TankDraw_ReviveAllDead_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Revive all dead survivors."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 复活全体"
+    }
 }
