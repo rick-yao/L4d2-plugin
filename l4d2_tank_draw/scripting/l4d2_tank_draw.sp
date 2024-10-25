@@ -370,8 +370,6 @@ Action LuckyDraw(int victim, int attacker)
 			{
 				L4D_RespawnPlayer(i);
 				TeleportEntity(i, fPos, NULL_VECTOR, NULL_VECTOR);
-				CheatCommand(i, "give", "pain_pills");
-				CheatCommand(i, "give", "rifle");
 				SetEntityHealth(i, 100);
 			}
 		}
