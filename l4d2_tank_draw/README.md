@@ -23,6 +23,8 @@ The plugin includes the following possible prizes:
 13. Clear all players' health
 14. Disarm all players
 15. Disarm lucky player
+16. A lucky tank
+17. Revive all dead survivors
 
 ## Configuration
 
