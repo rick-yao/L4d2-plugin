@@ -40,9 +40,6 @@ ConVar
 	ChanceReviveAllDead,
 	ChanceNewTank,
 
-	ChanceDisarmSurvivorMolotov,
-	ChanceKillSurvivorMolotov,
-
 	SingleMoonGravity,
 	LimitedTimeWorldMoonGravityTimer,
 	InfiniteMeeleRange,
@@ -60,6 +57,13 @@ Handle
 	g_WorldGravityTimer,
 	g_SingleGodModeTimer[MAXPLAYERS],
 	g_AllGodModeTimer;
+
+int
+	g_ChanceMolotov[MAXPLAYERS + 1];
+
+ConVar	g_hMaxPunishChance,
+	g_hDisarmChance,
+	g_hChanceMolotovIncrement;
 
 public Plugin myinfo =
 {
@@ -109,10 +113,12 @@ public void OnPluginStart()
 	ChanceClearAllSurvivorHealth	  = CreateConVar("l4d2_tank_draw_chance_clear_all_survivor_health", "10", "清空所有人血量概率 / Probability of clearing all survivors' health", FCVAR_NONE);
 	ChanceDisarmAllSurvivor		  = CreateConVar("l4d2_tank_draw_chance_disarm_all_survivor", "10", "所有人缴械概率 / Probability of disarming all survivors", FCVAR_NONE);
 	ChanceDisarmSingleSurvivor	  = CreateConVar("l4d2_tank_draw_chance_disarm_single_survivor", "10", "单人缴械概率 / Probability of disarming a single survivor", FCVAR_NONE);
-	ChanceDisarmSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_chance_disarm_survivor_molotov", "30", "无限弹药时，玩家乱扔火时缴械概率（百分比，0为关闭） / Probability of disarming a survivor when throwing molotovs recklessly with infinite ammo (percentage, 0 to disable)", FCVAR_NONE);
-	ChanceKillSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_chance_kill_survivor_molotov", "30", "无限弹药时，玩家乱扔火时处死概率（百分比，0为关闭） / Probability of killing a survivor when throwing molotovs recklessly with infinite ammo (percentage, 0 to disable)", FCVAR_NONE);
 	ChanceReviveAllDead		  = CreateConVar("l4d2_tank_draw_chance_revive_all_dead", "30", "全体复活概率 / Probability of reviving all dead", FCVAR_NONE);
 	ChanceNewTank			  = CreateConVar("l4d2_tank_draw_chance_new_tank", "30", "获得tank概率 / Probability of a tank", FCVAR_NONE);
+
+	g_hMaxPunishChance		  = CreateConVar("l4d2_tank_draw_max_punish_chance", "50", "扔火最大惩罚概率 | Maximum punishment chance (percentage)", FCVAR_NONE, true, 0.0, true, 100.0);
+	g_hDisarmChance			  = CreateConVar("l4d2_tank_draw_disarm_chance", "50", "触发扔火惩罚时缴械概率（百分比），剩余本分比为死亡概率 | Chance to disarm instead of kill when punishment triggers (percentage)", FCVAR_NONE, true, 0.0, true, 100.0);
+	g_hChanceMolotovIncrement	  = CreateConVar("l4d2_tank_draw_chance_increment", "10", "每次扔火时增加的概率 | How much the punishment chance increases per Molotov throw (percentage)", FCVAR_NONE, true, 0.0, true, 100.0);
 
 	AutoExecConfig(true, "l4d2_tank_draw");
 
@@ -127,6 +133,12 @@ public void OnPluginStart()
 	HookEvent("finale_vehicle_leaving", Event_Roundend, EventHookMode_Pre);
 	HookEvent("map_transition", Event_Roundend, EventHookMode_Pre);
 	HookEvent("finale_win", Event_Roundend, EventHookMode_Pre);
+
+	// init default chance to 0
+	for (int i = 0; i <= MaxClients; i++)
+	{
+		g_ChanceMolotov[i] = 0;
+	}
 
 	if (L4D2TankDrawDebugMode.IntValue == 1)
 	{
@@ -222,6 +234,11 @@ public Action Event_Roundend(Event event, const char[] name, bool dontBroadcast)
 	g_WorldGravity = FindConVar("sv_gravity");
 	g_WorldGravity.RestoreDefault();
 
+	for (int i = 0; i <= MaxClients; i++)
+	{
+		g_ChanceMolotov[i] = 0;
+	}
+
 	return Plugin_Continue;
 }
 
@@ -231,30 +248,34 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 	g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
 	if (g_hInfinitePrimaryAmmo.IntValue == 1)
 	{
-		int  random			 = GetRandomInt(1, 100);
-		int  chanceDisarmSurvivorMolotov = ChanceDisarmSurvivorMolotov.IntValue;
-		int  chanceKillSurvivorMolotov	 = ChanceKillSurvivorMolotov.IntValue;
-
-		int  attacker			 = GetClientOfUserId(event.GetInt("userid"));
+		int  attacker = GetClientOfUserId(event.GetInt("userid"));
 		char attackerName[MAX_NAME_LENGTH];
 		GetClientName(attacker, attackerName, sizeof(attackerName));
 
-		if (random <= chanceDisarmSurvivorMolotov)
+		// Roll for punishment based on accumulated chance
+		int random = GetRandomInt(1, 100);
+		if (random <= g_ChanceMolotov[attacker])
 		{
-			DisarmPlayer(attacker);
+			// Get disarm chance from ConVar
+			int disarmChance = g_hDisarmChance.IntValue;
 
-			CPrintToChatAll("%t", "TankDraw_MolotovDisarmMsg", attackerName);
-			PrintHintTextToAll("%t", "TankDraw_MolotovDisarmMsg_NoColor", attackerName);
-			return Plugin_Continue;
+			// Roll for punishment type
+			if (GetRandomInt(1, 100) <= disarmChance)
+			{
+				DisarmPlayer(attacker);
+				CPrintToChatAll("%t", "TankDraw_MolotovDisarmMsg", attackerName);
+				PrintHintTextToAll("%t", "TankDraw_MolotovDisarmMsg_NoColor", attackerName);
+			}
+			else
+			{
+				ForcePlayerSuicide(attacker);
+				CPrintToChatAll("%t", "TankDraw_MolotovDeathMsg", attackerName);
+				PrintHintTextToAll("%t", "TankDraw_MolotovDeathMsg_NoColor", attackerName);
+			}
 		}
-		if (random <= chanceDisarmSurvivorMolotov + chanceKillSurvivorMolotov)
-		{
-			ForcePlayerSuicide(attacker);
 
-			CPrintToChatAll("%t", "TankDraw_MolotovDeathMsg", attackerName);
-			PrintHintTextToAll("%t", "TankDraw_MolotovDeathMsg_NoColor", attackerName);
-			return Plugin_Continue;
-		}
+		// Increase punishment chance by increment amount from ConVar, cap at max chance
+		g_ChanceMolotov[attacker] = Min(g_ChanceMolotov[attacker] + g_hChanceMolotovIncrement.IntValue, g_hMaxPunishChance.IntValue);
 	}
 	return Plugin_Continue;
 }
@@ -274,6 +295,16 @@ public void OnMapEnd()
 
 	g_WorldGravity = FindConVar("sv_gravity");
 	g_WorldGravity.RestoreDefault();
+
+	for (int i = 0; i <= MaxClients; i++)
+	{
+		g_ChanceMolotov[i] = 0;
+	}
+}
+
+public void OnClientPutInServer(int client)
+{
+	g_ChanceMolotov[client] = 0;
 }
 
 Action LuckyDraw(int victim, int attacker)
@@ -657,7 +688,7 @@ Action ResetSingleGravity(Handle timer, int client)
 	return Plugin_Continue;
 }
 
-bool IsValidClient(int client)
+stock bool IsValidClient(int client)
 {
 	if (client < 1 || client > MaxClients) return false;
 	if (!IsClientConnected(client)) return false;
@@ -665,17 +696,17 @@ bool IsValidClient(int client)
 	return true;
 }
 
-bool IsValidAliveClient(int client)
+stock bool IsValidAliveClient(int client)
 {
 	return (1 <= client <= MaxClients && IsClientInGame(client) && IsPlayerAlive(client) && (GetClientTeam(client) == 2));
 }
 
-bool IsValidDeadClient(int client)
+stock bool IsValidDeadClient(int client)
 {
 	return (1 <= client <= MaxClients && IsClientInGame(client) && !IsPlayerAlive(client) && (GetClientTeam(client) == 2));
 }
 
-bool IsTank(int client)
+stock bool IsTank(int client)
 {
 	// Check if the client is valid and in-game
 	if (!IsValidClient(client))
@@ -720,22 +751,22 @@ Action ResetWorldGravity(Handle timer, int initValue)
 	return Plugin_Continue;
 }
 
-bool IsPlayerIncapacitated(int client)
+stock bool IsPlayerIncapacitated(int client)
 {
 	return (GetEntProp(client, Prop_Send, "m_isIncapacitated", 1) == 1);
 }
 
-bool IsPlayerIncapacitatedAtAll(int client)
+stock bool IsPlayerIncapacitatedAtAll(int client)
 {
 	return (IsPlayerIncapacitated(client) || IsHangingFromLedge(client));
 }
 
-bool IsHangingFromLedge(int client)
+stock bool IsHangingFromLedge(int client)
 {
 	return (GetEntProp(client, Prop_Send, "m_isHangingFromLedge", 1) == 1 || GetEntProp(client, Prop_Send, "m_isFallingFromLedge", 1) == 1);
 }
 
-void DisarmPlayer(int client)
+stock void DisarmPlayer(int client)
 {
 	for (int slot = 0; slot <= 4; slot++)
 	{
@@ -748,7 +779,7 @@ void DisarmPlayer(int client)
 	}
 }
 
-void ResetAllTimer()
+stock void ResetAllTimer()
 {
 	// reset single gravity timer
 	for (int i = 1; i <= MaxClients; i++)
@@ -842,7 +873,7 @@ public int MenuHandler_KillTank(Handle menu, MenuAction action, int client, int 
 	return 0;
 }
 
-void CheatCommand(int client, const char[] sCommand, const char[] sArguments = "")
+stock void CheatCommand(int client, const char[] sCommand, const char[] sArguments = "")
 {
 	static int iFlagBits, iCmdFlags;
 	iFlagBits = GetUserFlagBits(client);
@@ -854,7 +885,7 @@ void CheatCommand(int client, const char[] sCommand, const char[] sArguments = "
 	SetCommandFlags(sCommand, iCmdFlags);
 }
 
-bool TrySpawnTank(const float pos[3], int maxRetries = 3)
+stock bool TrySpawnTank(const float pos[3], int maxRetries = 3)
 {
 	int  attempts  = 1;
 	bool IsSuccess = false;
@@ -875,4 +906,9 @@ bool TrySpawnTank(const float pos[3], int maxRetries = 3)
 
 	PrintToServer("[Tank Draw] Failed to spawn Tank after %d attempts", maxRetries);
 	return false;
+}
+
+stock int Min(int a, int b)
+{
+	return (a < b) ? a : b;
 }
