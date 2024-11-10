@@ -40,7 +40,6 @@ ConVar
 	ChanceDisarmSingleSurvivor,
 	ChanceReviveAllDead,
 	ChanceNewTank,
-	ChanceTimerBomb,
 
 	ChanceDisarmSurvivorMolotov,
 	ChanceKillSurvivorMolotov,
@@ -55,7 +54,12 @@ ConVar
 	MaxHealthDecrease,
 	IncreasedGravity,
 	WorldMoonGravity,
-	LimitedTimeWorldMoonGravityOne;
+	LimitedTimeWorldMoonGravityOne,
+	// timer bomb related
+	ChanceTimerBomb,
+	TimerBombRadius,
+	TimerBombSecond,
+	TimerBombRangeDamage;
 
 Handle
 	g_SingleGravityTimer[MAXPLAYERS + 1],
@@ -116,6 +120,9 @@ public void OnPluginStart()
 	ChanceReviveAllDead		  = CreateConVar("l4d2_tank_draw_chance_revive_all_dead", "30", "全体复活概率 / Probability of reviving all dead", FCVAR_NONE);
 	ChanceNewTank			  = CreateConVar("l4d2_tank_draw_chance_new_tank", "30", "获得tank概率 / Probability of a tank", FCVAR_NONE);
 	ChanceTimerBomb			  = CreateConVar("l4d2_tank_draw_chance_timer_bomb", "30", "变成定时炸弹概率 / Probability of becoming a timer bomb", FCVAR_NONE);
+	TimerBombRadius			  = CreateConVar("l4d2_tank_draw_timer_bomb_radius", "300.0", "定时炸弹爆炸范围 / Radius of the timer bomb explosion", FCVAR_NONE);
+	TimerBombSecond			  = CreateConVar("l4d2_tank_draw_timer_bomb_seconds", "8", "定时炸弹倒计时秒数 / Countdown duration in seconds before the timer bomb explodes", FCVAR_NONE);
+	TimerBombRangeDamage		  = CreateConVar("l4d2_tank_draw_timer_bomb_range_damage", "100", "定时炸弹范围伤害值 / Damage caused by the timer bomb within the explosion range", FCVAR_NONE);
 
 	AutoExecConfig(true, "l4d2_tank_draw");
 
@@ -336,7 +343,7 @@ Action LuckyDraw(int victim, int attacker)
 	{
 		CPrintToChatAll("%t", "TankDraw_TimerBomb", attackerName);
 		PrintHintTextToAll("%t", "TankDraw_TimerBomb_NoColor", attackerName);
-		SetPlayerTimeBomb(attacker, 8);
+		SetPlayerTimeBomb(attacker, TimerBombSecond.IntValue, TimerBombRadius.FloatValue, TimerBombRangeDamage.IntValue);
 
 		return Plugin_Handled;
 	}
