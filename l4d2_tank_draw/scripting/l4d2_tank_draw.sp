@@ -7,11 +7,12 @@
 #include <multicolors>
 #include <left4dhooks>
 
+#include "lib/newbomb.sp"
+#include "lib/lib.sp"
+
 #define PLUGIN_VERSION "2.1.1"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
 #define COMMAND_FILTER COMMAND_FILTER_CONNECTED | COMMAND_FILTER_NO_BOTS
-
-#define Z_TANK	       8
 
 // built-in convar
 ConVar
@@ -56,9 +57,9 @@ ConVar
 	LimitedTimeWorldMoonGravityOne;
 
 Handle
-	g_SingleGravityTimer[MAXPLAYERS],
+	g_SingleGravityTimer[MAXPLAYERS + 1],
 	g_WorldGravityTimer,
-	g_SingleGodModeTimer[MAXPLAYERS],
+	g_SingleGodModeTimer[MAXPLAYERS + 1],
 	g_AllGodModeTimer;
 
 public Plugin myinfo =
@@ -657,55 +658,6 @@ Action ResetSingleGravity(Handle timer, int client)
 	return Plugin_Continue;
 }
 
-bool IsValidClient(int client)
-{
-	if (client < 1 || client > MaxClients) return false;
-	if (!IsClientConnected(client)) return false;
-	if (!IsClientInGame(client)) return false;
-	return true;
-}
-
-bool IsValidAliveClient(int client)
-{
-	return (1 <= client <= MaxClients && IsClientInGame(client) && IsPlayerAlive(client) && (GetClientTeam(client) == 2));
-}
-
-bool IsValidDeadClient(int client)
-{
-	return (1 <= client <= MaxClients && IsClientInGame(client) && !IsPlayerAlive(client) && (GetClientTeam(client) == 2));
-}
-
-bool IsTank(int client)
-{
-	// Check if the client is valid and in-game
-	if (!IsValidClient(client))
-	{
-		PrintToServer("[Tank Draw] IsTank: Client %d is not valid", client);
-		return false;
-	}
-
-	// Check if the client is actually connected
-	if (!IsClientConnected(client))
-	{
-		PrintToServer("[Tank Draw] IsTank: Client %d is not connected", client);
-		return false;
-	}
-
-	// Check if the client is on the infected team
-	if (GetClientTeam(client) != 3)	       // 3 is typically the infected team in L4D2
-	{
-		PrintToServer("[Tank Draw] IsTank: Client %d is not on the infected team (Team: %d)", client, GetClientTeam(client));
-		return false;
-	}
-	if (!HasEntProp(client, Prop_Send, "m_zombieClass"))
-	{
-		return false;
-	}
-
-	PrintToServer("[Tank Draw] IsTank: Client %d passed all preliminary checks", client);
-	return (GetEntProp(client, Prop_Send, "m_zombieClass") == Z_TANK);
-}
-
 Action ResetWorldGravity(Handle timer, int initValue)
 {
 	g_WorldGravity = FindConVar("sv_gravity");
@@ -718,34 +670,6 @@ Action ResetWorldGravity(Handle timer, int initValue)
 	g_WorldGravityTimer = null;
 
 	return Plugin_Continue;
-}
-
-bool IsPlayerIncapacitated(int client)
-{
-	return (GetEntProp(client, Prop_Send, "m_isIncapacitated", 1) == 1);
-}
-
-bool IsPlayerIncapacitatedAtAll(int client)
-{
-	return (IsPlayerIncapacitated(client) || IsHangingFromLedge(client));
-}
-
-bool IsHangingFromLedge(int client)
-{
-	return (GetEntProp(client, Prop_Send, "m_isHangingFromLedge", 1) == 1 || GetEntProp(client, Prop_Send, "m_isFallingFromLedge", 1) == 1);
-}
-
-void DisarmPlayer(int client)
-{
-	for (int slot = 0; slot <= 4; slot++)
-	{
-		int weapon = GetPlayerWeaponSlot(client, slot);
-		if (weapon != -1)
-		{
-			RemovePlayerItem(client, weapon);
-			RemoveEntity(weapon);
-		}
-	}
 }
 
 void ResetAllTimer()
@@ -840,18 +764,6 @@ public int MenuHandler_KillTank(Handle menu, MenuAction action, int client, int 
 		}
 	}
 	return 0;
-}
-
-void CheatCommand(int client, const char[] sCommand, const char[] sArguments = "")
-{
-	static int iFlagBits, iCmdFlags;
-	iFlagBits = GetUserFlagBits(client);
-	iCmdFlags = GetCommandFlags(sCommand);
-	SetUserFlagBits(client, ADMFLAG_ROOT);
-	SetCommandFlags(sCommand, iCmdFlags & ~FCVAR_CHEAT);
-	FakeClientCommand(client, "%s %s", sCommand, sArguments);
-	SetUserFlagBits(client, iFlagBits);
-	SetCommandFlags(sCommand, iCmdFlags);
 }
 
 bool TrySpawnTank(const float pos[3], int maxRetries = 3)
