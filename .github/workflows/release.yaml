@@ -18,20 +18,22 @@ jobs:
         run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
       - name: Cache SourceMod dependencies
+        id: cache
         uses: actions/cache@v4
         with:
           path: |
             sourcemod-*
-            Multi-Colors
-            Left4DHooks
-          key: ${{ runner.os }}-sourcemod-${{ hashFiles('**/sourcemod-*.tar.gz') }}
+          key: ${{ runner.os }}-sourcemod-${{ hashFiles('**/sourcemod-*') }}
           restore-keys: |
             ${{ runner.os }}-sourcemod-
 
-      - name: Setup SourceMod
+      - name: Download Sourcemod
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           wget https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6968-linux.tar.gz
+
+      - name: Setup SourceMod
+        run: |
           tar -xzf sourcemod-*.tar.gz
           git clone https://github.com/Bara/Multi-Colors.git
           git clone https://github.com/SilvDev/Left4DHooks.git
