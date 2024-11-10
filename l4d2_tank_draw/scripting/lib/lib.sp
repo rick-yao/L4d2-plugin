@@ -87,3 +87,8 @@ stock bool IsTank(int client)
 	PrintToServer("[Tank Draw] IsTank: Client %d passed all preliminary checks", client);
 	return (GetEntProp(client, Prop_Send, "m_zombieClass") == Z_TANK);
 }
+
+stock void PlaySoundToAll(const char[] sample)
+{
+	EmitSoundToAll(sample, SOUND_FROM_PLAYER, SNDCHAN_STATIC, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, NULL_VECTOR, NULL_VECTOR, true, 0.0);
+}

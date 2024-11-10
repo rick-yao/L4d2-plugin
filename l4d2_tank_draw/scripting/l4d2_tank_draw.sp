@@ -40,6 +40,7 @@ ConVar
 	ChanceDisarmSingleSurvivor,
 	ChanceReviveAllDead,
 	ChanceNewTank,
+	ChanceTimerBomb,
 
 	ChanceDisarmSurvivorMolotov,
 	ChanceKillSurvivorMolotov,
@@ -114,6 +115,7 @@ public void OnPluginStart()
 	ChanceKillSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_chance_kill_survivor_molotov", "30", "无限弹药时，玩家乱扔火时处死概率（百分比，0为关闭） / Probability of killing a survivor when throwing molotovs recklessly with infinite ammo (percentage, 0 to disable)", FCVAR_NONE);
 	ChanceReviveAllDead		  = CreateConVar("l4d2_tank_draw_chance_revive_all_dead", "30", "全体复活概率 / Probability of reviving all dead", FCVAR_NONE);
 	ChanceNewTank			  = CreateConVar("l4d2_tank_draw_chance_new_tank", "30", "获得tank概率 / Probability of a tank", FCVAR_NONE);
+	ChanceTimerBomb			  = CreateConVar("l4d2_tank_draw_chance_timer_bomb", "30", "变成定时炸弹概率 / Probability of becoming a timer bomb", FCVAR_NONE);
 
 	AutoExecConfig(true, "l4d2_tank_draw");
 
@@ -204,6 +206,8 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 
 	SetEntityGravity(victim, 1.0);
 
+	KillTimeBomb(victim);
+
 	return Plugin_Continue;
 }
 
@@ -290,6 +294,7 @@ Action LuckyDraw(int victim, int attacker)
 	int chanceDisarmAllSurvivor	      = ChanceDisarmAllSurvivor.IntValue;
 	int chanceDisarmSingleSurvivor	      = ChanceDisarmSingleSurvivor.IntValue;
 	int chanceNewTank		      = ChanceNewTank.IntValue;
+	int chanceTimerBomb		      = ChanceTimerBomb.IntValue;
 
 	int chanceLimitedTimeWorldMoonGravity = ChanceLimitedTimeWorldMoonGravity.IntValue;
 	int chanceMoonGravityOneLimitedTime   = ChanceMoonGravityOneLimitedTime.IntValue;
@@ -298,7 +303,7 @@ Action LuckyDraw(int victim, int attacker)
 	int chanceClearAllSurvivorHealth      = ChanceClearAllSurvivorHealth.IntValue;
 	int chanceReviveAllDead		      = ChanceReviveAllDead.IntValue;
 
-	int totalChance			      = chanceNoPrice + chanceReviveAllDead + chanceNewTank + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
+	int totalChance			      = chanceNoPrice + chanceTimerBomb + chanceReviveAllDead + chanceNewTank + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
 	totalChance += chanceLimitedTimeWorldMoonGravity + chanceMoonGravityOneLimitedTime + chanceWorldMoonGravityToggle + chanceIncreaseGravity;
 
 	if (totalChance == 0)
@@ -324,6 +329,16 @@ Action LuckyDraw(int victim, int attacker)
 		PrintHintTextToAll("%t", "TankDrawResult_NoPrize_NoColor", attackerName);
 
 		return Plugin_Continue;
+	}
+
+	currentChance += chanceTimerBomb;
+	if (random <= currentChance)
+	{
+		CPrintToChatAll("%t", "TankDraw_TimerBomb", attackerName);
+		PrintHintTextToAll("%t", "TankDraw_TimerBomb_NoColor", attackerName);
+		SetPlayerTimeBomb(attacker, 8);
+
+		return Plugin_Handled;
 	}
 
 	currentChance += chanceNewTank;
@@ -674,6 +689,8 @@ Action ResetWorldGravity(Handle timer, int initValue)
 
 void ResetAllTimer()
 {
+	KillAllTimeBombs();
+
 	// reset single gravity timer
 	for (int i = 1; i <= MaxClients; i++)
 	{
