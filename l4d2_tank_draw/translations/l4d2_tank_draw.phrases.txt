@@ -467,4 +467,28 @@
         "en"    "[Tank Draw] Spawn Tank failed."   
         "chi"   "[坦克抽奖] 生成Tank失败"
     }
+
+    "TankDraw_TimerBomb"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Become timer bomb."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}变成定时炸弹"
+    }
+
+    "TankDraw_TimerBomb_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Become timer bomb."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果：变成定时炸弹"
+    }
+    
+    "TankDraw_TimeToDie"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen} is going to bomb after %d seconds."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 将于 %d 秒后爆炸"
+    }
+
+    "TankDraw_TimeToDie_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s is going to bomb after %d seconds."
+        "chi"   "[坦克抽奖] 玩家 %s 将于 %d 秒后爆炸"
+    }
 }
