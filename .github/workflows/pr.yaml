@@ -18,20 +18,19 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            sourcemod*
-            Multi-Colors
-            Left4DHooks
+            sourcemod-*
           key: ${{ runner.os }}-sourcemod-${{ hashFiles('**/sourcemod-*.tar.gz') }}
           restore-keys: |
             ${{ runner.os }}-sourcemod-
 
-      - name: Setup SourceMod
+      - name: Download Sourcemod
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           wget https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6968-linux.tar.gz
-          mkdir sourcemod
-          tar -xzf sourcemod-*.tar.gz -C ./sourcemod
-          rm sourcemod-*
+
+      - name: Setup SourceMod
+        run: |
+          tar -xzf sourcemod-*.tar.gz
           git clone https://github.com/Bara/Multi-Colors.git
           git clone https://github.com/SilvDev/Left4DHooks.git
 
@@ -39,8 +38,8 @@ jobs:
         id: build
         run: |
           mkdir -p build
-          sourcemod/addons/sourcemod/scripting/spcomp64 l4d2_tank_draw/scripting/l4d2_tank_draw.sp -o build/l4d2_tank_draw.smx -i ./Multi-Colors/addons/sourcemod/scripting/include -i ./Left4DHooks/sourcemod/scripting/include
-          sourcemod/addons/sourcemod/scripting/spcomp64 l4d2_tank_trigger/scripting/l4d2_tank_trigger.sp -o build/l4d2_tank_trigger.smx -i ./Multi-Colors/addons/sourcemod/scripting/include -i ./Left4DHooks/sourcemod/scripting/include
+          addons/sourcemod/scripting/spcomp64 l4d2_tank_draw/scripting/l4d2_tank_draw.sp -o build/l4d2_tank_draw.smx -i ./Multi-Colors/addons/sourcemod/scripting/include -i ./Left4DHooks/sourcemod/scripting/include
+          addons/sourcemod/scripting/spcomp64 l4d2_tank_trigger/scripting/l4d2_tank_trigger.sp -o build/l4d2_tank_trigger.smx -i ./Multi-Colors/addons/sourcemod/scripting/include -i ./Left4DHooks/sourcemod/scripting/include
 
       - name: Check build success
         run: |
