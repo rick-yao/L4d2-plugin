@@ -17,7 +17,19 @@ jobs:
         id: date
         run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
+      - name: Cache SourceMod dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            sourcemod-*
+            Multi-Colors
+            Left4DHooks
+          key: ${{ runner.os }}-sourcemod-${{ hashFiles('**/sourcemod-*.tar.gz') }}
+          restore-keys: |
+            ${{ runner.os }}-sourcemod-
+
       - name: Setup SourceMod
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
           wget https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6968-linux.tar.gz
           tar -xzf sourcemod-*.tar.gz
