@@ -92,3 +92,26 @@ stock void PlaySoundToAll(const char[] sample)
 {
 	EmitSoundToAll(sample, SOUND_FROM_PLAYER, SNDCHAN_STATIC, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, NULL_VECTOR, NULL_VECTOR, true, 0.0);
 }
+
+stock bool TrySpawnTank(const float pos[3], int maxRetries = 3)
+{
+	int  attempts  = 1;
+	bool IsSuccess = false;
+
+	while (attempts <= maxRetries && !IsSuccess)
+	{
+		IsSuccess = L4D2_SpawnTank(pos, NULL_VECTOR) > 0;
+
+		if (IsSuccess)
+		{
+			PrintToServer("[Tank Draw] Successfully spawned Tank at position: %.1f, %.1f, %.1f", pos[0], pos[1], pos[2]);
+			PrintToServer("[Tank Draw] Successfully spawned Tank at %d attempts", attempts);
+			return true;
+		}
+
+		attempts++;
+	}
+
+	PrintToServer("[Tank Draw] Failed to spawn Tank after %d attempts", maxRetries);
+	return false;
+}
