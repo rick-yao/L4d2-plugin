@@ -19,7 +19,7 @@ jobs:
         with:
           path: |
             sourcemod-*
-          key: ${{ runner.os }}-sourcemod-${{ hashFiles('**/sourcemod-*.tar.gz') }}
+          key: ${{ runner.os }}-sourcemod-${{ hashFiles('**/sourcemod-*') }}
           restore-keys: |
             ${{ runner.os }}-sourcemod-
 
