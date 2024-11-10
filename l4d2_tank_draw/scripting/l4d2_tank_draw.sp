@@ -7,7 +7,7 @@
 #include <multicolors>
 #include <left4dhooks>
 
-#include "lib/newbomb.sp"
+#include "lib/timer_bomb.sp"
 #include "lib/lib.sp"
 
 #define PLUGIN_VERSION "2.1.1"
