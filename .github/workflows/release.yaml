@@ -13,9 +13,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Get current date
-        id: date
-        run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+      - name: Get current date and time
+        id: datetime
+        run: |
+          echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+          echo "DATETIME=$(date +'%Y-%m-%d-%H-%M-%S')" >> $GITHUB_ENV
 
       - name: Cache SourceMod dependencies
         id: cache
@@ -47,10 +49,13 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: release-${{ env.DATE }}
-          name: Release ${{ env.DATE }}
+          tag_name: release-${{ env.DATETIME }}
+          name: Release ${{ env.DATE }} (${{ github.sha }})
           draft: false
           files: |
             build/*.smx
           generate_release_notes: true
           token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+          body: |
+            Release created at: ${{ env.DATETIME }}
+            Commit: ${{ github.sha }}
