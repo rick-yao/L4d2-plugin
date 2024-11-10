@@ -31,6 +31,7 @@ jobs:
           wget https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6968-linux.tar.gz
           mkdir sourcemod
           tar -xzf sourcemod-*.tar.gz -C ./sourcemod
+          rm sourcemod-*
           git clone https://github.com/Bara/Multi-Colors.git
           git clone https://github.com/SilvDev/Left4DHooks.git
 
