@@ -1,9 +1,9 @@
-name: Build and Release SourceMod Plugin
+name: Build and Publish
 
 on:
   push:
-    tags:
-      - "v[0-9]+.[0-9]+.[0-9]+"
+    branches:
+      - main
 
 jobs:
   build:
@@ -12,6 +12,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Get current date
+        id: date
+        run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
       - name: Setup SourceMod
         run: |
@@ -26,9 +30,11 @@ jobs:
           addons/sourcemod/scripting/spcomp64 l4d2_tank_draw/scripting/l4d2_tank_draw.sp -o build/l4d2_tank_draw.smx -i ./Multi-Colors/addons/sourcemod/scripting/include -i ./Left4DHooks/sourcemod/scripting/include
           addons/sourcemod/scripting/spcomp64 l4d2_tank_trigger/scripting/l4d2_tank_trigger.sp -o build/l4d2_tank_trigger.smx -i ./Multi-Colors/addons/sourcemod/scripting/include -i ./Left4DHooks/sourcemod/scripting/include
 
-      - name: Release
+      - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: release-${{ env.DATE }}
+          name: Release ${{ env.DATE }}
           draft: false
           files: |
             build/*.smx
