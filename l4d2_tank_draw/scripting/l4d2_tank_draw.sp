@@ -7,11 +7,12 @@
 #include <multicolors>
 #include <left4dhooks>
 
-#define PLUGIN_VERSION "2.1.1"
+#include "lib/timer_bomb.sp"
+#include "lib/lib.sp"
+
+#define PLUGIN_VERSION "2.2.0"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
 #define COMMAND_FILTER COMMAND_FILTER_CONNECTED | COMMAND_FILTER_NO_BOTS
-
-#define Z_TANK	       8
 
 // built-in convar
 ConVar
@@ -53,12 +54,17 @@ ConVar
 	MaxHealthDecrease,
 	IncreasedGravity,
 	WorldMoonGravity,
-	LimitedTimeWorldMoonGravityOne;
+	LimitedTimeWorldMoonGravityOne,
+	// timer bomb related
+	ChanceTimerBomb,
+	TimerBombRadius,
+	TimerBombSecond,
+	TimerBombRangeDamage;
 
 Handle
-	g_SingleGravityTimer[MAXPLAYERS],
+	g_SingleGravityTimer[MAXPLAYERS + 1],
 	g_WorldGravityTimer,
-	g_SingleGodModeTimer[MAXPLAYERS],
+	g_SingleGodModeTimer[MAXPLAYERS + 1],
 	g_AllGodModeTimer;
 
 public Plugin myinfo =
@@ -113,6 +119,10 @@ public void OnPluginStart()
 	ChanceKillSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_chance_kill_survivor_molotov", "30", "无限弹药时，玩家乱扔火时处死概率（百分比，0为关闭） / Probability of killing a survivor when throwing molotovs recklessly with infinite ammo (percentage, 0 to disable)", FCVAR_NONE);
 	ChanceReviveAllDead		  = CreateConVar("l4d2_tank_draw_chance_revive_all_dead", "30", "全体复活概率 / Probability of reviving all dead", FCVAR_NONE);
 	ChanceNewTank			  = CreateConVar("l4d2_tank_draw_chance_new_tank", "30", "获得tank概率 / Probability of a tank", FCVAR_NONE);
+	ChanceTimerBomb			  = CreateConVar("l4d2_tank_draw_chance_timer_bomb", "30", "变成定时炸弹概率 / Probability of becoming a timer bomb", FCVAR_NONE);
+	TimerBombRadius			  = CreateConVar("l4d2_tank_draw_timer_bomb_radius", "300.0", "定时炸弹爆炸范围 / Radius of the timer bomb explosion", FCVAR_NONE);
+	TimerBombSecond			  = CreateConVar("l4d2_tank_draw_timer_bomb_seconds", "8", "定时炸弹倒计时秒数 / Countdown duration in seconds before the timer bomb explodes", FCVAR_NONE);
+	TimerBombRangeDamage		  = CreateConVar("l4d2_tank_draw_timer_bomb_range_damage", "100", "定时炸弹范围伤害值 / Damage caused by the timer bomb within the explosion range", FCVAR_NONE);
 
 	AutoExecConfig(true, "l4d2_tank_draw");
 
@@ -203,6 +213,8 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 
 	SetEntityGravity(victim, 1.0);
 
+	KillTimeBomb(victim);
+
 	return Plugin_Continue;
 }
 
@@ -289,6 +301,7 @@ Action LuckyDraw(int victim, int attacker)
 	int chanceDisarmAllSurvivor	      = ChanceDisarmAllSurvivor.IntValue;
 	int chanceDisarmSingleSurvivor	      = ChanceDisarmSingleSurvivor.IntValue;
 	int chanceNewTank		      = ChanceNewTank.IntValue;
+	int chanceTimerBomb		      = ChanceTimerBomb.IntValue;
 
 	int chanceLimitedTimeWorldMoonGravity = ChanceLimitedTimeWorldMoonGravity.IntValue;
 	int chanceMoonGravityOneLimitedTime   = ChanceMoonGravityOneLimitedTime.IntValue;
@@ -297,7 +310,7 @@ Action LuckyDraw(int victim, int attacker)
 	int chanceClearAllSurvivorHealth      = ChanceClearAllSurvivorHealth.IntValue;
 	int chanceReviveAllDead		      = ChanceReviveAllDead.IntValue;
 
-	int totalChance			      = chanceNoPrice + chanceReviveAllDead + chanceNewTank + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
+	int totalChance			      = chanceNoPrice + chanceTimerBomb + chanceReviveAllDead + chanceNewTank + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
 	totalChance += chanceLimitedTimeWorldMoonGravity + chanceMoonGravityOneLimitedTime + chanceWorldMoonGravityToggle + chanceIncreaseGravity;
 
 	if (totalChance == 0)
@@ -323,6 +336,16 @@ Action LuckyDraw(int victim, int attacker)
 		PrintHintTextToAll("%t", "TankDrawResult_NoPrize_NoColor", attackerName);
 
 		return Plugin_Continue;
+	}
+
+	currentChance += chanceTimerBomb;
+	if (random <= currentChance)
+	{
+		CPrintToChatAll("%t", "TankDraw_TimerBomb", attackerName);
+		PrintHintTextToAll("%t", "TankDraw_TimerBomb_NoColor", attackerName);
+		SetPlayerTimeBomb(attacker, TimerBombSecond.IntValue, TimerBombRadius.FloatValue, TimerBombRangeDamage.IntValue);
+
+		return Plugin_Handled;
 	}
 
 	currentChance += chanceNewTank;
@@ -657,55 +680,6 @@ Action ResetSingleGravity(Handle timer, int client)
 	return Plugin_Continue;
 }
 
-bool IsValidClient(int client)
-{
-	if (client < 1 || client > MaxClients) return false;
-	if (!IsClientConnected(client)) return false;
-	if (!IsClientInGame(client)) return false;
-	return true;
-}
-
-bool IsValidAliveClient(int client)
-{
-	return (1 <= client <= MaxClients && IsClientInGame(client) && IsPlayerAlive(client) && (GetClientTeam(client) == 2));
-}
-
-bool IsValidDeadClient(int client)
-{
-	return (1 <= client <= MaxClients && IsClientInGame(client) && !IsPlayerAlive(client) && (GetClientTeam(client) == 2));
-}
-
-bool IsTank(int client)
-{
-	// Check if the client is valid and in-game
-	if (!IsValidClient(client))
-	{
-		PrintToServer("[Tank Draw] IsTank: Client %d is not valid", client);
-		return false;
-	}
-
-	// Check if the client is actually connected
-	if (!IsClientConnected(client))
-	{
-		PrintToServer("[Tank Draw] IsTank: Client %d is not connected", client);
-		return false;
-	}
-
-	// Check if the client is on the infected team
-	if (GetClientTeam(client) != 3)	       // 3 is typically the infected team in L4D2
-	{
-		PrintToServer("[Tank Draw] IsTank: Client %d is not on the infected team (Team: %d)", client, GetClientTeam(client));
-		return false;
-	}
-	if (!HasEntProp(client, Prop_Send, "m_zombieClass"))
-	{
-		return false;
-	}
-
-	PrintToServer("[Tank Draw] IsTank: Client %d passed all preliminary checks", client);
-	return (GetEntProp(client, Prop_Send, "m_zombieClass") == Z_TANK);
-}
-
 Action ResetWorldGravity(Handle timer, int initValue)
 {
 	g_WorldGravity = FindConVar("sv_gravity");
@@ -720,36 +694,10 @@ Action ResetWorldGravity(Handle timer, int initValue)
 	return Plugin_Continue;
 }
 
-bool IsPlayerIncapacitated(int client)
-{
-	return (GetEntProp(client, Prop_Send, "m_isIncapacitated", 1) == 1);
-}
-
-bool IsPlayerIncapacitatedAtAll(int client)
-{
-	return (IsPlayerIncapacitated(client) || IsHangingFromLedge(client));
-}
-
-bool IsHangingFromLedge(int client)
-{
-	return (GetEntProp(client, Prop_Send, "m_isHangingFromLedge", 1) == 1 || GetEntProp(client, Prop_Send, "m_isFallingFromLedge", 1) == 1);
-}
-
-void DisarmPlayer(int client)
-{
-	for (int slot = 0; slot <= 4; slot++)
-	{
-		int weapon = GetPlayerWeaponSlot(client, slot);
-		if (weapon != -1)
-		{
-			RemovePlayerItem(client, weapon);
-			RemoveEntity(weapon);
-		}
-	}
-}
-
 void ResetAllTimer()
 {
+	KillAllTimeBombs();
+
 	// reset single gravity timer
 	for (int i = 1; i <= MaxClients; i++)
 	{
@@ -840,18 +788,6 @@ public int MenuHandler_KillTank(Handle menu, MenuAction action, int client, int 
 		}
 	}
 	return 0;
-}
-
-void CheatCommand(int client, const char[] sCommand, const char[] sArguments = "")
-{
-	static int iFlagBits, iCmdFlags;
-	iFlagBits = GetUserFlagBits(client);
-	iCmdFlags = GetCommandFlags(sCommand);
-	SetUserFlagBits(client, ADMFLAG_ROOT);
-	SetCommandFlags(sCommand, iCmdFlags & ~FCVAR_CHEAT);
-	FakeClientCommand(client, "%s %s", sCommand, sArguments);
-	SetUserFlagBits(client, iFlagBits);
-	SetCommandFlags(sCommand, iCmdFlags);
 }
 
 bool TrySpawnTank(const float pos[3], int maxRetries = 3)
