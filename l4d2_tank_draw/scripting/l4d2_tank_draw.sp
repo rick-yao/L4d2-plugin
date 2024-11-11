@@ -15,58 +15,6 @@
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
 #define COMMAND_FILTER COMMAND_FILTER_CONNECTED | COMMAND_FILTER_NO_BOTS
 
-// built-in convar
-ConVar
-	g_hInfinitePrimaryAmmo,
-	g_MeleeRange,
-	g_WorldGravity;
-
-// Custom ConVars for the plugin
-ConVar
-	TankDrawEnable,
-	ChanceNoPrice,
-	ChanceIncreaseHealth,
-	ChanceInfiniteAmmo,
-	ChanceInfiniteMelee,
-	ChanceLimitedTimeWorldMoonGravity,
-	ChanceMoonGravityOneLimitedTime,
-	ChanceAverageHealth,
-	ChanceWorldMoonGravityToggle,
-	ChanceIncreaseGravity,
-	ChanceDecreaseHealth,
-	ChanceKillAllSurvivor,
-	ChanceKillSingleSurvivor,
-	ChanceClearAllSurvivorHealth,
-	ChanceDisarmAllSurvivor,
-	ChanceDisarmSingleSurvivor,
-	ChanceReviveAllDead,
-	ChanceNewTank,
-
-	ChanceDisarmSurvivorMolotov,
-	ChanceKillSurvivorMolotov,
-
-	SingleMoonGravity,
-	LimitedTimeWorldMoonGravityTimer,
-	InfiniteMeeleRange,
-	L4D2TankDrawDebugMode,
-	MinHealthIncrease,
-	MaxHealthIncrease,
-	MinHealthDecrease,
-	MaxHealthDecrease,
-	IncreasedGravity,
-	WorldMoonGravity,
-	LimitedTimeWorldMoonGravityOne,
-	// timer bomb related
-	ChanceTimerBomb,
-	TimerBombRadius,
-	TimerBombSecond,
-	TimerBombRangeDamage;
-
-Handle
-	g_SingleGravityTimer[MAXPLAYERS + 1],
-	g_WorldGravityTimer,
-	g_SingleGodModeTimer[MAXPLAYERS + 1],
-	g_AllGodModeTimer;
 
 public Plugin myinfo =
 {
