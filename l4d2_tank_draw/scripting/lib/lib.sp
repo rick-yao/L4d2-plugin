@@ -49,9 +49,7 @@ ConVar
 
 Handle
 	g_SingleGravityTimer[MAXPLAYERS + 1],
-	g_WorldGravityTimer,
-	g_SingleGodModeTimer[MAXPLAYERS + 1],
-	g_AllGodModeTimer;
+	g_WorldGravityTimer;
 
 stock void CheatCommand(int client, const char[] sCommand, const char[] sArguments = "")
 {
@@ -176,10 +174,6 @@ stock void ResetAllTimer()
 	// reset single gravity timer
 	for (int i = 1; i <= MaxClients; i++)
 	{
-		if (g_SingleGodModeTimer[i])
-		{
-			delete g_SingleGodModeTimer[i];
-		}
 		if (g_SingleGravityTimer[i])
 		{
 			delete g_SingleGravityTimer[i];
@@ -190,11 +184,6 @@ stock void ResetAllTimer()
 	if (g_WorldGravityTimer)
 	{
 		delete g_WorldGravityTimer;
-	}
-	// reset god mode for all timer
-	if (g_AllGodModeTimer)
-	{
-		delete g_AllGodModeTimer;
 	}
 }
 
