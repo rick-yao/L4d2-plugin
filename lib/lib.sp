@@ -1,4 +1,5 @@
-#define Z_TANK 8
+#define Z_TANK	      8
+#define INFECTED_TEAM 3
 
 stock void CheatCommand(int client, const char[] sCommand, const char[] sArguments = "")
 {
@@ -39,6 +40,7 @@ stock void DisarmPlayer(int client)
 		}
 	}
 }
+
 stock bool IsValidClient(int client)
 {
 	if (client < 1 || client > MaxClients) return false;
@@ -62,21 +64,14 @@ stock bool IsTank(int client)
 	// Check if the client is valid and in-game
 	if (!IsValidClient(client))
 	{
-		PrintToServer("[Tank Draw] IsTank: Client %d is not valid", client);
-		return false;
-	}
-
-	// Check if the client is actually connected
-	if (!IsClientConnected(client))
-	{
-		PrintToServer("[Tank Draw] IsTank: Client %d is not connected", client);
+		PrintToServer("IsTank: Client %d is not valid", client);
 		return false;
 	}
 
 	// Check if the client is on the infected team
-	if (GetClientTeam(client) != 3)	       // 3 is typically the infected team in L4D2
+	if (GetClientTeam(client) != INFECTED_TEAM)	   // 3 is typically the infected team in L4D2
 	{
-		PrintToServer("[Tank Draw] IsTank: Client %d is not on the infected team (Team: %d)", client, GetClientTeam(client));
+		PrintToServer("IsTank: Client %d is not on the infected team (Team: %d)", client, GetClientTeam(client));
 		return false;
 	}
 	if (!HasEntProp(client, Prop_Send, "m_zombieClass"))
@@ -84,7 +79,7 @@ stock bool IsTank(int client)
 		return false;
 	}
 
-	PrintToServer("[Tank Draw] IsTank: Client %d passed all preliminary checks", client);
+	PrintToServer("IsTank: Client %d passed all preliminary checks", client);
 	return (GetEntProp(client, Prop_Send, "m_zombieClass") == Z_TANK);
 }
 
@@ -104,14 +99,14 @@ stock bool TrySpawnTank(const float pos[3], int maxRetries = 3)
 
 		if (IsSuccess)
 		{
-			PrintToServer("[Tank Draw] Successfully spawned Tank at position: %.1f, %.1f, %.1f", pos[0], pos[1], pos[2]);
-			PrintToServer("[Tank Draw] Successfully spawned Tank at %d attempts", attempts);
+			PrintToServer("Successfully spawned Tank at position: %.1f, %.1f, %.1f", pos[0], pos[1], pos[2]);
+			PrintToServer("Successfully spawned Tank at %d attempts", attempts);
 			return true;
 		}
 
 		attempts++;
 	}
 
-	PrintToServer("[Tank Draw] Failed to spawn Tank after %d attempts", maxRetries);
+	PrintToServer("Failed to spawn Tank after %d attempts", maxRetries);
 	return false;
 }
