@@ -90,7 +90,7 @@ public void OnPluginStart()
 
 	if (L4D2TankDrawDebugMode.IntValue == 1)
 	{
-		PrintToServer("调试菜单打开,debug menu on");
+		PrintToServer("调试菜单打开 / debug menu on");
 		RegConsoleCmd("sm_x", MenuFunc_MainMenu, "打开调试菜单 / open debug menu");
 	}
 }
@@ -159,7 +159,7 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
 	// reset value when player died
 	int victim = GetClientOfUserId(event.GetInt("userid"));
-	PrintToServer("player dead... %d", victim);
+	PrintToServer("player %d dead, reset player value", victim);
 
 	SetEntityGravity(victim, 1.0);
 
@@ -171,18 +171,9 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 public Action Event_Roundend(Event event, const char[] name, bool dontBroadcast)
 {
 	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
-	// reset all timer
+
 	ResetAllTimer();
-
-	// reset all changed server value
-	g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
-	g_hInfinitePrimaryAmmo.RestoreDefault();
-
-	g_MeleeRange = FindConVar("melee_range");
-	g_MeleeRange.RestoreDefault();
-
-	g_WorldGravity = FindConVar("sv_gravity");
-	g_WorldGravity.RestoreDefault();
+	ResetAllValue();
 
 	return Plugin_Continue;
 }
@@ -224,18 +215,9 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 public void OnMapEnd()
 {
 	if (TankDrawEnable.IntValue == 0) { return; }
-	// reset all timer
+
 	ResetAllTimer();
-
-	// reset all changed server value
-	g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
-	g_hInfinitePrimaryAmmo.RestoreDefault();
-
-	g_MeleeRange = FindConVar("melee_range");
-	g_MeleeRange.RestoreDefault();
-
-	g_WorldGravity = FindConVar("sv_gravity");
-	g_WorldGravity.RestoreDefault();
+	ResetAllValue();
 }
 
 Action LuckyDraw(int victim, int attacker)

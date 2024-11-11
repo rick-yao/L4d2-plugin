@@ -69,6 +69,19 @@ stock void ResetAllTimer()
 	}
 }
 
+stock void ResetAllValue()
+{
+	// reset all changed server value
+	g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
+	g_hInfinitePrimaryAmmo.RestoreDefault();
+
+	g_MeleeRange = FindConVar("melee_range");
+	g_MeleeRange.RestoreDefault();
+
+	g_WorldGravity = FindConVar("sv_gravity");
+	g_WorldGravity.RestoreDefault();
+}
+
 stock Action ResetSingleGravity(Handle timer, int client)
 {
 	if (IsValidClient(client))
