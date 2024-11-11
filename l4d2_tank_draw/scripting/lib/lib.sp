@@ -1,5 +1,3 @@
-#include "../../../lib/helper.sp"
-
 // built-in convar
 ConVar
 	g_hInfinitePrimaryAmmo,
