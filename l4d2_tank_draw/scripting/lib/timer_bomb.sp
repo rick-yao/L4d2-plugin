@@ -176,11 +176,6 @@ stock void KillTimeBomb(int client)
 		g_hTimeBombTimer[client] = null;
 		g_iTimeBombTicks[client] = 0;
 	}
-
-	if (IsClientInGame(client))
-	{
-		SetEntityRenderColor(client, 255, 255, 255, 255);
-	}
 }
 
 stock void KillAllTimeBombs()
