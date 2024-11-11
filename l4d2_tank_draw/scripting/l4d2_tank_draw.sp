@@ -8,7 +8,7 @@
 #include <left4dhooks>
 
 #include "lib/timer_bomb.sp"
-#include "lib/lib.sp"
+#include "../../lib/lib.sp"
 #include "lib/dev_menu.sp"
 
 #define PLUGIN_VERSION "2.2.0"
