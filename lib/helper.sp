@@ -1,4 +1,12 @@
+#define Z_SMOKER      1
+#define Z_BOOMER      2
+#define Z_HUNTER      3
+#define Z_SPITTER     4
+#define Z_JOCKEY      5
+#define Z_CHARGER     6
 #define Z_TANK	      8
+
+#define SURVIVOR_TEAM 2
 #define INFECTED_TEAM 3
 
 stock void CheatCommand(int client, const char[] sCommand, const char[] sArguments = "")
@@ -51,12 +59,12 @@ stock bool IsValidClient(int client)
 
 stock bool IsValidAliveClient(int client)
 {
-	return (1 <= client <= MaxClients && IsClientInGame(client) && IsPlayerAlive(client) && (GetClientTeam(client) == 2));
+	return (1 <= client <= MaxClients && IsClientInGame(client) && IsPlayerAlive(client) && (GetClientTeam(client) == SURVIVOR_TEAM));
 }
 
 stock bool IsValidDeadClient(int client)
 {
-	return (1 <= client <= MaxClients && IsClientInGame(client) && !IsPlayerAlive(client) && (GetClientTeam(client) == 2));
+	return (1 <= client <= MaxClients && IsClientInGame(client) && !IsPlayerAlive(client) && (GetClientTeam(client) == SURVIVOR_TEAM));
 }
 
 stock bool IsTank(int client)

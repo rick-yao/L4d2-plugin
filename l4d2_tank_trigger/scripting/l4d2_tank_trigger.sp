@@ -5,14 +5,9 @@
 #include <multicolors>
 #include <left4dhooks>
 
-#define PLUGIN_VERSION "0.1"
+#include "../../lib/helper.sp"
 
-#define Z_SMOKER       1
-#define Z_BOOMER       2
-#define Z_HUNTER       3
-#define Z_SPITTER      4
-#define Z_JOCKEY       5
-#define Z_CHARGER      6
+#define PLUGIN_VERSION "0.1"
 
 ConVar
 	ChanceCarAlarm,
@@ -107,35 +102,4 @@ void SpawnTank(float pos[3])
 	{
 		CPrintToChatAll("%t", "TankTrigger_TankSpawnFailed");
 	}
-}
-
-bool IsValidClient(int client)
-{
-	if (client < 1 || client > MaxClients) return false;
-	if (!IsClientConnected(client)) return false;
-	if (!IsClientInGame(client)) return false;
-	return true;
-}
-
-bool TrySpawnTank(const float pos[3], int maxRetries = 3)
-{
-	int  attempts  = 1;
-	bool IsSuccess = false;
-
-	while (attempts <= maxRetries && !IsSuccess)
-	{
-		IsSuccess = L4D2_SpawnTank(pos, NULL_VECTOR) > 0;
-
-		if (IsSuccess)
-		{
-			PrintToServer("[Tank Spawner] Successfully spawned Tank at position: %.1f, %.1f, %.1f", pos[0], pos[1], pos[2]);
-			PrintToServer("[Tank Spawner] Successfully spawned Tank at %d attempts", attempts);
-			return true;
-		}
-
-		attempts++;
-	}
-
-	PrintToServer("[Tank Spawner] Failed to spawn Tank after %d attempts", maxRetries);
-	return false;
 }
