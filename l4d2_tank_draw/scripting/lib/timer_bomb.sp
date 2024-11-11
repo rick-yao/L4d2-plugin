@@ -11,9 +11,6 @@ int    g_ExplosionSprite = -1;
 int    greyColor[4]	 = { 128, 128, 128, 255 };
 int    whiteColor[4]	 = { 255, 255, 255, 255 };
 
-// Sound related variables (keeping from original)
-char   g_BoomSound[PLATFORM_MAX_PATH];
-
 Handle g_hTimeBombTimer[MAXPLAYERS + 1];
 int    g_iTimeBombTicks[MAXPLAYERS + 1];
 
@@ -38,7 +35,7 @@ public void OnMapStart()
 stock bool SetPlayerTimeBomb(int target, int ticks = 5, float radius = DEFAULT_RADIUS, int damage = DAMAGE_BASE)
 {
 	// Validate target
-	if (!IsValidClient(target) || !IsPlayerAlive(target))
+	if (!IsValidAliveClient(target))
 		return false;
 
 	// If timer exists, kill it
@@ -72,7 +69,7 @@ public Action Timer_HandleBomb(Handle timer, DataPack data)
 	int   damage = data.ReadCell();
 	float radius = data.ReadFloat();
 
-	if (!IsValidClient(target) || !IsPlayerAlive(target))
+	if (!IsValidAliveClient(target))
 	{
 		g_hTimeBombTimer[target] = null;
 		return Plugin_Stop;
@@ -128,11 +125,8 @@ public Action Timer_HandleBomb(Handle timer, DataPack data)
 			TE_SendToAll();
 		}
 
-		// Play explosion sound
-		if (g_BoomSound[0])
-		{
-			EmitAmbientSound(g_BoomSound, vecOrigin, target, SNDLEVEL_RAIDSIREN);
-		}
+		float deathPos[3];
+		GetClientAbsOrigin(target, deathPos);
 
 		// Kill the bomb holder
 		ForcePlayerSuicide(target);
@@ -140,28 +134,28 @@ public Action Timer_HandleBomb(Handle timer, DataPack data)
 		// Damage nearby players
 		for (int i = 1; i <= MaxClients; i++)
 		{
-			if (!IsValidClient(i) || !IsPlayerAlive(i) || i == target)
+			if (!IsValidAliveClient(i) || i == target)
 				continue;
 
-			float targetPos[3];
-			GetClientAbsOrigin(i, targetPos);
+			float survivorPos[3];
+			GetClientAbsOrigin(i, survivorPos);
 
-			float distance = GetVectorDistance(vecOrigin, targetPos);
+			float distance = GetVectorDistance(deathPos, survivorPos);
 			if (distance <= radius)
 			{
 				// Calculate damage based on distance
-				damage = RoundToFloor(damage * ((radius - distance) / radius));
+				int finalDamage = RoundToFloor(damage * ((radius - distance) / radius));
 
 				// Create smaller explosion effect on damaged players
 				if (g_ExplosionSprite > -1)
 				{
-					TE_SetupExplosion(targetPos, g_ExplosionSprite, 0.2, 1, 0, 1, 1);
+					TE_SetupExplosion(survivorPos, g_ExplosionSprite, 0.2, 1, 0, 1, 1);
 					TE_SendToAll();
 				}
 
 				// Apply damage
 				SlapPlayer(i, 0);
-				SDKHooks_TakeDamage(i, i, i, float(damage), DMG_GENERIC);
+				SDKHooks_TakeDamage(i, i, i, float(finalDamage), DMG_GENERIC);
 			}
 		}
 
