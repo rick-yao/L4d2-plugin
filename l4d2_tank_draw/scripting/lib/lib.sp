@@ -92,3 +92,86 @@ stock void PlaySoundToAll(const char[] sample)
 {
 	EmitSoundToAll(sample, SOUND_FROM_PLAYER, SNDCHAN_STATIC, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, NULL_VECTOR, NULL_VECTOR, true, 0.0);
 }
+
+stock bool TrySpawnTank(const float pos[3], int maxRetries = 3)
+{
+	int  attempts  = 1;
+	bool IsSuccess = false;
+
+	while (attempts <= maxRetries && !IsSuccess)
+	{
+		IsSuccess = L4D2_SpawnTank(pos, NULL_VECTOR) > 0;
+
+		if (IsSuccess)
+		{
+			PrintToServer("[Tank Draw] Successfully spawned Tank at position: %.1f, %.1f, %.1f", pos[0], pos[1], pos[2]);
+			PrintToServer("[Tank Draw] Successfully spawned Tank at %d attempts", attempts);
+			return true;
+		}
+
+		attempts++;
+	}
+
+	PrintToServer("[Tank Draw] Failed to spawn Tank after %d attempts", maxRetries);
+	return false;
+}
+
+stock void ResetAllTimer()
+{
+	KillAllTimeBombs();
+
+	// reset single gravity timer
+	for (int i = 1; i <= MaxClients; i++)
+	{
+		if (g_SingleGodModeTimer[i])
+		{
+			delete g_SingleGodModeTimer[i];
+		}
+		if (g_SingleGravityTimer[i])
+		{
+			delete g_SingleGravityTimer[i];
+		}
+	}
+
+	// reset world gravity timer
+	if (g_WorldGravityTimer)
+	{
+		delete g_WorldGravityTimer;
+	}
+	// reset god mode for all timer
+	if (g_AllGodModeTimer)
+	{
+		delete g_AllGodModeTimer;
+	}
+}
+
+stock Action ResetSingleGravity(Handle timer, int client)
+{
+	if (IsValidClient(client))
+	{
+		char clientName[MAX_NAME_LENGTH];
+		GetClientName(client, clientName, sizeof(clientName));
+		CPrintToChatAll("%t", "TankDraw_GravityResetSingle", clientName);
+		PrintHintTextToAll("%t", "TankDraw_GravityResetSingle_NoColor", clientName);
+
+		SetEntityGravity(client, 1.0);
+
+		g_SingleGravityTimer[client] = null;
+	}
+
+	return Plugin_Continue;
+}
+
+stock Action ResetWorldGravity(Handle timer, int initValue)
+{
+	g_WorldGravity = FindConVar("sv_gravity");
+
+	g_WorldGravity.RestoreDefault();
+
+	CPrintToChatAll("%t", "TankDraw_WorldGravityReset");
+	PrintHintTextToAll("%t", "TankDraw_WorldGravityReset_NoColor");
+
+	g_WorldGravityTimer = null;
+
+	return Plugin_Continue;
+}
