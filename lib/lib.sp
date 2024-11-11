@@ -217,31 +217,3 @@ stock Action ResetWorldGravity(Handle timer, int initValue)
 
 	return Plugin_Continue;
 }
-
-stock int GetTotalChance()
-{
-	int chanceNoPrice		      = ChanceNoPrice.IntValue;
-	int chanceIncreaseHealth	      = ChanceIncreaseHealth.IntValue;
-	int chanceInfiniteAmmo		      = ChanceInfiniteAmmo.IntValue;
-	int chanceInfiniteMelee		      = ChanceInfiniteMelee.IntValue;
-	int chanceAverageHealth		      = ChanceAverageHealth.IntValue;
-	int chanceDecreaseHealth	      = ChanceDecreaseHealth.IntValue;
-	int chanceKillAllSurvivor	      = ChanceKillAllSurvivor.IntValue;
-	int chanceKillSingleSurvivor	      = ChanceKillSingleSurvivor.IntValue;
-	int chanceDisarmAllSurvivor	      = ChanceDisarmAllSurvivor.IntValue;
-	int chanceDisarmSingleSurvivor	      = ChanceDisarmSingleSurvivor.IntValue;
-	int chanceNewTank		      = ChanceNewTank.IntValue;
-	int chanceTimerBomb		      = ChanceTimerBomb.IntValue;
-
-	int chanceLimitedTimeWorldMoonGravity = ChanceLimitedTimeWorldMoonGravity.IntValue;
-	int chanceMoonGravityOneLimitedTime   = ChanceMoonGravityOneLimitedTime.IntValue;
-	int chanceWorldMoonGravityToggle      = ChanceWorldMoonGravityToggle.IntValue;
-	int chanceIncreaseGravity	      = ChanceIncreaseGravity.IntValue;
-	int chanceClearAllSurvivorHealth      = ChanceClearAllSurvivorHealth.IntValue;
-	int chanceReviveAllDead		      = ChanceReviveAllDead.IntValue;
-
-	int totalChance			      = chanceNoPrice + chanceTimerBomb + chanceReviveAllDead + chanceNewTank + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
-	totalChance += chanceLimitedTimeWorldMoonGravity + chanceMoonGravityOneLimitedTime + chanceWorldMoonGravityToggle + chanceIncreaseGravity;
-
-	return totalChance;
-}
