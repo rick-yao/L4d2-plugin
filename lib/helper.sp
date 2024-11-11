@@ -1,7 +1,7 @@
 #define Z_TANK	      8
 #define INFECTED_TEAM 3
 
-public void CheatCommand(int client, const char[] sCommand, const char[] sArguments = "")
+stock void CheatCommand(int client, const char[] sCommand, const char[] sArguments = "")
 {
 	static int iFlagBits, iCmdFlags;
 	iFlagBits = GetUserFlagBits(client);
@@ -13,22 +13,22 @@ public void CheatCommand(int client, const char[] sCommand, const char[] sArgume
 	SetCommandFlags(sCommand, iCmdFlags);
 }
 
-public bool IsPlayerIncapacitated(int client)
+stock bool IsPlayerIncapacitated(int client)
 {
 	return (GetEntProp(client, Prop_Send, "m_isIncapacitated", 1) == 1);
 }
 
-public bool IsPlayerIncapacitatedAtAll(int client)
+stock bool IsPlayerIncapacitatedAtAll(int client)
 {
 	return (IsPlayerIncapacitated(client) || IsHangingFromLedge(client));
 }
 
-public bool IsHangingFromLedge(int client)
+stock bool IsHangingFromLedge(int client)
 {
 	return (GetEntProp(client, Prop_Send, "m_isHangingFromLedge", 1) == 1 || GetEntProp(client, Prop_Send, "m_isFallingFromLedge", 1) == 1);
 }
 
-public void DisarmPlayer(int client)
+stock void DisarmPlayer(int client)
 {
 	for (int slot = 0; slot <= 4; slot++)
 	{
@@ -41,7 +41,7 @@ public void DisarmPlayer(int client)
 	}
 }
 
-public bool IsValidClient(int client)
+stock bool IsValidClient(int client)
 {
 	if (client < 1 || client > MaxClients) return false;
 	if (!IsClientConnected(client)) return false;
@@ -49,17 +49,17 @@ public bool IsValidClient(int client)
 	return true;
 }
 
-public bool IsValidAliveClient(int client)
+stock bool IsValidAliveClient(int client)
 {
 	return (1 <= client <= MaxClients && IsClientInGame(client) && IsPlayerAlive(client) && (GetClientTeam(client) == 2));
 }
 
-public bool IsValidDeadClient(int client)
+stock bool IsValidDeadClient(int client)
 {
 	return (1 <= client <= MaxClients && IsClientInGame(client) && !IsPlayerAlive(client) && (GetClientTeam(client) == 2));
 }
 
-public bool IsTank(int client)
+stock bool IsTank(int client)
 {
 	// Check if the client is valid and in-game
 	if (!IsValidClient(client))
@@ -83,12 +83,12 @@ public bool IsTank(int client)
 	return (GetEntProp(client, Prop_Send, "m_zombieClass") == Z_TANK);
 }
 
-public void PlaySoundToAll(const char[] sample)
+stock void PlaySoundToAll(const char[] sample)
 {
 	EmitSoundToAll(sample, SOUND_FROM_PLAYER, SNDCHAN_STATIC, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, NULL_VECTOR, NULL_VECTOR, true, 0.0);
 }
 
-public bool TrySpawnTank(const float pos[3], int maxRetries = 3)
+stock bool TrySpawnTank(const float pos[3], int maxRetries = 3)
 {
 	int  attempts  = 1;
 	bool IsSuccess = false;
