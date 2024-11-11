@@ -25,6 +25,7 @@ The plugin includes the following possible prizes:
 15. Disarm lucky player
 16. A lucky tank
 17. Revive all dead survivors
+18. Make a player become 'Timer Bomb'
 
 ## Configuration
 
