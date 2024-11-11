@@ -54,6 +54,7 @@ jobs:
           draft: false
           files: |
             build/*.smx
+            **/translations/*.txt
           generate_release_notes: true
           token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
           body: |
