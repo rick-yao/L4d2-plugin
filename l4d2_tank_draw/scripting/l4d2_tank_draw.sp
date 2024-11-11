@@ -9,10 +9,10 @@
 
 #include "../../lib/helper.sp"
 
+#include "lib/lib.sp"
 #include "lib/timer_bomb.sp"
 #include "lib/dev_menu.sp"
 #include "lib/lucky_draw.sp"
-#include "lib/lib.sp"
 
 #define PLUGIN_VERSION "2.2.0"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
