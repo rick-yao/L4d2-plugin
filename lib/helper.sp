@@ -232,15 +232,15 @@ public Action Timer_RetrySpawnTank(Handle timer, DataPack dp)
 {
 	dp.Reset();
 	float pos[3];
-	pos[0]				= dp.ReadFloat();
-	pos[1]				= dp.ReadFloat();
-	pos[2]				= dp.ReadFloat();
-	float		  retryInterval = dp.ReadFloat();
-	int		  attempts	= dp.ReadCell();
-	int		  maxRetries	= dp.ReadCell();
-	SpawnTankCallback callback	= dp.ReadFunction();
+	pos[0]		       = dp.ReadFloat();
+	pos[1]		       = dp.ReadFloat();
+	pos[2]		       = dp.ReadFloat();
+	float	 retryInterval = dp.ReadFloat();
+	int	 attempts      = dp.ReadCell();
+	int	 maxRetries    = dp.ReadCell();
+	Function callback      = dp.ReadFunction();
 
-	bool		  IsSuccess	= L4D2_SpawnTank(pos, NULL_VECTOR) > 0;
+	bool	 IsSuccess     = L4D2_SpawnTank(pos, NULL_VECTOR) > 0;
 
 	if (IsSuccess)
 	{
