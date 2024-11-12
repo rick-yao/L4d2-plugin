@@ -119,6 +119,17 @@ stock bool IsValidDeadClient(int client)
 }
 
 /**
+ * Checks if a client is a valid survivor.
+ *
+ * @param client    Client index to check
+ * @return          True if client is a valid survivor, false otherwise
+ */
+stock bool IsValidSurvivor(int client)
+{
+	return (1 <= client <= MaxClients && IsClientInGame(client) && (GetClientTeam(client) == SURVIVOR_TEAM));
+}
+
+/**
  * Checks if a client is a Tank special infected.
  * Includes debug logging for validation steps.
  *

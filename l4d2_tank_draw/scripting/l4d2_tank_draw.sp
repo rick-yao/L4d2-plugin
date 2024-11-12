@@ -160,11 +160,14 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
 	// reset value when player died
 	int victim = GetClientOfUserId(event.GetInt("userid"));
-	PrintToServer("player %d dead, reset player value", victim);
+	if (IsValidSurvivor(victim))
+	{
+		PrintToServer("player %d dead, reset player value", victim);
 
-	SetEntityGravity(victim, 1.0);
+		SetEntityGravity(victim, 1.0);
 
-	KillTimeBomb(victim);
+		KillTimeBomb(victim);
+	}
 
 	return Plugin_Continue;
 }
