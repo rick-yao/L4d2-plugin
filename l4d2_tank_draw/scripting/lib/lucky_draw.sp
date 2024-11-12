@@ -56,7 +56,9 @@ stock Action LuckyDraw(int victim, int attacker)
 		int maxHealth	 = MaxTempHealthIncrease.IntValue;
 		int randomHealth = GetRandomInt(minHealth, maxHealth);
 
-		L4D_SetPlayerTempHealthFloat(attacker, float(randomHealth));
+		int temp	 = L4D_GetPlayerTempHealth(attacker) + randomHealth;
+
+		L4D_SetPlayerTempHealthFloat(attacker, float(temp));
 
 		CPrintToChatAll("%t", "TankDrawResult_IncreaseTempHealth", attackerName, randomHealth);
 		PrintHintTextToAll("%t", "TankDrawResult_IncreaseTempHealth_NoColor", attackerName, randomHealth);
