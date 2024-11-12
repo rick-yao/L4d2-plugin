@@ -30,7 +30,8 @@ public void OnMapStart()
  * @param target        Target player index
  * @param ticks         Number of ticks before explosion (default: 5)
  * @param radius        Explosion radius (default: 300.0)
- * @return             True if bomb was set, false if removed
+ * @param damage	Max damage that could be applied to survivor (default: 100)
+ * @return             True if bomb was set, false if removed or not a valid alive client
  */
 stock bool SetPlayerTimeBomb(int target, int ticks = 5, float radius = DEFAULT_RADIUS, int damage = DAMAGE_BASE)
 {
