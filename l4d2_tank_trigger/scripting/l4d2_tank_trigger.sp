@@ -57,7 +57,7 @@ public Action Event_Spawn(Event event, const char[] name, bool dontBroadcast)
 		{
 			CPrintToChatAll("%t", "TankTrigger_WitchKilledSpawnTank", attackerName);
 			PrintHintTextToAll("%t", "TankTrigger_WitchKilledSpawnTank_NoColor", attackerName);
-			SpawnTank(pos);
+			TrySpawnTank(pos, OnSpawnComplete);
 		}
 		return Plugin_Continue;
 	}
@@ -83,7 +83,7 @@ public Action Event_Spawn(Event event, const char[] name, bool dontBroadcast)
 		{
 			CPrintToChatAll("%t", "TankTrigger_CarTriggeredSpawnTank", attackerName);
 			PrintHintTextToAll("%t", "TankTrigger_CarTriggeredSpawnTank_NoColor", attackerName);
-			SpawnTank(pos);
+			TrySpawnTank(pos, OnSpawnComplete);
 		}
 		return Plugin_Continue;
 	}
@@ -91,10 +91,9 @@ public Action Event_Spawn(Event event, const char[] name, bool dontBroadcast)
 	return Plugin_Continue;
 }
 
-void SpawnTank(float pos[3])
+void OnSpawnComplete(bool success, int attempts)
 {
-	bool SpawnSuccess = TrySpawnTank(pos, 10);
-	if (SpawnSuccess)
+	if (success)
 	{
 		CPrintToChatAll("%t", "TankTrigger_TankSpawnSuccess");
 	}
