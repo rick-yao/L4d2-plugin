@@ -68,18 +68,12 @@ stock Action LuckyDraw(int victim, int attacker)
 			return Plugin_Continue;
 		}
 
-		float fPos[3];
-		GetClientAbsOrigin(attacker, fPos);
-
-		bool IsSuccess = TrySpawnTank(fPos, 10);
-
 		CPrintToChatAll("%t", "TankDraw_NewTank", attackerName);
 		PrintHintTextToAll("%t", "TankDraw_NewTank_NoColor", attackerName);
 
-		if (!IsSuccess)
-		{
-			CPrintToChatAll("%t", "Tank_NewTankFailed");
-		}
+		float fPos[3];
+		GetClientAbsOrigin(attacker, fPos);
+		TrySpawnTank(fPos, OnSpawnComplete);
 
 		return Plugin_Continue;
 	}

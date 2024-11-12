@@ -112,3 +112,15 @@ stock Action ResetWorldGravity(Handle timer, int initValue)
 
 	return Plugin_Continue;
 }
+
+stock void OnSpawnComplete(bool success, int attempts)
+{
+	if (success)
+	{
+		CPrintToChatAll("%t", "Tank_NewTankSuccess");
+	}
+	else
+	{
+		CPrintToChatAll("%t", "Tank_NewTankFailed");
+	}
+}

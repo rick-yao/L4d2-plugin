@@ -456,6 +456,18 @@
         "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果：幸运Tank"
     }
     
+    "Tank_NewTankSuccess"
+    {
+        "en"    "{yellow}[Tank Draw] Spawn Tank successfully."   
+        "chi"   "{yellow}[坦克抽奖] 生成Tank成功"
+    }
+
+    "Tank_NewTankSuccess_NoColor"
+    {
+        "en"    "[Tank Draw] Spawn Tank successfully."   
+        "chi"   "[坦克抽奖] 生成Tank成功"
+    }
+
     "Tank_NewTankFailed"
     {
         "en"    "{yellow}[Tank Draw] Spawn Tank failed."   
