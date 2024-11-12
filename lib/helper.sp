@@ -174,7 +174,7 @@ typedef SpawnTankCallback = function void(bool success, int attempts);
  * @param retryInterval Time in seconds to wait between retry attempts (default: 0.1)
  * @param maxRetries    Maximum number of spawn attempts (default: 10)
  */
-stock void TrySpawnTank(const float pos[3], SpawnTankCallback callback = INVALID_FUNCTION, float retryInterval = 0.2, int maxRetries = 5)
+stock void TrySpawnTank(const float pos[3], SpawnTankCallback callback = INVALID_FUNCTION, float retryInterval = 0.5, int maxRetries = 6)
 {
 	int  attempts  = 1;
 	bool IsSuccess = false;
