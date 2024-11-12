@@ -113,7 +113,6 @@ stock Action LuckyDraw(int victim, int attacker)
 			{
 				L4D_RespawnPlayer(i);
 				TeleportEntity(i, fPos, NULL_VECTOR, NULL_VECTOR);
-				SetEntityHealth(i, 100);
 			}
 		}
 
