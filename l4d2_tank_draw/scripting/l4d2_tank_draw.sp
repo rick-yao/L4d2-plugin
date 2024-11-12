@@ -75,6 +75,10 @@ public void OnPluginStart()
 	TimerBombSecond			  = CreateConVar("l4d2_tank_draw_timer_bomb_seconds", "8", "定时炸弹倒计时秒数 / Countdown duration in seconds before the timer bomb explodes", FCVAR_NONE);
 	TimerBombRangeDamage		  = CreateConVar("l4d2_tank_draw_timer_bomb_range_damage", "100", "定时炸弹范围伤害值 / Damage caused by the timer bomb within the explosion range", FCVAR_NONE);
 
+	ChanceIncreaseTempHealth	  = CreateConVar("l4d2_tank_draw_chance_increase_temp_health", "10", "增加临时生命值的概率 / Probability of increasing temporary health", FCVAR_NONE);
+	MaxTempHealthIncrease		  = CreateConVar("l4d2_tank_draw_max_temp_health_increase", "500", "临时生命值增加的最大值 / Maximum value for the temporary health increase", false, false);
+	MinTempHealthIncrease		  = CreateConVar("l4d2_tank_draw_min_temp_health_increase", "200", "临时生命值增加的最小值 / Minimum value for the temporary health increase", false, false);
+
 	AutoExecConfig(true, "l4d2_tank_draw");
 
 	PrintToServer("[Tank Draw] Plugin loaded");

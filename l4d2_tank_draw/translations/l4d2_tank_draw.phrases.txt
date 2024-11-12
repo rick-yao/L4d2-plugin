@@ -503,4 +503,16 @@
         "en"    "[Tank Draw] Player %s is going to bomb after %d seconds."
         "chi"   "[坦克抽奖] 玩家 %s 将于 %d 秒后爆炸"
     }
+
+    "TankDrawResult_IncreaseTempHealth"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Randomly increased %d temp health."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}随机增加 %d 虚血"
+    }
+
+    "TankDrawResult_IncreaseTempHealth_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Randomly increased %d temp health."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 随机增加 %d 虚血"
+    }
 }

@@ -24,6 +24,7 @@ ConVar
 	ChanceDisarmSingleSurvivor,
 	ChanceReviveAllDead,
 	ChanceNewTank,
+	ChanceIncreaseTempHealth,
 
 	ChanceDisarmSurvivorMolotov,
 	ChanceKillSurvivorMolotov,
@@ -43,7 +44,10 @@ ConVar
 	ChanceTimerBomb,
 	TimerBombRadius,
 	TimerBombSecond,
-	TimerBombRangeDamage;
+	TimerBombRangeDamage,
+	// temp health
+	MaxTempHealthIncrease,
+	MinTempHealthIncrease;
 
 Handle
 	g_SingleGravityTimer[MAXPLAYERS + 1],

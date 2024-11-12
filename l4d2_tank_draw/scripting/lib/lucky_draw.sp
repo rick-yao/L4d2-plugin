@@ -12,6 +12,7 @@ stock Action LuckyDraw(int victim, int attacker)
 	int chanceDisarmSingleSurvivor	      = ChanceDisarmSingleSurvivor.IntValue;
 	int chanceNewTank		      = ChanceNewTank.IntValue;
 	int chanceTimerBomb		      = ChanceTimerBomb.IntValue;
+	int chanceIncreaseTempHealth	      = ChanceIncreaseTempHealth.IntValue;
 
 	int chanceLimitedTimeWorldMoonGravity = ChanceLimitedTimeWorldMoonGravity.IntValue;
 	int chanceMoonGravityOneLimitedTime   = ChanceMoonGravityOneLimitedTime.IntValue;
@@ -20,7 +21,7 @@ stock Action LuckyDraw(int victim, int attacker)
 	int chanceClearAllSurvivorHealth      = ChanceClearAllSurvivorHealth.IntValue;
 	int chanceReviveAllDead		      = ChanceReviveAllDead.IntValue;
 
-	int totalChance			      = chanceNoPrice + chanceTimerBomb + chanceReviveAllDead + chanceNewTank + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
+	int totalChance			      = chanceNoPrice + chanceIncreaseTempHealth + chanceTimerBomb + chanceReviveAllDead + chanceNewTank + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
 	totalChance += chanceLimitedTimeWorldMoonGravity + chanceMoonGravityOneLimitedTime + chanceWorldMoonGravityToggle + chanceIncreaseGravity;
 
 	if (totalChance == 0)
@@ -44,6 +45,21 @@ stock Action LuckyDraw(int victim, int attacker)
 	{
 		CPrintToChatAll("%t", "TankDrawResult_NoPrize", attackerName);
 		PrintHintTextToAll("%t", "TankDrawResult_NoPrize_NoColor", attackerName);
+
+		return Plugin_Continue;
+	}
+
+	currentChance += chanceIncreaseTempHealth;
+	if (random <= currentChance)
+	{
+		int minHealth	 = MinTempHealthIncrease.IntValue;
+		int maxHealth	 = MaxTempHealthIncrease.IntValue;
+		int randomHealth = GetRandomInt(minHealth, maxHealth);
+
+		L4D_SetPlayerTempHealthFloat(attacker, float(randomHealth));
+
+		CPrintToChatAll("%t", "TankDrawResult_IncreaseTempHealth", attackerName, randomHealth);
+		PrintHintTextToAll("%t", "TankDrawResult_IncreaseTempHealth_NoColor", attackerName, randomHealth);
 
 		return Plugin_Continue;
 	}
