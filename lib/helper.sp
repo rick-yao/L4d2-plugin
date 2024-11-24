@@ -301,3 +301,17 @@ public Action Timer_RetrySpawnTank(Handle timer, DataPack dp)
 	delete dp;
 	return Plugin_Stop;
 }
+
+/**
+ * Returns the username associated with the given entity index.
+ * @note This function should only used for dev purposes.
+ *
+ * @param entity      Entity index to retrieve the username for
+ * @return           Username associated with the given entity index
+ */
+stock char[] GetUserNameFromIndex(int entity)
+{
+	char name[MAX_NAME_LENGTH];
+	GetClientName(entity, name, sizeof(name));
+	return name;
+}
