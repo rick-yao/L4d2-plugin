@@ -156,7 +156,7 @@ public Action Timer_HandleBomb(Handle timer, DataPack data)
 
 				// Apply damage
 				SlapPlayer(i, 0);
-				SDKHooks_TakeDamage(i, i, i, float(finalDamage), DMG_GENERIC);
+				SDKHooks_TakeDamage(i, i, target, float(finalDamage), DMG_GENERIC);
 			}
 		}
 
