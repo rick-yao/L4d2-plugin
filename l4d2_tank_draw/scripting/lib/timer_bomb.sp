@@ -160,9 +160,6 @@ public Action Timer_HandleBomb(Handle timer, DataPack data)
 			}
 		}
 
-		// Reset variables
-		g_hTimeBombTimer[target] = null;
-		SetEntityRenderColor(target, 255, 255, 255, 255);
 		return Plugin_Stop;
 	}
 
