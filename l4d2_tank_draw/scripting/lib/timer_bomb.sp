@@ -155,6 +155,7 @@ public Action Timer_HandleBomb(Handle timer, DataPack data)
 			}
 		}
 
+		KillTimeBomb(target);
 		return Plugin_Stop;
 	}
 
