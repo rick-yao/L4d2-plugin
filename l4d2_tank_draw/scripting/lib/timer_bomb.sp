@@ -8,8 +8,8 @@
 int    g_BeamSprite	 = -1;
 int    g_HaloSprite	 = -1;
 int    g_ExplosionSprite = -1;
-int    greyColor[4]	 = { 128, 128, 128, 255 };
-int    whiteColor[4]	 = { 255, 255, 255, 255 };
+
+int    iColorRed[4]	 = { 255, 75, 75, 255 };
 
 Handle g_hTimeBombTimer[MAXPLAYERS + 1];
 int    g_iTimeBombTicks[MAXPLAYERS + 1];
@@ -99,14 +99,9 @@ public Action Timer_HandleBomb(Handle timer, DataPack data)
 	// Create beam rings
 	if (g_BeamSprite > -1 && g_HaloSprite > -1)
 	{
-		// Inner ring (grey)
-		TE_SetupBeamRingPoint(vecOrigin, 10.0, radius, g_BeamSprite, g_HaloSprite,
-				      0, 15, 0.5, 5.0, 0.0, greyColor, 10, 0);
-		TE_SendToAll();
-
-		// Outer ring (white)
-		TE_SetupBeamRingPoint(vecOrigin, 10.0, radius, g_BeamSprite, g_HaloSprite,
-				      0, 10, 0.6, 10.0, 0.5, whiteColor, 10, 0);
+		// *1.5 is to correct the radius
+		TE_SetupBeamRingPoint(vecOrigin, 10.0, radius * 1.5, g_BeamSprite, g_HaloSprite,
+				      0, 10, 0.6, 15.0, 0.5, iColorRed, 10, 0);
 		TE_SendToAll();
 	}
 
