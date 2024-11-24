@@ -2,7 +2,7 @@
 #define DAMAGE_BASE    100
 #define DEFAULT_RADIUS 300.0
 #define BEEP_SOUND     "weapons/hegrenade/beep.wav"
-#define EXPLODE_SOUND  "animation/plane_engine_explode.wav"
+#define EXPLODE_SOUND  "weapons/grenade_launcher/grenadefire/grenade_launcher_explode_1.wav"
 
 // Beam related variables
 int    g_BeamSprite	 = -1;
