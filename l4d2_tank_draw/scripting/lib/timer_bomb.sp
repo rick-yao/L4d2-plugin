@@ -121,7 +121,7 @@ public Action Timer_HandleBomb(Handle timer, DataPack data)
 		// Create explosion effect
 		if (g_ExplosionSprite > -1)
 		{
-			TE_SetupExplosion(vecOrigin, g_ExplosionSprite, 5.0, 1, 0,
+			TE_SetupExplosion(vecOrigin, g_ExplosionSprite, 20.0, 1, 0,
 					  RoundToNearest(radius), 5000);
 			TE_SendToAll();
 		}
