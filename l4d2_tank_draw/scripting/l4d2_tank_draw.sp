@@ -93,9 +93,9 @@ public void OnPluginStart()
 
 	HookEvent("molotov_thrown", Event_Molotov);
 
-	HookEvent("finale_vehicle_leaving", Event_Roundend, EventHookMode_Pre);
-	HookEvent("map_transition", Event_Roundend, EventHookMode_Pre);
-	HookEvent("finale_win", Event_Roundend, EventHookMode_Pre);
+	HookEvent("finale_vehicle_leaving", Event_RoundEnd, EventHookMode_Pre);
+	HookEvent("map_transition", Event_RoundEnd, EventHookMode_Pre);
+	HookEvent("finale_win", Event_RoundEnd, EventHookMode_Pre);
 
 	if (L4D2TankDrawDebugMode.IntValue == 1)
 	{
@@ -222,7 +222,7 @@ public void OnMapEnd()
 	ResetAllValue();
 }
 
-public Action Event_Roundend(Event event, const char[] name, bool dontBroadcast)
+public Action Event_RoundEnd(Event event, const char[] name, bool dontBroadcast)
 {
 	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
 
