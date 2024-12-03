@@ -563,16 +563,4 @@
         "en"    "[Tank Draw] Player %s is going to bomb after %d seconds."
         "chi"   "[坦克抽奖] 玩家 %s 将于 %d 秒后爆炸"
     }
-
-    "TankDraw_TimeBomb_Removed"
-    {
-        "en"    "{yellow}[Tank Draw] {lightgreen}Timer bomb has been removed from player {olive}%s"
-        "chi"   "{yellow}[坦克抽奖] {lightgreen}移除玩家 {olive}%s{lightgreen} 的定时炸弹"
-    }
-
-    "TankDraw_TimeBomb_Removed_NoColor"
-    {
-        "en"    "[Tank Draw] Timer bomb has been removed from player %s"
-        "chi"   "[坦克抽奖] 移除玩家 %s 的定时炸弹"
-    }
 }
