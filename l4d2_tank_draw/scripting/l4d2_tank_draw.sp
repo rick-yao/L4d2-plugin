@@ -215,11 +215,27 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 		}
 		if (random <= chanceDisarmSurvivorMolotov + chanceKillSurvivorMolotov + chanceTimerBombMolotov)
 		{
-			SetPlayerTimeBomb(attacker, TimerBombSecond.IntValue, TimerBombRadius.FloatValue, TimerBombRangeDamage.IntValue);
+			if (g_hTimeBombTimer[attacker] != null)
+			{
+				KillTimer(g_hTimeBombTimer[attacker]);
+				g_hTimeBombTimer[attacker] = null;
+				g_iTimeBombTicks[attacker] = 0;
 
-			CPrintToChatAll("%t", "TankDraw_TimerBomb", attackerName);
-			PrintHintTextToAll("%t", "TankDraw_TimerBomb_NoColor", attackerName);
-			return Plugin_Continue;
+				// Reset player color
+				SetEntityRenderColor(attacker, 255, 255, 255, 255);
+
+				CPrintToChatAll("%t", "TankDraw_CancelTimerBomb_Molotov", attackerName);
+				PrintHintTextToAll("%t", "TankDraw_CancelTimerBomb_Molotov_NoColor", attackerName);
+
+				return Plugin_Continue;
+			}
+			else {
+				SetPlayerTimeBomb(attacker, TimerBombSecond.IntValue, TimerBombRadius.FloatValue, TimerBombRangeDamage.IntValue);
+
+				CPrintToChatAll("%t", "TankDraw_TimerBomb_Molotov", attackerName);
+				PrintHintTextToAll("%t", "TankDraw_TimerBomb_Molotov_NoColor", attackerName);
+				return Plugin_Continue;
+			}
 		}
 	}
 	return Plugin_Continue;

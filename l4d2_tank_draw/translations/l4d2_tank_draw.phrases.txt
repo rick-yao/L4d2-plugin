@@ -336,13 +336,25 @@
         "chi"   "[坦克抽奖] 玩家 %s 随意扔燃烧弹，立刻处决"
     }
 
-    "TankDraw_TimerBomb"
+    "TankDraw_CancelTimerBomb_Molotov"
     {
-        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen} threw a Molotov recklessly and became a timer bomb!"
-        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 随意扔燃烧弹，变成了定时炸弹"
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen} canceled the timer bomb by throwing a Molotov recklessly."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 通过随意扔燃烧弹{olive}取消了定时炸弹"
     }
 
-    "TankDraw_TimerBomb_NoColor"
+    "TankDraw_CancelTimerBomb_Molotov_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s canceled the timer bomb by throwing a Molotov recklessly."
+        "chi"   "[坦克抽奖] 玩家 %s 通过随意扔燃烧弹取消了定时炸弹"
+    }
+
+    "TankDraw_TimerBomb_Molotov"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen} threw a Molotov recklessly and became a timer bomb!"
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 随意扔燃烧弹，变成了{olive}定时炸弹"
+    }
+
+    "TankDraw_TimerBomb_Molotov_NoColor"
     {
         "en"    "[Tank Draw] Player %s threw a Molotov recklessly and became a timer bomb!"
         "chi"   "[坦克抽奖] 玩家 %s 随意扔燃烧弹，变成了定时炸弹"
@@ -514,6 +526,18 @@
     {
         "en"    "[Tank Draw] Spawn Tank failed."   
         "chi"   "[坦克抽奖] 生成Tank失败"
+    }
+
+    "TankDraw_Cancel_TimerBomb"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Cancel timer bomb."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen}的幸运抽奖结果： {olive}取消定时炸弹"
+    }
+
+    "TankDraw_Cancel_TimerBomb_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Cancel timer bomb."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 取消定时炸弹"
     }
 
     "TankDraw_TimerBomb"

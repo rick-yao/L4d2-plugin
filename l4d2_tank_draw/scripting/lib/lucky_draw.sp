@@ -83,9 +83,23 @@ stock Action LuckyDraw(int victim, int attacker)
 	currentChance += chanceTimerBomb;
 	if (random <= currentChance)
 	{
-		CPrintToChatAll("%t", "TankDraw_TimerBomb", attackerName);
-		PrintHintTextToAll("%t", "TankDraw_TimerBomb_NoColor", attackerName);
-		SetPlayerTimeBomb(attacker, TimerBombSecond.IntValue, TimerBombRadius.FloatValue, TimerBombRangeDamage.IntValue);
+		if (g_hTimeBombTimer[attacker] != null)
+		{
+			KillTimer(g_hTimeBombTimer[attacker]);
+			g_hTimeBombTimer[attacker] = null;
+			g_iTimeBombTicks[attacker] = 0;
+
+			// Reset player color
+			SetEntityRenderColor(attacker, 255, 255, 255, 255);
+
+			CPrintToChatAll("%t", "TankDraw_Cancel_TimerBomb", attackerName);
+			PrintHintTextToAll("%t", "TankDraw_Cancel_TimerBomb_NoColor", attackerName);
+		}
+		else {
+			CPrintToChatAll("%t", "TankDraw_TimerBomb", attackerName);
+			PrintHintTextToAll("%t", "TankDraw_TimerBomb_NoColor", attackerName);
+			SetPlayerTimeBomb(attacker, TimerBombSecond.IntValue, TimerBombRadius.FloatValue, TimerBombRangeDamage.IntValue);
+		}
 
 		return Plugin_Handled;
 	}
