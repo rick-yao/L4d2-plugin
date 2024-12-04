@@ -48,6 +48,11 @@ stock bool SetPlayerTimeBomb(int target, int ticks = 5, float radius = DEFAULT_R
 
 		// Reset player color
 		SetEntityRenderColor(target, 255, 255, 255, 255);
+
+		// Notify all players
+		char name[MAX_NAME_LENGTH];
+		GetClientName(target, name, sizeof(name));
+		CPrintToChatAll("%t", "TankDraw_TimeBomb_Removed", name);
 		return false;
 	}
 

@@ -28,6 +28,7 @@ ConVar
 
 	ChanceDisarmSurvivorMolotov,
 	ChanceKillSurvivorMolotov,
+	ChanceTimerBombMolotov,
 
 	SingleMoonGravity,
 	LimitedTimeWorldMoonGravityTimer,

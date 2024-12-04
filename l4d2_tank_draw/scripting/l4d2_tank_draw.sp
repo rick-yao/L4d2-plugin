@@ -66,6 +66,7 @@ public void OnPluginStart()
 	ChanceInfiniteAmmo		  = CreateConVar("l4d2_tank_draw_infinite_ammo_chance", "10", "无限弹药的概率 / Probability of infinite ammo", FCVAR_NONE);
 	ChanceKillSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_infinite_ammo_kill_survivor_molotov_chance", "30", "无限弹药时，玩家乱扔火时处死概率（百分比，0为关闭） / Probability of killing a survivor when throwing molotovs recklessly with infinite ammo (percentage, 0 to disable)", FCVAR_NONE);
 	ChanceDisarmSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_infinite_ammo_disarm_survivor_molotov_chance", "30", "无限弹药时，玩家乱扔火时缴械概率（百分比，0为关闭） / Probability of disarming a survivor when throwing molotovs recklessly with infinite ammo (percentage, 0 to disable)", FCVAR_NONE);
+	ChanceTimerBombMolotov		  = CreateConVar("l4d2_tank_draw_infinite_ammo_timer_bomb_molotov_chance", "30", "无限弹药时，玩家乱扔火时变成定时炸弹概率（百分比，0为关闭） / Probability of becoming a timer bomb when throwing molotovs recklessly with infinite ammo (percentage, 0 to disable)", FCVAR_NONE);
 
 	ChanceInfiniteMelee		  = CreateConVar("l4d2_tank_draw_infinite_melee_chance", "5", "无限近战范围的概率 / Probability of infinite melee range", FCVAR_NONE);
 	InfiniteMeeleRange		  = CreateConVar("l4d2_tank_draw_infinite_melee_range", "700", "无限近战范围，游戏默认为70，重复抽取会自动恢复默认值 / Infinite melee range, game default is 70, repeated draws will restore default value", false, false);
@@ -184,13 +185,13 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 
 public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 {
-	// randomly kill player when infinite ammo is active
 	g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
 	if (g_hInfinitePrimaryAmmo.IntValue == 1)
 	{
 		int  random			 = GetRandomInt(1, 100);
 		int  chanceDisarmSurvivorMolotov = ChanceDisarmSurvivorMolotov.IntValue;
 		int  chanceKillSurvivorMolotov	 = ChanceKillSurvivorMolotov.IntValue;
+		int  chanceTimerBombMolotov	 = ChanceTimerBombMolotov.IntValue;
 
 		int  attacker			 = GetClientOfUserId(event.GetInt("userid"));
 		char attackerName[MAX_NAME_LENGTH];
@@ -210,6 +211,14 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 
 			CPrintToChatAll("%t", "TankDraw_MolotovDeathMsg", attackerName);
 			PrintHintTextToAll("%t", "TankDraw_MolotovDeathMsg_NoColor", attackerName);
+			return Plugin_Continue;
+		}
+		if (random <= chanceDisarmSurvivorMolotov + chanceKillSurvivorMolotov + chanceTimerBombMolotov)
+		{
+			SetPlayerTimeBomb(attacker, TimerBombSecond.IntValue, TimerBombRadius.FloatValue, TimerBombRangeDamage.IntValue);
+
+			CPrintToChatAll("%t", "TankDraw_TimerBomb", attackerName);
+			PrintHintTextToAll("%t", "TankDraw_TimerBomb_NoColor", attackerName);
 			return Plugin_Continue;
 		}
 	}

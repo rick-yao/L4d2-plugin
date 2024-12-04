@@ -336,6 +336,18 @@
         "chi"   "[坦克抽奖] 玩家 %s 随意扔燃烧弹，立刻处决"
     }
 
+    "TankDraw_TimerBomb"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen} threw a Molotov recklessly and became a timer bomb!"
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 随意扔燃烧弹，变成了定时炸弹"
+    }
+
+    "TankDraw_TimerBomb_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s threw a Molotov recklessly and became a timer bomb!"
+        "chi"   "[坦克抽奖] 玩家 %s 随意扔燃烧弹，变成了定时炸弹"
+    }
+
     "TankDraw_DebugMode"
     {
         "en"    "{yellow}[Tank Draw] {lightgreen}Debug mode is {olive}ON."
@@ -526,5 +538,17 @@
     {
         "en"    "[Tank Draw] Player %s is going to bomb after %d seconds."
         "chi"   "[坦克抽奖] 玩家 %s 将于 %d 秒后爆炸"
+    }
+
+    "TankDraw_TimeBomb_Removed"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Timer bomb has been removed from player {olive}%s"
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}移除玩家 {olive}%s{lightgreen} 的定时炸弹"
+    }
+
+    "TankDraw_TimeBomb_Removed_NoColor"
+    {
+        "en"    "[Tank Draw] Timer bomb has been removed from player %s"
+        "chi"   "[坦克抽奖] 移除玩家 %s 的定时炸弹"
     }
 }
