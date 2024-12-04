@@ -24,6 +24,7 @@ ConVar
 	ChanceDisarmSingleSurvivor,
 	ChanceReviveAllDead,
 	ChanceNewTank,
+	ChanceDisableGlow,
 
 	ChanceDisarmSurvivorMolotov,
 	ChanceKillSurvivorMolotov,
@@ -48,6 +49,8 @@ ConVar
 Handle
 	g_SingleGravityTimer[MAXPLAYERS + 1],
 	g_WorldGravityTimer;
+
+int	   g_GlowDisabled = 0;
 
 stock void ResetAllTimer()
 {
@@ -80,6 +83,8 @@ stock void ResetAllValue()
 
 	g_WorldGravity = FindConVar("sv_gravity");
 	g_WorldGravity.RestoreDefault();
+
+	g_GlowDisabled = 0;
 }
 
 stock Action ResetSingleGravity(Handle timer, int client)

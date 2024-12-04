@@ -12,6 +12,7 @@ stock Action LuckyDraw(int victim, int attacker)
 	int chanceDisarmSingleSurvivor	      = ChanceDisarmSingleSurvivor.IntValue;
 	int chanceNewTank		      = ChanceNewTank.IntValue;
 	int chanceTimerBomb		      = ChanceTimerBomb.IntValue;
+	int chanceDisableGlow		      = ChanceDisableGlow.IntValue;
 
 	int chanceLimitedTimeWorldMoonGravity = ChanceLimitedTimeWorldMoonGravity.IntValue;
 	int chanceMoonGravityOneLimitedTime   = ChanceMoonGravityOneLimitedTime.IntValue;
@@ -20,7 +21,7 @@ stock Action LuckyDraw(int victim, int attacker)
 	int chanceClearAllSurvivorHealth      = ChanceClearAllSurvivorHealth.IntValue;
 	int chanceReviveAllDead		      = ChanceReviveAllDead.IntValue;
 
-	int totalChance			      = chanceNoPrice + chanceTimerBomb + chanceReviveAllDead + chanceNewTank + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor;
+	int totalChance			      = chanceNoPrice + chanceTimerBomb + chanceReviveAllDead + chanceNewTank + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor + chanceDisableGlow;
 	totalChance += chanceLimitedTimeWorldMoonGravity + chanceMoonGravityOneLimitedTime + chanceWorldMoonGravityToggle + chanceIncreaseGravity;
 
 	if (totalChance == 0)
@@ -45,6 +46,37 @@ stock Action LuckyDraw(int victim, int attacker)
 		CPrintToChatAll("%t", "TankDrawResult_NoPrize", attackerName);
 		PrintHintTextToAll("%t", "TankDrawResult_NoPrize_NoColor", attackerName);
 
+		return Plugin_Continue;
+	}
+
+	currentChance += chanceDisableGlow;
+	if (random <= currentChance)
+	{
+		if (g_GlowDisabled == 0)
+		{
+			g_GlowDisabled = 1;
+			CPrintToChatAll("%t", "TankDraw_DisableGlow", attackerName);
+			PrintHintTextToAll("%t", "TankDraw_DisableGlow_NoColor", attackerName);
+			for (int i = 1; i <= MaxClients; i++)
+			{
+				if (IsValidAliveClient(i))
+				{
+					SetEntProp(i, Prop_Send, "m_bSurvivorGlowEnabled", 0);
+				}
+			}
+		}
+		else {
+			g_GlowDisabled = 0;
+			CPrintToChatAll("%t", "TankDraw_RestoreGlow", attackerName);
+			PrintHintTextToAll("%t", "TankDraw_RestoreGlow_NoColor", attackerName);
+			for (int i = 1; i <= MaxClients; i++)
+			{
+				if (IsValidAliveClient(i))
+				{
+					SetEntProp(i, Prop_Send, "m_bSurvivorGlowEnabled", 1);
+				}
+			}
+		}
 		return Plugin_Continue;
 	}
 
