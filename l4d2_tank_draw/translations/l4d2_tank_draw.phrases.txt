@@ -567,7 +567,7 @@
     "TankDraw_FreezeBomb"
     {
         "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Turned into a freeze bomb!"
-        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}变成冰冻炸弹！"
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}变成冰冻炸弹"
     }
 
     "TankDraw_FreezeBomb_NoColor"
@@ -585,6 +585,6 @@
     "TankDraw_TimeToFreeze_NoColor"
     {
         "en"    "[Tank Draw] Player %s freeze bomb will explode in %d seconds!"
-        "chi"   "[坦克抽奖] 玩家 %s 冰冻弹将在 %d 秒后爆炸！"
+        "chi"   "[坦克抽奖] 玩家 %s 冰冻弹将在 %d 秒后爆炸"
     }
 }
