@@ -63,7 +63,7 @@ stock void ResetAllTimer()
 	// reset world gravity timer
 	if (g_WorldGravityTimer)
 	{
-		delete g_WorldGravityTimer;
+		KillTimer(g_WorldGravityTimer);
 	}
 }
 

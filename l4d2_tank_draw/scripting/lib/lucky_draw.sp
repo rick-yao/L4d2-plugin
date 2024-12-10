@@ -164,7 +164,7 @@ stock Action LuckyDraw(int victim, int attacker)
 
 		if (g_WorldGravityTimer)
 		{
-			delete g_WorldGravityTimer;
+			KillTimer(g_WorldGravityTimer);
 		}
 		g_WorldGravityTimer = CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityTimer), ResetWorldGravity, default_gravity_int);
 		CPrintToChatAll("%t", "TankDrawResult_LimitedMoonGravity", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityTimer));
@@ -181,7 +181,7 @@ stock Action LuckyDraw(int victim, int attacker)
 
 		if (g_SingleGravityTimer[attacker])
 		{
-			delete g_SingleGravityTimer[attacker];
+			KillTimer(g_SingleGravityTimer[attacker]);
 		}
 		g_SingleGravityTimer[attacker] = CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityOne), ResetSingleGravity, attacker);
 		CPrintToChatAll("%t", "TankDrawResult_SingleMoonGravity", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityOne));
