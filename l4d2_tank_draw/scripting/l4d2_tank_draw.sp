@@ -3,6 +3,9 @@
  * @repository https://github.com/rick-yao/L4d2-plugin
  *
  * Version History
+ * v2.3.2 - 2024-12-10
+ * - clear survivor timer and other value if survivor died or disconnected
+ *
  * v2.3.1 - 2024-12-10
  * - clear temp health when average health
  *
@@ -25,7 +28,7 @@
 #include "lib/dev_menu.sp"
 #include "lib/lucky_draw.sp"
 
-#define PLUGIN_VERSION "2.3.1"
+#define PLUGIN_VERSION "2.3.2"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
 #define COMMAND_FILTER COMMAND_FILTER_CONNECTED | COMMAND_FILTER_NO_BOTS
 
@@ -186,12 +189,24 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 	{
 		PrintToServer("player %d dead, reset player value", victim);
 
-		SetEntityGravity(victim, 1.0);
-
-		KillTimeBomb(victim);
+		ResetClient(victim);
 	}
 
 	return Plugin_Continue;
+}
+
+public void OnClientDisconnect(int client)
+{
+	if (TankDrawEnable.IntValue == 0) { return; }
+	// reset value when player disconnect
+	if (IsValidSurvivor(client))
+	{
+		PrintToServer("player %d disconnect, reset player value", client);
+
+		ResetClient(client);
+	}
+
+	return;
 }
 
 public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)

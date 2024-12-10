@@ -130,3 +130,25 @@ stock void OnSpawnComplete(bool success, int attempts)
 		CPrintToChatAll("%t", "Tank_NewTankFailed");
 	}
 }
+
+stock void KillSingleGravityTimer(int client)
+{
+	if (g_SingleGravityTimer[client] != null)
+	{
+		KillTimer(g_SingleGravityTimer[client]);
+		g_SingleGravityTimer[client] = null;
+	}
+}
+
+stock void ResetClient(int client)
+{
+	KillSingleGravityTimer(client);
+
+	KillTimeBomb(client);
+
+	SetEntityGravity(client, 1.0);
+
+	SetEntityRenderColor(client, 255, 255, 255, 255);
+
+	SetEntProp(client, Prop_Send, "m_bSurvivorGlowEnabled", 1);
+}
