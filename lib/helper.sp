@@ -65,24 +65,6 @@ stock bool IsHangingFromLedge(int client)
 }
 
 /**
- * Removes all weapons from a player across all weapon slots (0-4).
- *
- * @param client    Client index to disarm
- */
-stock void DisarmPlayer(int client)
-{
-	for (int slot = 0; slot <= 4; slot++)
-	{
-		int weapon = GetPlayerWeaponSlot(client, slot);
-		if (weapon != -1)
-		{
-			RemovePlayerItem(client, weapon);
-			RemoveEntity(weapon);
-		}
-	}
-}
-
-/**
  * Checks if a client index is valid, connected, and in-game.
  *
  * @param client    Client index to validate

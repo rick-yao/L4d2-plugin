@@ -225,7 +225,7 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 
 		if (random <= chanceDisarmSurvivorMolotov)
 		{
-			DisarmPlayer(attacker);
+			L4D_RemoveAllWeapons(attacker);
 
 			CPrintToChatAll("%t", "TankDraw_MolotovDisarmMsg", attackerName);
 			PrintHintTextToAll("%t", "TankDraw_MolotovDisarmMsg_NoColor", attackerName);

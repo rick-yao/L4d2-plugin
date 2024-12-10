@@ -389,7 +389,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		{
 			if (IsValidAliveClient(i))
 			{
-				DisarmPlayer(i);
+				L4D_RemoveAllWeapons(i);
 			}
 		}
 		CPrintToChatAll("%t", "TankDrawResult_DisarmAllSurvivors", attackerName);
@@ -401,7 +401,7 @@ stock Action LuckyDraw(int victim, int attacker)
 	currentChance += chanceDisarmSingleSurvivor;
 	if (random <= currentChance)
 	{
-		DisarmPlayer(attacker);
+		L4D_RemoveAllWeapons(attacker);
 		CPrintToChatAll("%t", "TankDrawResult_DisarmSingleSurvivor", attackerName);
 		PrintHintTextToAll("%t", "TankDrawResult_DisarmSingleSurvivor_NoColor", attackerName);
 
