@@ -106,6 +106,7 @@ public void OnPluginStart()
 	PrintToServer("[Tank Draw] debug mode: %d", L4D2TankDrawDebugMode.IntValue);
 
 	HookEvent("player_incapacitated", Event_PlayerIncapacitated);
+
 	HookEvent("player_death", Event_PlayerDeath);
 
 	HookEvent("molotov_thrown", Event_Molotov);
@@ -180,10 +181,10 @@ public Action Event_PlayerIncapacitated(Event event, const char[] name, bool don
 	}
 }
 
+// reset value when player died
 public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast)
 {
 	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
-	// reset value when player died
 	int victim = GetClientOfUserId(event.GetInt("userid"));
 	if (IsValidSurvivor(victim))
 	{
@@ -195,10 +196,10 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 	return Plugin_Continue;
 }
 
+// reset value when player disconnect
 public void OnClientDisconnect(int client)
 {
 	if (TankDrawEnable.IntValue == 0) { return; }
-	// reset value when player disconnect
 	if (IsValidSurvivor(client))
 	{
 		PrintToServer("player %d disconnect, reset player value", client);
