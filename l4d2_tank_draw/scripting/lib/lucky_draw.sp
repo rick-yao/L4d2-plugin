@@ -353,7 +353,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		}
 		else
 		{
-			SetEntPropFloat(attacker, Prop_Send, "m_healthBuffer", 0.0);
+			L4D_SetTempHealth(attacker, 0.0);
 			SDKHooks_TakeDamage(attacker, attacker, attacker, float(health) - 1, DMG_GENERIC);
 			CPrintToChatAll("%t", "TankDrawResult_DecreaseHealthNotEnough", attackerName, randomHealth, health - 1);
 			PrintHintTextToAll("%t", "TankDrawResult_DecreaseHealthNotEnough_NoColor", attackerName, randomHealth, health - 1);
@@ -371,7 +371,7 @@ stock Action LuckyDraw(int victim, int attacker)
 			{
 				if (!IsPlayerIncapacitatedAtAll(i))
 				{
-					SetEntPropFloat(i, Prop_Send, "m_healthBuffer", 0.0);
+					L4D_SetTempHealth(i, 0.0);
 					SetEntityHealth(i, 1);
 				}
 			}
