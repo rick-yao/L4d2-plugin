@@ -58,13 +58,7 @@ stock void ResetAllTimer()
 	KillAllTimeBombs();
 
 	// reset single gravity timer
-	for (int i = 1; i <= MaxClients; i++)
-	{
-		if (g_SingleGravityTimer[i])
-		{
-			delete g_SingleGravityTimer[i];
-		}
-	}
+	KillAllSingleGravityTimer();
 
 	// reset world gravity timer
 	if (g_WorldGravityTimer)
@@ -137,6 +131,14 @@ stock void KillSingleGravityTimer(int client)
 	{
 		KillTimer(g_SingleGravityTimer[client]);
 		g_SingleGravityTimer[client] = null;
+	}
+}
+
+stock void KillAllSingleGravityTimer()
+{
+	for (int i = 1; i <= MaxClients; i++)
+	{
+		KillSingleGravityTimer(i);
 	}
 }
 
