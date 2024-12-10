@@ -110,6 +110,7 @@ stock Action LuckyDraw(int victim, int attacker)
 			CPrintToChatAll("%t", "TankDraw_TimerBomb", attackerName);
 			PrintHintTextToAll("%t", "TankDraw_TimerBomb_NoColor", attackerName);
 			SetPlayerTimeBomb(attacker, TimerBombSecond.IntValue, TimerBombRadius.FloatValue, TimerBombRangeDamage.IntValue);
+			CheatCommand(attacker, "give", "adrenaline");
 		}
 
 		return Plugin_Handled;

@@ -279,6 +279,7 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 			}
 			else {
 				SetPlayerTimeBomb(attacker, TimerBombSecond.IntValue, TimerBombRadius.FloatValue, TimerBombRangeDamage.IntValue);
+				CheatCommand(attacker, "give", "adrenaline");
 
 				CPrintToChatAll("%t", "TankDraw_TimerBomb_Molotov", attackerName);
 				PrintHintTextToAll("%t", "TankDraw_TimerBomb_Molotov_NoColor", attackerName);
