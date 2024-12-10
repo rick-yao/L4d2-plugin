@@ -49,7 +49,7 @@ ConVar
 
 	ChanceFreezeBomb,
 	FreezeBombDuration,
-	FreezeBombSecond,
+	FreezeBombCountDown,
 	FreezeBombRadius;
 
 Handle

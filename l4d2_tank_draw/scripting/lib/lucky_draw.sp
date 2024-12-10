@@ -53,7 +53,7 @@ stock Action LuckyDraw(int victim, int attacker)
 	currentChance += chanceFreezeBomb;
 	if (random <= currentChance)
 	{
-		SetPlayerFreezeBomb(attacker, FreezeBombDuration.IntValue, FreezeBombRadius.FloatValue, FreezeBombSecond.IntValue);	   // 5 second countdown, 300 unit radius, 5 second freeze
+		SetPlayerFreezeBomb(attacker, FreezeBombCountDown.IntValue, FreezeBombRadius.FloatValue, FreezeBombDuration.IntValue);	      // 5 second countdown, 300 unit radius, 5 second freeze
 		CPrintToChatAll("%t", "TankDraw_FreezBomb", attackerName);
 		PrintHintTextToAll("%t", "TankDraw_FreezBomb_NoColor", attackerName);
 		return Plugin_Continue;
