@@ -45,7 +45,12 @@ ConVar
 	ChanceTimerBomb,
 	TimerBombRadius,
 	TimerBombSecond,
-	TimerBombRangeDamage;
+	TimerBombRangeDamage,
+
+	ChanceFreezeBomb,
+	FreezeBombDuration,
+	FreezeBombSecond,
+	FreezeBombRadius;
 
 Handle
 	g_SingleGravityTimer[MAXPLAYERS + 1],

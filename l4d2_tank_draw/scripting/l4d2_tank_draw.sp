@@ -28,6 +28,7 @@
 
 #include "lib/lib.sp"
 #include "lib/timer_bomb.sp"
+#include "lib/freeze_timer_bomb.sp"
 #include "lib/dev_menu.sp"
 #include "lib/lucky_draw.sp"
 
@@ -102,6 +103,11 @@ public void OnPluginStart()
 	TimerBombRangeDamage		  = CreateConVar("l4d2_tank_draw_timer_bomb_damage", "100", "定时炸弹范围伤害值 / Damage caused by the timer bomb within the explosion range", FCVAR_NONE);
 	TimerBombSecond			  = CreateConVar("l4d2_tank_draw_timer_bomb_duration", "8", "定时炸弹倒计时秒数 / Countdown duration in seconds before the timer bomb explodes", FCVAR_NONE);
 	TimerBombRadius			  = CreateConVar("l4d2_tank_draw_timer_bomb_radius", "300.0", "定时炸弹爆炸范围 / Radius of the timer bomb explosion", FCVAR_NONE);
+
+	ChanceFreezeBomb		  = CreateConVar("l4d2_tank_draw_freeze_bomb_chance", "30", "变成冰冻炸弹概率 / Probability of becoming a freeze bomb", FCVAR_NONE);
+	FreezeBombDuration		  = CreateConVar("l4d2_tank_draw_freeze_duration", "10", "冰冻持续时间 / Duration of the freeze effect in seconds", FCVAR_NONE);
+	FreezeBombSecond		  = CreateConVar("l4d2_tank_draw_freeze_bomb_duration", "8", "冰冻炸弹倒计时秒数 / Countdown duration in seconds before the freeze bomb explodes", FCVAR_NONE);
+	FreezeBombRadius		  = CreateConVar("l4d2_tank_draw_freeze_bomb_radius", "300.0", "冰冻炸弹范围 / Radius of the freeze bomb effect", FCVAR_NONE);
 
 	AutoExecConfig(true, "l4d2_tank_draw");
 

@@ -3,6 +3,7 @@
 #define DEFAULT_RADIUS 300.0
 #define BEEP_SOUND     "weapons/hegrenade/beep.wav"
 #define EXPLODE_SOUND  "weapons/grenade_launcher/grenadefire/grenade_launcher_explode_1.wav"
+#define FREEZE_SOUND   "physics/glass/glass_impact_bullet4.wav"
 
 // Beam related variables
 int    g_BeamSprite	 = -1;
@@ -22,6 +23,7 @@ public void OnMapStart()
 
 	PrecacheSound(BEEP_SOUND);
 	PrecacheSound(EXPLODE_SOUND);
+	PrecacheSound(FREEZE_SOUND);
 }
 
 /**
