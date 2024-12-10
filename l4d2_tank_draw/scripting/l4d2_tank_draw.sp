@@ -1,3 +1,20 @@
+/*
+ * @author Rick Yao https://github.com/rick-yao
+ * @repository https://github.com/rick-yao/L4d2-plugin
+ *
+ * Changelog
+ * v2.3.3 - 2024-12-10
+ * - reset survivor value when mission lost
+ *
+ * v2.3.2 - 2024-12-10
+ * - clear survivor timer and other value if survivor died or disconnected
+ *
+ * v2.3.1 - 2024-12-10
+ * - clear temp health when average health
+ *
+ * for changelog before 2.3.0 please checkout commit history
+ *
+ */
 #pragma semicolon 1
 #pragma newdecls required 1	   // force new syntax
 
@@ -14,7 +31,7 @@
 #include "lib/dev_menu.sp"
 #include "lib/lucky_draw.sp"
 
-#define PLUGIN_VERSION "2.3.0"
+#define PLUGIN_VERSION "2.3.3"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
 #define COMMAND_FILTER COMMAND_FILTER_CONNECTED | COMMAND_FILTER_NO_BOTS
 
@@ -92,7 +109,9 @@ public void OnPluginStart()
 	PrintToServer("[Tank Draw] debug mode: %d", L4D2TankDrawDebugMode.IntValue);
 
 	HookEvent("player_incapacitated", Event_PlayerIncapacitated);
+
 	HookEvent("player_death", Event_PlayerDeath);
+	HookEvent("mission_lost", Event_Lost);
 
 	HookEvent("molotov_thrown", Event_Molotov);
 
@@ -110,6 +129,8 @@ public void OnPluginStart()
 public Action Event_PlayerIncapacitated(Event event, const char[] name, bool dontBroadcast)
 {
 	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
+	PrintToServer("[Tank Draw] Event_PlayerIncapacitated triggered.");
+
 	// Check if the victim is a Tank
 	int victim = GetClientOfUserId(event.GetInt("userid"));
 	if (!IsTank(victim))
@@ -166,25 +187,43 @@ public Action Event_PlayerIncapacitated(Event event, const char[] name, bool don
 	}
 }
 
+// reset value when player died
 public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast)
 {
 	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
-	// reset value when player died
+	PrintToServer("[Tank Draw] Event_PlayerDeath triggered.");
+
 	int victim = GetClientOfUserId(event.GetInt("userid"));
 	if (IsValidSurvivor(victim))
 	{
 		PrintToServer("player %d dead, reset player value", victim);
 
-		SetEntityGravity(victim, 1.0);
-
-		KillTimeBomb(victim);
+		ResetClient(victim);
 	}
 
 	return Plugin_Continue;
 }
 
+// reset value when player disconnect
+public void OnClientDisconnect(int client)
+{
+	if (TankDrawEnable.IntValue == 0) { return; }
+	PrintToServer("[Tank Draw] OnClientDisconnect triggered.");
+
+	if (IsValidSurvivor(client))
+	{
+		PrintToServer("player %d disconnect, reset player value", client);
+
+		ResetClient(client);
+	}
+
+	return;
+}
+
 public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 {
+	PrintToServer("[Tank Draw] Event_Molotov triggered.");
+
 	g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
 	if (g_hInfinitePrimaryAmmo.IntValue == 1)
 	{
@@ -199,7 +238,7 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 
 		if (random <= chanceDisarmSurvivorMolotov)
 		{
-			DisarmPlayer(attacker);
+			L4D_RemoveAllWeapons(attacker);
 
 			CPrintToChatAll("%t", "TankDraw_MolotovDisarmMsg", attackerName);
 			PrintHintTextToAll("%t", "TankDraw_MolotovDisarmMsg_NoColor", attackerName);
@@ -244,6 +283,7 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 public void OnMapEnd()
 {
 	if (TankDrawEnable.IntValue == 0) { return; }
+	PrintToServer("[Tank Draw] MapEnd triggered.");
 
 	ResetAllTimer();
 	ResetAllValue();
@@ -252,9 +292,22 @@ public void OnMapEnd()
 public Action Event_RoundEnd(Event event, const char[] name, bool dontBroadcast)
 {
 	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
+	PrintToServer("[Tank Draw] Event_RoundEnd triggered.");
 
 	ResetAllTimer();
 	ResetAllValue();
+
+	return Plugin_Continue;
+}
+
+public Action Event_Lost(Event event, const char[] name, bool dontBroadcast)
+{
+	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
+	PrintToServer("[Tank Draw] Event_Lost triggered.");
+
+	KillAllTimeBombs();
+
+	KillAllSingleGravityTimer();
 
 	return Plugin_Continue;
 }

@@ -164,7 +164,7 @@ stock Action LuckyDraw(int victim, int attacker)
 
 		if (g_WorldGravityTimer)
 		{
-			delete g_WorldGravityTimer;
+			KillTimer(g_WorldGravityTimer);
 		}
 		g_WorldGravityTimer = CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityTimer), ResetWorldGravity, default_gravity_int);
 		CPrintToChatAll("%t", "TankDrawResult_LimitedMoonGravity", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityTimer));
@@ -181,7 +181,7 @@ stock Action LuckyDraw(int victim, int attacker)
 
 		if (g_SingleGravityTimer[attacker])
 		{
-			delete g_SingleGravityTimer[attacker];
+			KillTimer(g_SingleGravityTimer[attacker]);
 		}
 		g_SingleGravityTimer[attacker] = CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityOne), ResetSingleGravity, attacker);
 		CPrintToChatAll("%t", "TankDrawResult_SingleMoonGravity", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityOne));
@@ -328,6 +328,7 @@ stock Action LuckyDraw(int victim, int attacker)
 			if (IsValidAliveClient(i) && !IsPlayerIncapacitatedAtAll(i))
 			{
 				SetEntityHealth(i, averageHealth);
+				L4D_SetTempHealth(i, 0.0);
 			}
 		}
 		CPrintToChatAll("%t", "TankDrawResult_AverageHealth", attackerName, averageHealth);
@@ -352,7 +353,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		}
 		else
 		{
-			SetEntPropFloat(attacker, Prop_Send, "m_healthBuffer", 0.0);
+			L4D_SetTempHealth(attacker, 0.0);
 			SDKHooks_TakeDamage(attacker, attacker, attacker, float(health) - 1, DMG_GENERIC);
 			CPrintToChatAll("%t", "TankDrawResult_DecreaseHealthNotEnough", attackerName, randomHealth, health - 1);
 			PrintHintTextToAll("%t", "TankDrawResult_DecreaseHealthNotEnough_NoColor", attackerName, randomHealth, health - 1);
@@ -370,7 +371,7 @@ stock Action LuckyDraw(int victim, int attacker)
 			{
 				if (!IsPlayerIncapacitatedAtAll(i))
 				{
-					SetEntPropFloat(i, Prop_Send, "m_healthBuffer", 0.0);
+					L4D_SetTempHealth(i, 0.0);
 					SetEntityHealth(i, 1);
 				}
 			}
@@ -388,7 +389,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		{
 			if (IsValidAliveClient(i))
 			{
-				DisarmPlayer(i);
+				L4D_RemoveAllWeapons(i);
 			}
 		}
 		CPrintToChatAll("%t", "TankDrawResult_DisarmAllSurvivors", attackerName);
@@ -400,7 +401,7 @@ stock Action LuckyDraw(int victim, int attacker)
 	currentChance += chanceDisarmSingleSurvivor;
 	if (random <= currentChance)
 	{
-		DisarmPlayer(attacker);
+		L4D_RemoveAllWeapons(attacker);
 		CPrintToChatAll("%t", "TankDrawResult_DisarmSingleSurvivor", attackerName);
 		PrintHintTextToAll("%t", "TankDrawResult_DisarmSingleSurvivor_NoColor", attackerName);
 

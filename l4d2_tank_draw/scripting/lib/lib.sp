@@ -58,18 +58,12 @@ stock void ResetAllTimer()
 	KillAllTimeBombs();
 
 	// reset single gravity timer
-	for (int i = 1; i <= MaxClients; i++)
-	{
-		if (g_SingleGravityTimer[i])
-		{
-			delete g_SingleGravityTimer[i];
-		}
-	}
+	KillAllSingleGravityTimer();
 
 	// reset world gravity timer
 	if (g_WorldGravityTimer)
 	{
-		delete g_WorldGravityTimer;
+		KillTimer(g_WorldGravityTimer);
 	}
 }
 
@@ -129,4 +123,34 @@ stock void OnSpawnComplete(bool success, int attempts)
 	{
 		CPrintToChatAll("%t", "Tank_NewTankFailed");
 	}
+}
+
+stock void KillSingleGravityTimer(int client)
+{
+	if (g_SingleGravityTimer[client] != null)
+	{
+		KillTimer(g_SingleGravityTimer[client]);
+		g_SingleGravityTimer[client] = null;
+	}
+}
+
+stock void KillAllSingleGravityTimer()
+{
+	for (int i = 1; i <= MaxClients; i++)
+	{
+		KillSingleGravityTimer(i);
+	}
+}
+
+stock void ResetClient(int client)
+{
+	KillSingleGravityTimer(client);
+
+	KillTimeBomb(client);
+
+	SetEntityGravity(client, 1.0);
+
+	SetEntityRenderColor(client, 255, 255, 255, 255);
+
+	SetEntProp(client, Prop_Send, "m_bSurvivorGlowEnabled", 1);
 }
