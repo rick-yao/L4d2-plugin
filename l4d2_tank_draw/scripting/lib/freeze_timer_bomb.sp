@@ -6,7 +6,6 @@ int	   iColorBlue[4] = { 0, 128, 255, 192 };
 
 Handle	   g_hFreezeTimer[MAXPLAYERS + 1];
 int	   g_iFreezeBombTicks[MAXPLAYERS + 1];
-bool	   g_bIsFrozen[MAXPLAYERS + 1];
 
 /**
  * Sets or removes a freeze bomb on a player
@@ -94,12 +93,6 @@ public Action Timer_FreezeBomb(Handle timer, DataPack pack)
 
 	EmitSoundToAll(FREEZE_SOUND, target);
 
-	if (g_ExplosionSprite > -1)
-	{
-		TE_SetupExplosion(targetPos, g_ExplosionSprite, 10.0, 1, 0, RoundToFloor(radius), 5000);
-		TE_SendToAll();
-	}
-
 	// Freeze all players within radius
 	for (int i = 1; i <= MaxClients; i++)
 	{
@@ -124,19 +117,24 @@ void FreezePlayer(int client, int duration)
 	if (!IsValidAliveClient(client))
 		return;
 
-	g_bIsFrozen[client] = true;
+	// Clear existing timer if there is one
+	if (g_hFreezeTimer[client] != null)
+	{
+		KillTimer(g_hFreezeTimer[client]);
+		g_hFreezeTimer[client] = null;
+	}
+
 	SetEntityMoveType(client, MOVETYPE_NONE);
 	SetEntityRenderColor(client, iColorBlue[0], iColorBlue[1], iColorBlue[2], iColorBlue[3]);
 
-	// Create timer to unfreeze
-	CreateTimer(float(duration), Timer_Unfreeze, client);
+	g_hFreezeTimer[client] = CreateTimer(float(duration), Timer_Unfreeze, client);
 }
 
 public Action Timer_Unfreeze(Handle timer, any client)
 {
-	if (IsValidAliveClient(client) && g_bIsFrozen[client])
+	if (IsValidAliveClient(client))
 	{
-		g_bIsFrozen[client] = false;
+		g_hFreezeTimer[client] = null;
 		SetEntityMoveType(client, MOVETYPE_WALK);
 		SetEntityRenderColor(client, 255, 255, 255, 255);
 		EmitSoundToClient(client, FREEZE_SOUND);
