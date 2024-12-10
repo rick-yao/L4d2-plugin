@@ -1,3 +1,14 @@
+/*
+ * @author Rick Yao https://github.com/rick-yao
+ * @repository https://github.com/rick-yao/L4d2-plugin
+ *
+ * Version History
+ * v2.3.1 - 2024-12-10
+ * - clear temp health when average health
+ *
+ * for changelog before 2.3.0 please checkout commit history
+ *
+ */
 #pragma semicolon 1
 #pragma newdecls required 1	   // force new syntax
 
@@ -14,7 +25,7 @@
 #include "lib/dev_menu.sp"
 #include "lib/lucky_draw.sp"
 
-#define PLUGIN_VERSION "2.3.0"
+#define PLUGIN_VERSION "2.3.1"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
 #define COMMAND_FILTER COMMAND_FILTER_CONNECTED | COMMAND_FILTER_NO_BOTS
 

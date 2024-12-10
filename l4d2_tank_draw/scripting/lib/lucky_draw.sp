@@ -328,6 +328,7 @@ stock Action LuckyDraw(int victim, int attacker)
 			if (IsValidAliveClient(i) && !IsPlayerIncapacitatedAtAll(i))
 			{
 				SetEntityHealth(i, averageHealth);
+				L4D_SetTempHealth(i, 0.0);
 			}
 		}
 		CPrintToChatAll("%t", "TankDrawResult_AverageHealth", attackerName, averageHealth);
