@@ -64,6 +64,12 @@ public Action Timer_FreezeBomb(Handle timer, DataPack pack)
 
 	g_iFreezeBombTicks[target]--;
 
+	// Display countdown
+	char targetName[MAX_NAME_LENGTH];
+	GetClientName(target, targetName, sizeof(targetName));
+	PrintCenterTextAll("%t", "TankDraw_TimeToFreeze_NoColor", targetName, g_iFreezeBombTicks[target]);
+	CPrintToChatAll("%t", "TankDraw_TimeToFreeze", targetName, g_iFreezeBombTicks[target]);
+
 	if (g_iFreezeBombTicks[target] > 0)
 	{
 		// Visual and sound effects for countdown
