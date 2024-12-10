@@ -312,6 +312,7 @@ public Action Event_Lost(Event event, const char[] name, bool dontBroadcast)
 	PrintToServer("[Tank Draw] Event_Lost triggered.");
 
 	KillAllTimeBombs();
+	KillAllFreezeBombs();
 
 	KillAllSingleGravityTimer();
 

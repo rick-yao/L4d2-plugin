@@ -141,3 +141,22 @@ public Action Timer_Unfreeze(Handle timer, any client)
 	}
 	return Plugin_Stop;
 }
+stock void KillFreezeBomb(int client)
+{
+	if (g_hFreezeTimer[client] != null)
+	{
+		KillTimer(g_hFreezeTimer[client]);
+		g_hFreezeTimer[client]	   = null;
+		g_iFreezeBombTicks[client] = 0;
+		SetEntityMoveType(client, MOVETYPE_WALK);
+		SetEntityRenderColor(client, 255, 255, 255, 255);
+	}
+}
+
+stock void KillAllFreezeBombs()
+{
+	for (int i = 1; i <= MaxClients; i++)
+	{
+		KillFreezeBomb(i);
+	}
+}

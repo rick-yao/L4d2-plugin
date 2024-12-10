@@ -61,6 +61,7 @@ int	   g_GlowDisabled = 0;
 stock void ResetAllTimer()
 {
 	KillAllTimeBombs();
+	KillAllFreezeBombs();
 
 	// reset single gravity timer
 	KillAllSingleGravityTimer();
@@ -152,6 +153,8 @@ stock void ResetClient(int client)
 	KillSingleGravityTimer(client);
 
 	KillTimeBomb(client);
+
+	KillFreezeBomb(client);
 
 	SetEntityGravity(client, 1.0);
 
