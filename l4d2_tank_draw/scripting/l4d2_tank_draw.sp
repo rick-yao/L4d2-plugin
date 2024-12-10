@@ -3,6 +3,9 @@
  * @repository https://github.com/rick-yao/L4d2-plugin
  *
  * Changelog
+ * v2.4.0 - 2024-12-10
+ * - add freeze time bomb
+ *
  * v2.3.3 - 2024-12-10
  * - reset survivor value when mission lost
  *
@@ -32,7 +35,7 @@
 #include "lib/dev_menu.sp"
 #include "lib/lucky_draw.sp"
 
-#define PLUGIN_VERSION "2.3.3"
+#define PLUGIN_VERSION "2.4.0"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
 #define COMMAND_FILTER COMMAND_FILTER_CONNECTED | COMMAND_FILTER_NO_BOTS
 
