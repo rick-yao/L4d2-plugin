@@ -591,12 +591,12 @@
     "TankDraw_NewWitch"
     {
          "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}A lucky Witch."
-         "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive} 幸运女巫"
+         "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive} 幸运Witch"
     }
 
     "TankDraw_NewWitch_NoColor"
     {
         "en"    "[Tank Draw] Player %s's lucky draw result: A lucky Witch."
-        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 幸运女巫"
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 幸运Witch"
     }
 }
