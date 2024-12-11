@@ -483,25 +483,25 @@
     "TankDraw_DisableGlow"
     {
         "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Disable survivor glow."
-        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive} 取消所有人物光亮"
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive} 取消所有人物光圈"
     }
 
     "TankDraw_DisableGlow_NoColor"
     {
         "en"    "[Tank Draw] Player %s's lucky draw result: Disable survivor glow."
-        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 取消所有人物光亮"
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 取消所有人物光圈"
     }
 
     "TankDraw_RestoreGlow"
     {
         "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Restore survivor glow."
-        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果： {olive}恢复所有人物光亮"
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果： {olive}恢复所有人物光圈"
     }
 
     "TankDraw_RestoreGlow_NoColor"
     {
         "en"    "[Tank Draw] Player %s's lucky draw result: Restore survivor glow."
-        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 恢复所有人物光亮"
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 恢复所有人物光圈"
     }
 
     "Tank_NewTankSuccess"

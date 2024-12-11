@@ -69,7 +69,7 @@ public void OnPluginStart()
 
 	TankDrawEnable			  = CreateConVar("l4d2_tank_draw_enable", "1", "Tank抽奖插件开/关 [1=开|0=关]。 / Tank draw plugin on/off [1=on|0=off].", PLUGIN_FLAG, true, 0.0, true, 1.0);
 
-	ChanceDisableGlow		  = CreateConVar("l4d2_tank_draw_disable_glow_chance", "30", "取消人物光亮概率 / Probability of disabling survivor glow", FCVAR_NONE);
+	ChanceDisableGlow		  = CreateConVar("l4d2_tank_draw_disable_glow_chance", "30", "取消人物光圈概率 / Probability of disabling survivor glow", FCVAR_NONE);
 
 	ChanceIncreaseGravity		  = CreateConVar("l4d2_tank_draw_gravity_increased_chance", "10", "增加单人重力的概率 / Probability of increasing single player gravity", FCVAR_NONE);
 	IncreasedGravity		  = CreateConVar("l4d2_tank_draw_gravity_increased_multiplier", "2.0", "抽奖增加单人重力的倍数，从1.0至8.0 / Multiplier for increasing single player gravity, from 1.0 to 8.0", PLUGIN_FLAG, true, 1.0, true, 8.0);
