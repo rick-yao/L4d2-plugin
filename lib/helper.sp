@@ -202,7 +202,7 @@ stock void TrySpawnTank(const float pos[3], SpawnTankCallback callback = INVALID
 		dp.WriteCell(maxRetries);
 		dp.WriteFunction(callback);
 
-		CreateTimer(retryInterval, Timer_RetrySpawnTank, dp);
+		CreateTimer(retryInterval, Timer_RetrySpawnTank, dp, TIMER_FLAG_NO_MAPCHANGE | TIMER_DATA_HNDL_CLOSE);
 		return;
 	}
 
@@ -265,7 +265,7 @@ public Action Timer_RetrySpawnTank(Handle timer, DataPack dp)
 		dp.WriteCell(maxRetries);
 		dp.WriteFunction(callback);
 
-		CreateTimer(retryInterval, Timer_RetrySpawnTank, dp);
+		CreateTimer(retryInterval, Timer_RetrySpawnTank, dp, TIMER_FLAG_NO_MAPCHANGE | TIMER_DATA_HNDL_CLOSE);
 		return Plugin_Continue;
 	}
 

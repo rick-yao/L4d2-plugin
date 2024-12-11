@@ -61,7 +61,7 @@ stock bool SetPlayerTimeBomb(int target, int ticks = 5, float radius = DEFAULT_R
 	data.WriteCell(target);
 	data.WriteCell(damage);
 	data.WriteFloat(radius);
-	g_hTimeBombTimer[target] = CreateTimer(1.0, Timer_HandleBomb, data, TIMER_REPEAT);
+	g_hTimeBombTimer[target] = CreateTimer(1.0, Timer_HandleBomb, data, REPEAT_TIMER);
 
 	return true;
 }

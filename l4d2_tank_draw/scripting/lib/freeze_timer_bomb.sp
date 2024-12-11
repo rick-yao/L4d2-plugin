@@ -43,7 +43,7 @@ stock bool SetPlayerFreezeBomb(int target, int ticks = 8, float radius = DEFAULT
 	pack.WriteFloat(radius);
 	pack.WriteCell(freezeTime);
 
-	g_hFreezeTimer[target] = CreateTimer(1.0, Timer_FreezeBomb, pack, TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE | TIMER_DATA_HNDL_CLOSE);
+	g_hFreezeTimer[target] = CreateTimer(1.0, Timer_FreezeBomb, pack, REPEAT_TIMER);
 
 	return true;
 }
@@ -133,7 +133,7 @@ void FreezePlayer(int client, int duration)
 	SetEntityMoveType(client, MOVETYPE_NONE);
 	SetEntityRenderColor(client, iColorBlue[0], iColorBlue[1], iColorBlue[2], iColorBlue[3]);
 
-	g_hFreezeTimer[client] = CreateTimer(float(duration), Timer_Unfreeze, client);
+	g_hFreezeTimer[client] = CreateTimer(float(duration), Timer_Unfreeze, client, NO_REPEAT_TIMER);
 }
 
 public Action Timer_Unfreeze(Handle timer, any client)
