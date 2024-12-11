@@ -26,6 +26,8 @@ The plugin includes the following possible prizes:
 16. A lucky tank
 17. Revive all dead survivors
 18. Make a player become 'Timer Bomb'
+19. Make a player become 'Freeze Bomb'
+20. A lucky Witch
 
 ## Configuration
 
