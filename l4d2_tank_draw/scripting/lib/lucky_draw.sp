@@ -152,7 +152,7 @@ stock Action LuckyDraw(int victim, int attacker)
 
 		float fPos[3];
 		GetClientAbsOrigin(attacker, fPos);
-		L4D2_SpawnWitch(fPos, INVALID_HANDLE_VECTOR);
+		L4D2_SpawnWitch(fPos, NULL_VECTOR);
 
 		return Plugin_Continue;
 	}
@@ -175,7 +175,7 @@ stock Action LuckyDraw(int victim, int attacker)
 			if (IsValidDeadClient(i))
 			{
 				L4D_RespawnPlayer(i);
-				TeleportEntity(i, fPos, INVALID_HANDLE_VECTOR, INVALID_HANDLE_VECTOR);
+				TeleportEntity(i, fPos, NULL_VECTOR, NULL_VECTOR);
 			}
 		}
 
