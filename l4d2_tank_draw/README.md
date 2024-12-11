@@ -48,7 +48,7 @@ Enjoy the excitement of random prizes after taking down a Tank with melee weapon
 
 #### NOTE
 
-Since infinite ammo is also applied to molotov, so I added a mechanism to randomly disarm/kill player if the player throw molotov when infinite ammo is on.
+Since infinite ammo is also applied to molotov, so I added a mechanism to randomly disarm/kill/turn into a timer bomb player if the player throw molotov when infinite ammo is on.
 
 #### Other language
 
