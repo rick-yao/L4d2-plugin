@@ -11,6 +11,7 @@ stock Action LuckyDraw(int victim, int attacker)
 	int chanceDisarmAllSurvivor	      = ChanceDisarmAllSurvivor.IntValue;
 	int chanceDisarmSingleSurvivor	      = ChanceDisarmSingleSurvivor.IntValue;
 	int chanceNewTank		      = ChanceNewTank.IntValue;
+	int chanceNewWitch		      = ChanceNewWitch.IntValue;
 	int chanceTimerBomb		      = ChanceTimerBomb.IntValue;
 	int chanceDisableGlow		      = ChanceDisableGlow.IntValue;
 	int chanceFreezeBomb		      = ChanceFreezeBomb.IntValue;
@@ -22,7 +23,7 @@ stock Action LuckyDraw(int victim, int attacker)
 	int chanceClearAllSurvivorHealth      = ChanceClearAllSurvivorHealth.IntValue;
 	int chanceReviveAllDead		      = ChanceReviveAllDead.IntValue;
 
-	int totalChance			      = chanceNoPrice + chanceFreezeBomb + chanceTimerBomb + chanceReviveAllDead + chanceNewTank + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor + chanceDisableGlow;
+	int totalChance			      = chanceNoPrice + chanceNewWitch + chanceFreezeBomb + chanceTimerBomb + chanceReviveAllDead + chanceNewTank + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor + chanceDisableGlow;
 	totalChance += chanceLimitedTimeWorldMoonGravity + chanceMoonGravityOneLimitedTime + chanceWorldMoonGravityToggle + chanceIncreaseGravity;
 
 	if (totalChance == 0)
@@ -132,6 +133,26 @@ stock Action LuckyDraw(int victim, int attacker)
 		float fPos[3];
 		GetClientAbsOrigin(attacker, fPos);
 		TrySpawnTank(fPos, OnSpawnComplete);
+
+		return Plugin_Continue;
+	}
+
+	currentChance += chanceNewWitch;
+	if (random <= currentChance)
+	{
+		if (!IsValidAliveClient(attacker))
+		{
+			CPrintToChatAll("%t", "TankDraw_SomeThingWrong");
+			PrintHintTextToAll("%t", "TankDraw_SomeThingWrong_NoColor");
+			return Plugin_Continue;
+		}
+
+		CPrintToChatAll("%t", "TankDraw_NewWitch", attackerName);
+		PrintHintTextToAll("%t", "TankDraw_NewWitch_NoColor", attackerName);
+
+		float fPos[3];
+		GetClientAbsOrigin(attacker, fPos);
+		L4D2_SpawnWitch(fPos, NULL_VECTOR);
 
 		return Plugin_Continue;
 	}

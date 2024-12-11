@@ -24,6 +24,7 @@ ConVar
 	ChanceDisarmSingleSurvivor,
 	ChanceReviveAllDead,
 	ChanceNewTank,
+	ChanceNewWitch,
 	ChanceDisableGlow,
 
 	ChanceDisarmSurvivorMolotov,

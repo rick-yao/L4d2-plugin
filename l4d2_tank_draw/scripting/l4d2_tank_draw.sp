@@ -3,6 +3,9 @@
  * @repository https://github.com/rick-yao/L4d2-plugin
  *
  * Changelog
+ * v2.5.0 - 2024-12-11
+ * - add new witch
+ *
  * v2.4.0 - 2024-12-10
  * - add freeze time bomb
  *
@@ -35,7 +38,7 @@
 #include "lib/dev_menu.sp"
 #include "lib/lucky_draw.sp"
 
-#define PLUGIN_VERSION "2.4.0"
+#define PLUGIN_VERSION "2.5.0"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
 #define COMMAND_FILTER COMMAND_FILTER_CONNECTED | COMMAND_FILTER_NO_BOTS
 
@@ -97,6 +100,7 @@ public void OnPluginStart()
 	ChanceKillSingleSurvivor	  = CreateConVar("l4d2_tank_draw_kill_single_survivor_chance", "10", "单人死亡概率 / Probability of killing a single survivor", FCVAR_NONE);
 
 	ChanceNewTank			  = CreateConVar("l4d2_tank_draw_new_tank_chance", "30", "获得tank概率 / Probability of a tank", FCVAR_NONE);
+	ChanceNewWitch			  = CreateConVar("l4d2_tank_draw_new_witch_chance", "30", "获得witch概率 / Probability of a witch", FCVAR_NONE);
 
 	ChanceNoPrice			  = CreateConVar("l4d2_tank_draw_no_price_chance", "20", "没有奖励的概率 / Probability of no reward", FCVAR_NONE);
 
