@@ -23,10 +23,10 @@ stock bool SetPlayerFreezeBomb(int target, int ticks = 8, float radius = DEFAULT
 		return false;
 
 	// If timer exists, kill it
-	if (g_hFreezeTimer[target] != null)
+	if (g_hFreezeTimer[target] != INVALID_HANDLE)
 	{
 		KillTimer(g_hFreezeTimer[target]);
-		g_hFreezeTimer[target]	   = null;
+		g_hFreezeTimer[target]	   = INVALID_HANDLE;
 		g_iFreezeBombTicks[target] = 0;
 
 		// Reset player color
@@ -58,7 +58,7 @@ public Action Timer_FreezeBomb(Handle timer, DataPack pack)
 
 	if (!IsValidAliveClient(target))
 	{
-		g_hFreezeTimer[target] = null;
+		g_hFreezeTimer[target] = INVALID_HANDLE;
 		return Plugin_Stop;
 	}
 
@@ -114,7 +114,7 @@ public Action Timer_FreezeBomb(Handle timer, DataPack pack)
 		}
 	}
 
-	g_hFreezeTimer[target] = null;
+	g_hFreezeTimer[target] = INVALID_HANDLE;
 	return Plugin_Stop;
 }
 
@@ -124,10 +124,10 @@ void FreezePlayer(int client, int duration)
 		return;
 
 	// Clear existing timer if there is one
-	if (g_hFreezeTimer[client] != null)
+	if (g_hFreezeTimer[client] != INVALID_HANDLE)
 	{
 		KillTimer(g_hFreezeTimer[client]);
-		g_hFreezeTimer[client] = null;
+		g_hFreezeTimer[client] = INVALID_HANDLE;
 	}
 
 	SetEntityMoveType(client, MOVETYPE_NONE);
@@ -140,7 +140,7 @@ public Action Timer_Unfreeze(Handle timer, any client)
 {
 	if (IsValidAliveClient(client))
 	{
-		g_hFreezeTimer[client] = null;
+		g_hFreezeTimer[client] = INVALID_HANDLE;
 		SetEntityMoveType(client, MOVETYPE_WALK);
 		SetEntityRenderColor(client, 255, 255, 255, 255);
 		EmitSoundToClient(client, FREEZE_SOUND);
@@ -149,10 +149,10 @@ public Action Timer_Unfreeze(Handle timer, any client)
 }
 stock void KillFreezeBomb(int client)
 {
-	if (g_hFreezeTimer[client] != null)
+	if (g_hFreezeTimer[client] != INVALID_HANDLE)
 	{
 		KillTimer(g_hFreezeTimer[client]);
-		g_hFreezeTimer[client]	   = null;
+		g_hFreezeTimer[client]	   = INVALID_HANDLE;
 		g_iFreezeBombTicks[client] = 0;
 		SetEntityMoveType(client, MOVETYPE_WALK);
 		SetEntityRenderColor(client, 255, 255, 255, 255);

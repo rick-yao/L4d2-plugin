@@ -267,10 +267,10 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 		}
 		if (random <= chanceDisarmSurvivorMolotov + chanceKillSurvivorMolotov + chanceTimerBombMolotov)
 		{
-			if (g_hTimeBombTimer[attacker] != null)
+			if (g_hTimeBombTimer[attacker] != INVALID_HANDLE)
 			{
 				KillTimer(g_hTimeBombTimer[attacker]);
-				g_hTimeBombTimer[attacker] = null;
+				g_hTimeBombTimer[attacker] = INVALID_HANDLE;
 				g_iTimeBombTicks[attacker] = 0;
 
 				// Reset player color

@@ -95,10 +95,10 @@ stock Action LuckyDraw(int victim, int attacker)
 	currentChance += chanceTimerBomb;
 	if (random <= currentChance)
 	{
-		if (g_hTimeBombTimer[attacker] != null)
+		if (g_hTimeBombTimer[attacker] != INVALID_HANDLE)
 		{
 			KillTimer(g_hTimeBombTimer[attacker]);
-			g_hTimeBombTimer[attacker] = null;
+			g_hTimeBombTimer[attacker] = INVALID_HANDLE;
 			g_iTimeBombTicks[attacker] = 0;
 
 			// Reset player color
@@ -152,7 +152,7 @@ stock Action LuckyDraw(int victim, int attacker)
 
 		float fPos[3];
 		GetClientAbsOrigin(attacker, fPos);
-		L4D2_SpawnWitch(fPos, NULL_VECTOR);
+		L4D2_SpawnWitch(fPos, INVALID_HANDLE_VECTOR);
 
 		return Plugin_Continue;
 	}
@@ -175,7 +175,7 @@ stock Action LuckyDraw(int victim, int attacker)
 			if (IsValidDeadClient(i))
 			{
 				L4D_RespawnPlayer(i);
-				TeleportEntity(i, fPos, NULL_VECTOR, NULL_VECTOR);
+				TeleportEntity(i, fPos, INVALID_HANDLE_VECTOR, INVALID_HANDLE_VECTOR);
 			}
 		}
 
@@ -195,9 +195,10 @@ stock Action LuckyDraw(int victim, int attacker)
 
 		g_WorldGravity.IntValue = WorldMoonGravity.IntValue;
 
-		if (g_WorldGravityTimer)
+		if (g_WorldGravityTimer != INVALID_HANDLE)
 		{
-			delete g_WorldGravityTimer;
+			KillTimer(g_WorldGravityTimer);
+			g_WorldGravityTimer = INVALID_HANDLE;
 		}
 		g_WorldGravityTimer = CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityTimer), ResetWorldGravity, default_gravity_int, NO_REPEAT_TIMER);
 		CPrintToChatAll("%t", "TankDrawResult_LimitedMoonGravity", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityTimer));
@@ -212,9 +213,10 @@ stock Action LuckyDraw(int victim, int attacker)
 	{
 		SetEntityGravity(attacker, GetConVarFloat(SingleMoonGravity));
 
-		if (g_SingleGravityTimer[attacker])
+		if (g_SingleGravityTimer[attacker] != INVALID_HANDLE)
 		{
-			delete g_SingleGravityTimer[attacker];
+			KillTimer(g_SingleGravityTimer[attacker]);
+			g_SingleGravityTimer[attacker] = INVALID_HANDLE;
 		}
 		g_SingleGravityTimer[attacker] = CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityOne), ResetSingleGravity, attacker, NO_REPEAT_TIMER);
 		CPrintToChatAll("%t", "TankDrawResult_SingleMoonGravity", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityOne));
