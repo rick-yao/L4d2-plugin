@@ -53,11 +53,10 @@ ConVar
 	FreezeBombCountDown,
 	FreezeBombRadius;
 
-Handle
-	g_SingleGravityTimer[MAXPLAYERS + 1],
-	g_WorldGravityTimer;
+Handle g_SingleGravityTimer[MAXPLAYERS + 1] = { INVALID_HANDLE, ... };
+Handle g_WorldGravityTimer		    = INVALID_HANDLE;
 
-int g_GlowDisabled = 0;
+int    g_GlowDisabled			    = 0;
 
 #define REPEAT_TIMER	TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE | TIMER_DATA_HNDL_CLOSE
 #define NO_REPEAT_TIMER TIMER_FLAG_NO_MAPCHANGE | TIMER_DATA_HNDL_CLOSE

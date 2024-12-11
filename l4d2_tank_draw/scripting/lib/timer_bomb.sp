@@ -6,13 +6,13 @@
 #define FREEZE_SOUND   "physics/glass/glass_impact_bullet4.wav"
 
 // Beam related variables
-int    g_BeamSprite	 = -1;
-int    g_HaloSprite	 = -1;
-int    g_ExplosionSprite = -1;
+int    g_BeamSprite			= -1;
+int    g_HaloSprite			= -1;
+int    g_ExplosionSprite		= -1;
 
-int    iColorRed[4]	 = { 255, 75, 75, 255 };
+int    iColorRed[4]			= { 255, 75, 75, 255 };
 
-Handle g_hTimeBombTimer[MAXPLAYERS + 1];
+Handle g_hTimeBombTimer[MAXPLAYERS + 1] = { INVALID_HANDLE, ... };
 int    g_iTimeBombTicks[MAXPLAYERS + 1];
 
 public void OnMapStart()

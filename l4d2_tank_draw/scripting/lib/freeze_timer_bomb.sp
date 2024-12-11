@@ -2,9 +2,9 @@
 #define DEFAULT_FREEZE_TIME   10
 #define BEEP_SOUND	      "weapons/hegrenade/beep.wav"
 
-int	   iColorBlue[4] = { 0, 128, 255, 192 };
+int	   iColorBlue[4]		  = { 0, 128, 255, 192 };
 
-Handle	   g_hFreezeTimer[MAXPLAYERS + 1];
+Handle	   g_hFreezeTimer[MAXPLAYERS + 1] = { INVALID_HANDLE, ... };
 int	   g_iFreezeBombTicks[MAXPLAYERS + 1];
 
 /**
