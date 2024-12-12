@@ -58,8 +58,8 @@ Handle g_WorldGravityTimer		    = INVALID_HANDLE;
 
 int    g_GlowDisabled			    = 0;
 
-#define REPEAT_TIMER	TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE | TIMER_DATA_HNDL_CLOSE
-#define NO_REPEAT_TIMER TIMER_FLAG_NO_MAPCHANGE | TIMER_DATA_HNDL_CLOSE
+#define REPEAT_TIMER	TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE
+#define NO_REPEAT_TIMER TIMER_FLAG_NO_MAPCHANGE
 
 stock void ResetAllTimer()
 {
@@ -157,7 +157,7 @@ stock void ResetClient(int client)
 
 	KillTimeBomb(client);
 
-	KillFreezeBomb(client);
+	KillFreezeBombTimer(client);
 
 	SetEntityGravity(client, 1.0);
 

@@ -126,8 +126,8 @@ public void OnPluginStart()
 
 	HookEvent("player_incapacitated", Event_PlayerIncapacitated);
 
-	HookEvent("player_death", Event_PlayerDeath);
-	HookEvent("mission_lost", Event_Lost);
+	HookEvent("player_death", Event_PlayerDeath, EventHookMode_Pre);
+	HookEvent("mission_lost", Event_Lost, EventHookMode_Pre);
 
 	HookEvent("molotov_thrown", Event_Molotov);
 
