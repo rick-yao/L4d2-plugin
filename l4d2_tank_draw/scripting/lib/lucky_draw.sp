@@ -16,6 +16,7 @@ stock Action LuckyDraw(int victim, int attacker)
 	int chanceDisableGlow		      = ChanceDisableGlow.IntValue;
 	int chanceFreezeBomb		      = ChanceFreezeBomb.IntValue;
 	int chanceResetAllSurvivorHealth      = ChanceResetAllSurvivorHealth.IntValue;
+	int chanceInfinitePrimaryAmmo	      = ChanceInfinitePrimaryAmmo.IntValue;
 
 	int chanceLimitedTimeWorldMoonGravity = ChanceLimitedTimeWorldMoonGravity.IntValue;
 	int chanceMoonGravityOneLimitedTime   = ChanceMoonGravityOneLimitedTime.IntValue;
@@ -24,7 +25,7 @@ stock Action LuckyDraw(int victim, int attacker)
 	int chanceClearAllSurvivorHealth      = ChanceClearAllSurvivorHealth.IntValue;
 	int chanceReviveAllDead		      = ChanceReviveAllDead.IntValue;
 
-	int totalChance			      = chanceNoPrice + chanceResetAllSurvivorHealth + chanceNewWitch + chanceFreezeBomb + chanceTimerBomb + chanceReviveAllDead + chanceNewTank + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor + chanceDisableGlow;
+	int totalChance			      = chanceNoPrice + chanceResetAllSurvivorHealth + chanceInfinitePrimaryAmmo + chanceNewWitch + chanceFreezeBomb + chanceTimerBomb + chanceReviveAllDead + chanceNewTank + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor + chanceDisableGlow;
 	totalChance += chanceLimitedTimeWorldMoonGravity + chanceMoonGravityOneLimitedTime + chanceWorldMoonGravityToggle + chanceIncreaseGravity;
 
 	if (totalChance == 0)
@@ -49,6 +50,30 @@ stock Action LuckyDraw(int victim, int attacker)
 		CPrintToChatAll("%t", "TankDrawResult_NoPrize", attackerName);
 		PrintHintTextToAll("%t", "TankDrawResult_NoPrize_NoColor", attackerName);
 
+		return Plugin_Continue;
+	}
+
+	currentChance += chanceInfinitePrimaryAmmo;
+	if (random <= currentChance)
+	{
+		// Infinite ammo
+		g_hInfiniteAmmo	       = FindConVar("sv_infinite_ammo");
+		g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_primary_ammo");
+		if (g_hInfiniteAmmo.IntValue == 1)
+		{
+			g_hInfiniteAmmo.RestoreDefault();
+		}
+		if (g_hInfinitePrimaryAmmo.IntValue == 0)
+		{
+			g_hInfinitePrimaryAmmo.IntValue = 1;
+			CPrintToChatAll("%t", "TankDrawResult_EnableInfinitePrimaryAmmo", attackerName);
+			PrintHintTextToAll("%t", "TankDrawResult_EnableInfinitePrimaryAmmo_NoColor", attackerName);
+		}
+		else {
+			g_hInfinitePrimaryAmmo.RestoreDefault();
+			CPrintToChatAll("%t", "TankDrawResult_DisableInfinitePrimaryAmmo", attackerName);
+			PrintHintTextToAll("%t", "TankDrawResult_DisableInfinitePrimaryAmmo_NoColor", attackerName);
+		}
 		return Plugin_Continue;
 	}
 
@@ -321,15 +346,20 @@ stock Action LuckyDraw(int victim, int attacker)
 	if (random <= currentChance)
 	{
 		// Infinite ammo
-		g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
-		if (g_hInfinitePrimaryAmmo.IntValue == 0)
+		g_hInfiniteAmmo	       = FindConVar("sv_infinite_ammo");
+		g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_primary_ammo");
+		if (g_hInfinitePrimaryAmmo.IntValue == 1)
 		{
-			g_hInfinitePrimaryAmmo.IntValue = 1;
+			g_hInfinitePrimaryAmmo.RestoreDefault();
+		}
+		if (g_hInfiniteAmmo.IntValue == 0)
+		{
+			g_hInfiniteAmmo.IntValue = 1;
 			CPrintToChatAll("%t", "TankDrawResult_EnableInfiniteAmmo", attackerName);
 			PrintHintTextToAll("%t", "TankDrawResult_EnableInfiniteAmmo_NoColor", attackerName);
 		}
 		else {
-			g_hInfinitePrimaryAmmo.RestoreDefault();
+			g_hInfiniteAmmo.RestoreDefault();
 			CPrintToChatAll("%t", "TankDrawResult_DisableInfiniteAmmo", attackerName);
 			PrintHintTextToAll("%t", "TankDrawResult_DisableInfiniteAmmo_NoColor", attackerName);
 		}

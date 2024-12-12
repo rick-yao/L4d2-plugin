@@ -611,4 +611,28 @@
         "en"    "[Tank Draw] Player %s's lucky draw result: Reset all survivors' health."
         "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 重置所有幸存者生命值"
     }
+
+    "TankDrawResult_EnableInfinitePrimaryAmmo"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Everyone has infinite primary ammo."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}开启主武器无限子弹"
+    }
+
+    "TankDrawResult_EnableInfinitePrimaryAmmo_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Everyone has infinite primary ammo."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 开启主武器无限子弹"
+    }
+
+    "TankDrawResult_DisableInfinitePrimaryAmmo"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Disable Infinite primary ammo."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}关闭主武器无限子弹"
+    }
+
+    "TankDrawResult_DisableInfinitePrimaryAmmo_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Disable Infinite primary ammo."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 关闭主武器无限子弹"
+    }
 }
