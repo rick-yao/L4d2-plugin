@@ -9,25 +9,27 @@ This SourceMod plugin for Left 4 Dead 2 adds a "lucky draw" feature that trigger
 The plugin includes the following possible prizes:
 
 1. No prize
-2. Increase health randomly
-3. Toggle infinite ammo for all players
-4. Toggle infinite melee range for all players
-5. Limited-time world gravity to moon gravity
-6. Limited-time moon gravity for the lucky player
-7. Average health for all survivors
-8. Toggle world gravity to moon gravity
-9. Increase gravity for the lucky player
-10. Take damage randomly to the lucky player
-11. Kill the lucky player
-12. Kill all players
-13. Clear all players' health
-14. Disarm all players
-15. Disarm lucky player
-16. A lucky tank
-17. Revive all dead survivors
-18. Make a player become 'Timer Bomb'
-19. Make a player become 'Freeze Bomb'
+2. Lucky player gains random health
+3. Average health among all survivors
+4. Reset all survivors' health to 100 and reset their incapped times
+5. Clear all survivors' health
+6. Lucky player takes random damage
+7. All survivors gain infinite ammo
+8. All survivors gain infinite primary ammo
+9. All survivors gain infinite melee range
+10. Temporary moon gravity for all
+11. Temporary moon gravity for the lucky player
+12. Toggle moon gravity for all
+13. Increase gravity for the lucky player
+14. Kill the lucky player
+15. Kill all survivors
+16. Resurrect all dead survivors
+17. Disarm the lucky player
+18. Disarm all survivors
+19. A lucky Tank
 20. A lucky Witch
+21. Turn the lucky player into a "timer bomb"
+22. Turn the lucky player into a "freeze bomb"
 
 ## Configuration
 
