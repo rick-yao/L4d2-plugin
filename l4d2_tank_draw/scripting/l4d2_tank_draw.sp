@@ -3,6 +3,9 @@
  * @repository https://github.com/rick-yao/L4d2-plugin
  *
  * Changelog
+ * v2.7.0 - 2024-12-12
+ * - add reset all survivor health
+ *
  * v2.6.0 - 2024-12-12
  * - refactor the operation of timer, make it more robust
  *
@@ -41,7 +44,7 @@
 #include "lib/dev_menu.sp"
 #include "lib/lucky_draw.sp"
 
-#define PLUGIN_VERSION "2.6.0"
+#define PLUGIN_VERSION "2.7.0"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
 #define COMMAND_FILTER COMMAND_FILTER_CONNECTED | COMMAND_FILTER_NO_BOTS
 
@@ -101,6 +104,8 @@ public void OnPluginStart()
 	ChanceKillAllSurvivor		  = CreateConVar("l4d2_tank_draw_kill_all_survivor_chance", "10", "团灭概率 / Probability of killing all survivors", FCVAR_NONE);
 
 	ChanceKillSingleSurvivor	  = CreateConVar("l4d2_tank_draw_kill_single_survivor_chance", "10", "单人死亡概率 / Probability of killing a single survivor", FCVAR_NONE);
+
+	ChanceResetAllSurvivorHealth	  = CreateConVar("l4d2_tank_draw_reset_all_survivor_health_chance", "30", "重置所有人血量概率 / Probability of resetting all survivors' health", FCVAR_NONE);
 
 	ChanceNewTank			  = CreateConVar("l4d2_tank_draw_new_tank_chance", "30", "获得tank概率 / Probability of a tank", FCVAR_NONE);
 	ChanceNewWitch			  = CreateConVar("l4d2_tank_draw_new_witch_chance", "30", "获得witch概率 / Probability of a witch", FCVAR_NONE);

@@ -599,4 +599,16 @@
         "en"    "[Tank Draw] Player %s's lucky draw result: A lucky Witch."
         "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 幸运Witch"
     }
+
+    "TankDrawResult_ResetAllSurvivorHealth"
+    {
+         "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Reset all survivors' health."
+         "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive} 重置所有幸存者生命值"
+    }
+
+    "TankDrawResult_ResetAllSurvivorHealth_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Reset all survivors' health."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 重置所有幸存者生命值"
+    }
 }
