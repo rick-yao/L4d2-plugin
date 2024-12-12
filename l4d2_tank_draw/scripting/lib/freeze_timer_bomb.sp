@@ -140,11 +140,11 @@ public Action Timer_Unfreeze(Handle timer, any client)
 {
 	if (IsValidAliveClient(client))
 	{
-		g_hFreezeTimer[client] = INVALID_HANDLE;
 		SetEntityMoveType(client, MOVETYPE_WALK);
 		SetEntityRenderColor(client, 255, 255, 255, 255);
 		EmitSoundToClient(client, FREEZE_SOUND);
 	}
+	g_hFreezeTimer[client] = INVALID_HANDLE;
 	return Plugin_Stop;
 }
 stock void KillFreezeBomb(int client)

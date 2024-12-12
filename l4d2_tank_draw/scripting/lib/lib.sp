@@ -102,10 +102,9 @@ stock Action ResetSingleGravity(Handle timer, int client)
 		PrintHintTextToAll("%t", "TankDraw_GravityResetSingle_NoColor", clientName);
 
 		SetEntityGravity(client, 1.0);
-
-		g_SingleGravityTimer[client] = INVALID_HANDLE;
 	}
 
+	g_SingleGravityTimer[client] = INVALID_HANDLE;
 	return Plugin_Continue;
 }
 
