@@ -51,7 +51,9 @@ ConVar
 	ChanceFreezeBomb,
 	FreezeBombDuration,
 	FreezeBombCountDown,
-	FreezeBombRadius;
+	FreezeBombRadius,
+
+	ChanceResetAllSurvivorHealth;
 
 Handle g_SingleGravityTimer[MAXPLAYERS + 1] = { INVALID_HANDLE, ... };
 Handle g_WorldGravityTimer		    = INVALID_HANDLE;

@@ -15,6 +15,7 @@ stock Action LuckyDraw(int victim, int attacker)
 	int chanceTimerBomb		      = ChanceTimerBomb.IntValue;
 	int chanceDisableGlow		      = ChanceDisableGlow.IntValue;
 	int chanceFreezeBomb		      = ChanceFreezeBomb.IntValue;
+	int chanceResetAllSurvivorHealth      = ChanceResetAllSurvivorHealth.IntValue;
 
 	int chanceLimitedTimeWorldMoonGravity = ChanceLimitedTimeWorldMoonGravity.IntValue;
 	int chanceMoonGravityOneLimitedTime   = ChanceMoonGravityOneLimitedTime.IntValue;
@@ -23,7 +24,7 @@ stock Action LuckyDraw(int victim, int attacker)
 	int chanceClearAllSurvivorHealth      = ChanceClearAllSurvivorHealth.IntValue;
 	int chanceReviveAllDead		      = ChanceReviveAllDead.IntValue;
 
-	int totalChance			      = chanceNoPrice + chanceNewWitch + chanceFreezeBomb + chanceTimerBomb + chanceReviveAllDead + chanceNewTank + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor + chanceDisableGlow;
+	int totalChance			      = chanceNoPrice + chanceResetAllSurvivorHealth + chanceNewWitch + chanceFreezeBomb + chanceTimerBomb + chanceReviveAllDead + chanceNewTank + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor + chanceDisableGlow;
 	totalChance += chanceLimitedTimeWorldMoonGravity + chanceMoonGravityOneLimitedTime + chanceWorldMoonGravityToggle + chanceIncreaseGravity;
 
 	if (totalChance == 0)
@@ -48,6 +49,22 @@ stock Action LuckyDraw(int victim, int attacker)
 		CPrintToChatAll("%t", "TankDrawResult_NoPrize", attackerName);
 		PrintHintTextToAll("%t", "TankDrawResult_NoPrize_NoColor", attackerName);
 
+		return Plugin_Continue;
+	}
+
+	currentChance += chanceResetAllSurvivorHealth;
+	if (random <= currentChance)
+	{
+		for (int i = 1; i <= MaxClients; i++)
+		{
+			if (IsValidAliveClient(i))
+			{
+				CheatCommand(i, "give", "health");
+				L4D_SetTempHealth(i, 0.0);
+			}
+		}
+		CPrintToChatAll("%t", "TankDrawResult_ResetAllSurvivorHealth", attackerName);
+		PrintHintTextToAll("%t", "TankDrawResult_ResetAllSurvivorHealth_NoColor", attackerName);
 		return Plugin_Continue;
 	}
 
