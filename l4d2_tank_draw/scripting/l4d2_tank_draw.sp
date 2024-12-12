@@ -98,6 +98,8 @@ public void OnPluginStart()
 	ChanceDisarmSurvivorMolotov	  = CreateConVar("l4d2_tank_draw_infinite_ammo_disarm_survivor_molotov_chance", "30", "无限弹药时，玩家乱扔火时缴械概率（百分比，0为关闭） / Probability of disarming a survivor when throwing molotovs recklessly with infinite ammo (percentage, 0 to disable)", FCVAR_NONE);
 	ChanceTimerBombMolotov		  = CreateConVar("l4d2_tank_draw_infinite_ammo_timer_bomb_molotov_chance", "30", "无限弹药时，玩家乱扔火时变成定时炸弹概率（百分比，0为关闭） / Probability of becoming a timer bomb when throwing molotovs recklessly with infinite ammo (percentage, 0 to disable)", FCVAR_NONE);
 
+	ChanceInfinitePrimaryAmmo	  = CreateConVar("l4d2_tank_draw_infinite_primary_ammo_chance", "10", "主武器无限弹药的概率 / Probability of infinite primary ammo", FCVAR_NONE);
+
 	ChanceInfiniteMelee		  = CreateConVar("l4d2_tank_draw_infinite_melee_chance", "5", "无限近战范围的概率 / Probability of infinite melee range", FCVAR_NONE);
 	InfiniteMeeleRange		  = CreateConVar("l4d2_tank_draw_infinite_melee_range", "700", "无限近战范围，游戏默认为70，重复抽取会自动恢复默认值 / Infinite melee range, game default is 70, repeated draws will restore default value", false, false);
 
@@ -245,8 +247,8 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 {
 	PrintToServer("[Tank Draw] Event_Molotov triggered.");
 
-	g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
-	if (g_hInfinitePrimaryAmmo.IntValue == 1)
+	g_hInfiniteAmmo = FindConVar("sv_infinite_ammo");
+	if (g_hInfiniteAmmo.IntValue == 1)
 	{
 		int  random			 = GetRandomInt(1, 100);
 		int  chanceDisarmSurvivorMolotov = ChanceDisarmSurvivorMolotov.IntValue;

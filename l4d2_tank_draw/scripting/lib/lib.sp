@@ -1,5 +1,6 @@
 // built-in convar
 ConVar
+	g_hInfiniteAmmo,
 	g_hInfinitePrimaryAmmo,
 	g_MeleeRange,
 	g_WorldGravity;
@@ -53,7 +54,9 @@ ConVar
 	FreezeBombCountDown,
 	FreezeBombRadius,
 
-	ChanceResetAllSurvivorHealth;
+	ChanceResetAllSurvivorHealth,
+
+	ChanceInfinitePrimaryAmmo;
 
 Handle g_SingleGravityTimer[MAXPLAYERS + 1] = { INVALID_HANDLE, ... };
 Handle g_WorldGravityTimer		    = INVALID_HANDLE;
@@ -82,7 +85,10 @@ stock void ResetAllTimer()
 stock void ResetAllValue()
 {
 	// reset all changed server value
-	g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_ammo");
+	g_hInfiniteAmmo = FindConVar("sv_infinite_ammo");
+	g_hInfiniteAmmo.RestoreDefault();
+
+	g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_primary_ammo");
 	g_hInfinitePrimaryAmmo.RestoreDefault();
 
 	g_MeleeRange = FindConVar("melee_range");
