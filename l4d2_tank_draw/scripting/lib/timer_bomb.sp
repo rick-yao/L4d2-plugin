@@ -6,13 +6,13 @@
 #define FREEZE_SOUND   "physics/glass/glass_impact_bullet4.wav"
 
 // Beam related variables
-int    g_BeamSprite	 = -1;
-int    g_HaloSprite	 = -1;
-int    g_ExplosionSprite = -1;
+int    g_BeamSprite			= -1;
+int    g_HaloSprite			= -1;
+int    g_ExplosionSprite		= -1;
 
-int    iColorRed[4]	 = { 255, 75, 75, 255 };
+int    iColorRed[4]			= { 255, 75, 75, 255 };
 
-Handle g_hTimeBombTimer[MAXPLAYERS + 1];
+Handle g_hTimeBombTimer[MAXPLAYERS + 1] = { INVALID_HANDLE, ... };
 int    g_iTimeBombTicks[MAXPLAYERS + 1];
 
 public void OnMapStart()
@@ -42,10 +42,10 @@ stock bool SetPlayerTimeBomb(int target, int ticks = 5, float radius = DEFAULT_R
 		return false;
 
 	// If timer exists, kill it
-	if (g_hTimeBombTimer[target] != null)
+	if (g_hTimeBombTimer[target] != INVALID_HANDLE)
 	{
 		KillTimer(g_hTimeBombTimer[target]);
-		g_hTimeBombTimer[target] = null;
+		g_hTimeBombTimer[target] = INVALID_HANDLE;
 		g_iTimeBombTicks[target] = 0;
 
 		// Reset player color
@@ -61,7 +61,7 @@ stock bool SetPlayerTimeBomb(int target, int ticks = 5, float radius = DEFAULT_R
 	data.WriteCell(target);
 	data.WriteCell(damage);
 	data.WriteFloat(radius);
-	g_hTimeBombTimer[target] = CreateTimer(1.0, Timer_HandleBomb, data, TIMER_REPEAT);
+	g_hTimeBombTimer[target] = CreateTimer(1.0, Timer_HandleBomb, data, REPEAT_TIMER);
 
 	return true;
 }
@@ -75,7 +75,7 @@ public Action Timer_HandleBomb(Handle timer, DataPack data)
 
 	if (!IsValidAliveClient(target))
 	{
-		g_hTimeBombTimer[target] = null;
+		g_hTimeBombTimer[target] = INVALID_HANDLE;
 		return Plugin_Stop;
 	}
 
@@ -167,10 +167,10 @@ public Action Timer_HandleBomb(Handle timer, DataPack data)
 
 stock void KillTimeBomb(int client)
 {
-	if (g_hTimeBombTimer[client] != null)
+	if (g_hTimeBombTimer[client] != INVALID_HANDLE)
 	{
 		KillTimer(g_hTimeBombTimer[client]);
-		g_hTimeBombTimer[client] = null;
+		g_hTimeBombTimer[client] = INVALID_HANDLE;
 		g_iTimeBombTicks[client] = 0;
 	}
 }

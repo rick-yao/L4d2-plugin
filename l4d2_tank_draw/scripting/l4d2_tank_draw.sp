@@ -3,6 +3,9 @@
  * @repository https://github.com/rick-yao/L4d2-plugin
  *
  * Changelog
+ * v2.6.0 - 2024-12-12
+ * - refactor the operation of timer, make it more robust
+ *
  * v2.5.0 - 2024-12-11
  * - add new witch
  *
@@ -38,7 +41,7 @@
 #include "lib/dev_menu.sp"
 #include "lib/lucky_draw.sp"
 
-#define PLUGIN_VERSION "2.5.0"
+#define PLUGIN_VERSION "2.6.0"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
 #define COMMAND_FILTER COMMAND_FILTER_CONNECTED | COMMAND_FILTER_NO_BOTS
 
@@ -267,10 +270,10 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 		}
 		if (random <= chanceDisarmSurvivorMolotov + chanceKillSurvivorMolotov + chanceTimerBombMolotov)
 		{
-			if (g_hTimeBombTimer[attacker] != null)
+			if (g_hTimeBombTimer[attacker] != INVALID_HANDLE)
 			{
 				KillTimer(g_hTimeBombTimer[attacker]);
-				g_hTimeBombTimer[attacker] = null;
+				g_hTimeBombTimer[attacker] = INVALID_HANDLE;
 				g_iTimeBombTicks[attacker] = 0;
 
 				// Reset player color

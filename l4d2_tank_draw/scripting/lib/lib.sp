@@ -53,11 +53,13 @@ ConVar
 	FreezeBombCountDown,
 	FreezeBombRadius;
 
-Handle
-	g_SingleGravityTimer[MAXPLAYERS + 1],
-	g_WorldGravityTimer;
+Handle g_SingleGravityTimer[MAXPLAYERS + 1] = { INVALID_HANDLE, ... };
+Handle g_WorldGravityTimer		    = INVALID_HANDLE;
 
-int	   g_GlowDisabled = 0;
+int    g_GlowDisabled			    = 0;
+
+#define REPEAT_TIMER	TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE | TIMER_DATA_HNDL_CLOSE
+#define NO_REPEAT_TIMER TIMER_FLAG_NO_MAPCHANGE | TIMER_DATA_HNDL_CLOSE
 
 stock void ResetAllTimer()
 {
@@ -68,9 +70,10 @@ stock void ResetAllTimer()
 	KillAllSingleGravityTimer();
 
 	// reset world gravity timer
-	if (g_WorldGravityTimer)
+	if (g_WorldGravityTimer != INVALID_HANDLE)
 	{
-		delete g_WorldGravityTimer
+		KillTimer(g_WorldGravityTimer);
+		g_WorldGravityTimer = INVALID_HANDLE;
 	}
 }
 
@@ -100,7 +103,7 @@ stock Action ResetSingleGravity(Handle timer, int client)
 
 		SetEntityGravity(client, 1.0);
 
-		g_SingleGravityTimer[client] = null;
+		g_SingleGravityTimer[client] = INVALID_HANDLE;
 	}
 
 	return Plugin_Continue;
@@ -115,7 +118,7 @@ stock Action ResetWorldGravity(Handle timer, int initValue)
 	CPrintToChatAll("%t", "TankDraw_WorldGravityReset");
 	PrintHintTextToAll("%t", "TankDraw_WorldGravityReset_NoColor");
 
-	g_WorldGravityTimer = null;
+	g_WorldGravityTimer = INVALID_HANDLE;
 
 	return Plugin_Continue;
 }
@@ -134,10 +137,10 @@ stock void OnSpawnComplete(bool success, int attempts)
 
 stock void KillSingleGravityTimer(int client)
 {
-	if (g_SingleGravityTimer[client] != null)
+	if (g_SingleGravityTimer[client] != INVALID_HANDLE)
 	{
 		KillTimer(g_SingleGravityTimer[client]);
-		g_SingleGravityTimer[client] = null;
+		g_SingleGravityTimer[client] = INVALID_HANDLE;
 	}
 }
 
