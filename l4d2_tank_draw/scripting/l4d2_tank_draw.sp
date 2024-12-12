@@ -49,6 +49,7 @@
 #include "lib/freeze_timer_bomb.sp"
 #include "lib/dev_menu.sp"
 #include "lib/lucky_draw.sp"
+#include "lib/drug_m.sp"
 
 #define PLUGIN_VERSION "2.9.0"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
