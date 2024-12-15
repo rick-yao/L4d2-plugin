@@ -13,6 +13,9 @@ This SourceMod plugin for Left 4 Dead 2 adds a "lucky draw" feature that trigger
 
 The plugin includes the following possible prizes:
 
+**The default configuration sets the probability of "no prize" to 10, while all other prizes are set to 0. Please configure them yourself.**  
+**The probability of a single prize is calculated as: (prize probability) / (sum of all prize probabilities)** 
+
 1. No prize
 2. Lucky player gains random health (Survivor's total health cannot exceed the server's maximum health limit)
 3. Average health among all survivors (Averages the actual health of all standing survivors and clears temporary health)
