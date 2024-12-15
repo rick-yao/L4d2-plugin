@@ -85,7 +85,7 @@ public void OnPluginStart()
 	ChanceDisableGlow		  = CreateConVar("l4d2_tank_draw_disable_glow_chance", "0", "取消人物光圈概率(取消人物轮廓光圈，人物头上的名字依然保留，不建议使用，很多插件会修改光圈) \nProbability of disabling survivor glow. Removes survivor outline glow but keeps name above the head. Not recommended as many plugins modify the glow", FCVAR_NONE);
 
 	ChanceIncreaseGravity		  = CreateConVar("l4d2_tank_draw_gravity_increased_chance", "0", "增加单人重力的概率(爬梯子可以解除buff) \nProbability of increasing gravity for a single player. Buff can be removed by climbing a ladder", FCVAR_NONE);
-	IncreasedGravity		  = CreateConVar("l4d2_tank_draw_gravity_increased_multiplier", "2.0", "抽奖增加单人重力的倍数，从1.0至8.0 \nMultiplier for increasing single player gravity during the draw, from 1.0 to 8.0", PLUGIN_FLAG, true, 1.0, true, 8.0);
+	IncreasedGravity		  = CreateConVar("l4d2_tank_draw_gravity_increased_multiplier", "3.0", "抽奖增加单人重力的倍数，从1.0至8.0 \nMultiplier for increasing single player gravity during the draw, from 1.0 to 8.0", PLUGIN_FLAG, true, 1.0, true, 8.0);
 
 	ChanceMoonGravityOneLimitedTime	  = CreateConVar("l4d2_tank_draw_gravity_moon_single_chance", "0", "抽奖者单人获得限时月球重力的概率(爬梯子可以解除buff) \nProbability of a single player receiving limited-time moon gravity. Buff can be removed by climbing a ladder", FCVAR_NONE);
 	SingleMoonGravity		  = CreateConVar("l4d2_tank_draw_gravity_moon_single", "0.1", "单人月球重力参数，人物正常重力值为1 \nMoon gravity parameter for a single player. Normal gravity value is 1", false, false);
@@ -124,14 +124,14 @@ public void OnPluginStart()
 	ChanceReviveAllDead		  = CreateConVar("l4d2_tank_draw_revive_all_dead_chance", "0", "全体复活概率 \nProbability of reviving all dead survivors", FCVAR_NONE);
 
 	ChanceTimerBomb			  = CreateConVar("l4d2_tank_draw_timer_bomb_chance", "0", "变成定时炸弹概率(重复抽取会取消计时) \nProbability of becoming a timer bomb. Repeated draws cancel the timer", FCVAR_NONE);
-	TimerBombRangeDamage		  = CreateConVar("l4d2_tank_draw_timer_bomb_damage", "100", "定时炸弹范围伤害值 \nDamage caused by the timer bomb within its explosion range", FCVAR_NONE);
+	TimerBombRangeDamage		  = CreateConVar("l4d2_tank_draw_timer_bomb_damage", "200", "定时炸弹范围伤害值 \nDamage caused by the timer bomb within its explosion range", FCVAR_NONE);
 	TimerBombSecond			  = CreateConVar("l4d2_tank_draw_timer_bomb_duration", "8", "定时炸弹倒计时秒数 \nCountdown duration in seconds before the timer bomb explodes", FCVAR_NONE);
-	TimerBombRadius			  = CreateConVar("l4d2_tank_draw_timer_bomb_radius", "300.0", "定时炸弹爆炸范围 \nRadius of the timer bomb explosion", FCVAR_NONE);
+	TimerBombRadius			  = CreateConVar("l4d2_tank_draw_timer_bomb_radius", "500.0", "定时炸弹爆炸范围 \nRadius of the timer bomb explosion", FCVAR_NONE);
 
 	ChanceFreezeBomb		  = CreateConVar("l4d2_tank_draw_freeze_bomb_chance", "0", "变成冰冻炸弹概率(重复抽取会取消计时) \nProbability of becoming a freeze bomb. Repeated draws cancel the timer", FCVAR_NONE);
 	FreezeBombDuration		  = CreateConVar("l4d2_tank_draw_freeze_duration", "15", "冰冻持续时间 \nDuration of the freeze effect in seconds", FCVAR_NONE);
 	FreezeBombCountDown		  = CreateConVar("l4d2_tank_draw_freeze_bomb_countdown", "8", "冰冻炸弹倒计时秒数 \nCountdown duration in seconds before the freeze bomb explodes", FCVAR_NONE);
-	FreezeBombRadius		  = CreateConVar("l4d2_tank_draw_freeze_bomb_radius", "300.0", "冰冻炸弹范围 \nRadius of the freeze bomb effect", FCVAR_NONE);
+	FreezeBombRadius		  = CreateConVar("l4d2_tank_draw_freeze_bomb_radius", "500.0", "冰冻炸弹范围 \nRadius of the freeze bomb effect", FCVAR_NONE);
 
 	AutoExecConfig(true, "l4d2_tank_draw");
 
