@@ -6,7 +6,8 @@ Add several triggers to randomly spawn tank.
 
 ## Trigger
 
-1. Killing witch
+* The Tank will spawn at the player's location when the following conditions are triggered:
+1. Kill Witch
 2. Trigger car alarm
 
 ## Configuration
