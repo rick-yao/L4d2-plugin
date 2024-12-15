@@ -3,6 +3,9 @@
  * @repository https://github.com/rick-yao/L4d2-plugin
  *
  * Changelog
+ * v2.9.0 - 2024-12-15
+ * - change doc
+ *
  * v2.8.0 - 2024-12-12
  * - add infinite primary ammo
  *
@@ -47,15 +50,16 @@
 #include "lib/dev_menu.sp"
 #include "lib/lucky_draw.sp"
 
-#define PLUGIN_VERSION "2.8.0"
+#define PLUGIN_VERSION "2.9.0"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
 #define COMMAND_FILTER COMMAND_FILTER_CONNECTED | COMMAND_FILTER_NO_BOTS
 
 public Plugin myinfo =
 {
-	author	    = "Rick",
+	author	    = "Rick Yao",
 	name	    = "L4D2 Tank Draw",
-	description = "Face your destiny after killing a tank",
+	description = "Face your destiny after killing tank with melee",
+	url	    = "https://github.com/rick-yao/L4d2-plugin",
 	version	    = PLUGIN_VERSION,
 };
 
