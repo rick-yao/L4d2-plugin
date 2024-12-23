@@ -1,6 +1,6 @@
 stock Action LuckyDraw(int victim, int attacker)
 {
-	int chanceNoPrice		      = ChanceNoPrice.IntValue;
+	int chanceNoPrize		      = ChanceNoPrize.IntValue;
 	int chanceIncreaseHealth	      = ChanceIncreaseHealth.IntValue;
 	int chanceInfiniteAmmo		      = ChanceInfiniteAmmo.IntValue;
 	int chanceInfiniteMelee		      = ChanceInfiniteMelee.IntValue;
@@ -25,7 +25,7 @@ stock Action LuckyDraw(int victim, int attacker)
 	int chanceClearAllSurvivorHealth      = ChanceClearAllSurvivorHealth.IntValue;
 	int chanceReviveAllDead		      = ChanceReviveAllDead.IntValue;
 
-	int totalChance			      = chanceNoPrice + chanceResetAllSurvivorHealth + chanceInfinitePrimaryAmmo + chanceNewWitch + chanceFreezeBomb + chanceTimerBomb + chanceReviveAllDead + chanceNewTank + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor + chanceDisableGlow;
+	int totalChance			      = chanceNoPrize + chanceResetAllSurvivorHealth + chanceInfinitePrimaryAmmo + chanceNewWitch + chanceFreezeBomb + chanceTimerBomb + chanceReviveAllDead + chanceNewTank + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor + chanceDisableGlow;
 	totalChance += chanceLimitedTimeWorldMoonGravity + chanceMoonGravityOneLimitedTime + chanceWorldMoonGravityToggle + chanceIncreaseGravity;
 
 	if (totalChance == 0)
@@ -44,7 +44,7 @@ stock Action LuckyDraw(int victim, int attacker)
 	int currentChance = 0;
 
 	// no prize
-	currentChance += chanceNoPrice;
+	currentChance += chanceNoPrize;
 	if (random <= currentChance)
 	{
 		CPrintToChatAll("%t", "TankDrawResult_NoPrize", attackerName);

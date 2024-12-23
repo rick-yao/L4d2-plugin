@@ -8,7 +8,7 @@ ConVar
 // Custom ConVars for the plugin
 ConVar
 	TankDrawEnable,
-	ChanceNoPrice,
+	ChanceNoPrize,
 	ChanceIncreaseHealth,
 	ChanceInfiniteAmmo,
 	ChanceInfiniteMelee,

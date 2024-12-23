@@ -119,7 +119,7 @@ public void OnPluginStart()
 	ChanceNewTank			  = CreateConVar("l4d2_tank_draw_new_tank_chance", "0", "获得tank概率 \nProbability of spawning a new tank", FCVAR_NONE);
 	ChanceNewWitch			  = CreateConVar("l4d2_tank_draw_new_witch_chance", "0", "获得witch概率 \nProbability of spawning a new witch", FCVAR_NONE);
 
-	ChanceNoPrice			  = CreateConVar("l4d2_tank_draw_no_price_chance", "10", "没有奖励的概率 \nProbability of receiving no reward", FCVAR_NONE);
+	ChanceNoPrize			  = CreateConVar("l4d2_tank_draw_no_prize_chance", "10", "没有奖励的概率 \nProbability of receiving no reward", FCVAR_NONE);
 
 	ChanceReviveAllDead		  = CreateConVar("l4d2_tank_draw_revive_all_dead_chance", "0", "全体复活概率 \nProbability of reviving all dead survivors", FCVAR_NONE);
 
