@@ -78,7 +78,7 @@ public void OnPluginStart()
 	MinHealthDecrease		  = CreateConVar("l4d2_tank_draw_decrease_health_min", "200", "抽奖受到伤害的最小值 \nMinimum damage value received during the draw", false, false);
 
 	ChanceDisarmAllSurvivor		  = CreateConVar("l4d2_tank_draw_disarm_all_survivor_chance", "0", "所有人缴械概率(清空所有槽位道具) \nProbability of disarming all survivors by clearing all item slots", FCVAR_NONE);
-	ChanceDisarmSingleSurvivor	  = CreateConVar("l4d2_tank_draw_disarm_single_survivor_chance", "0", "单人缴械概率 \nProbability of disarming a single survivor", FCVAR_NONE);
+	ChanceDisarmSingleSurvivor	  = CreateConVar("l4d2_tank_draw_disarm_single_survivor_chance", "0", "缴械幸运玩家概率 \nProbability of disarming single survivor", FCVAR_NONE);
 
 	TankDrawEnable			  = CreateConVar("l4d2_tank_draw_enable", "1", "Tank抽奖插件开/关 [1=开|0=关]。 \nEnable or disable the Tank draw plugin [1=on|0=off]", PLUGIN_FLAG, true, 0.0, true, 1.0);
 
