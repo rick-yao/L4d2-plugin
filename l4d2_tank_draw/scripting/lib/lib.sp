@@ -170,6 +170,9 @@ stock void KillAllSingleGravityTimer()
 
 stock void ResetClient(int client)
 {
+	delete g_hDrugTimers[client];
+	g_iDrugTicks[client] = 0;
+
 	KillSingleGravityTimer(client);
 
 	KillTimeBomb(client);
