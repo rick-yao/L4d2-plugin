@@ -34,7 +34,7 @@
  *
  */
 #pragma semicolon 1
-#pragma newdecls required 1	   // force new syntax
+#pragma newdecls required	 // force new syntax
 
 #include <sourcemod>
 #include <sdktools>
