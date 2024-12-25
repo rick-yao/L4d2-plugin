@@ -13,6 +13,7 @@ stock void SetDrug(int client, int ticks = 30)
 	{
 		delete g_hDrugTimers[client];
 		g_iDrugTicks[client] = 0;
+		ClearDrugState(client);
 		return;
 	}
 
@@ -27,8 +28,9 @@ Action Timer_Drug(Handle timer, int client)
 	{
 		delete g_hDrugTimers[client];
 		g_iDrugTicks[client] = 0;
-		return Plugin_Handled;
+		return Plugin_Stop;
 	}
+
 	g_iDrugTicks[client]--;
 	if (g_iDrugTicks[client] > 0)
 	{
@@ -40,15 +42,16 @@ Action Timer_Drug(Handle timer, int client)
 		TeleportEntity(client, NULL_VECTOR, angs, NULL_VECTOR);
 
 		int clients[2];
-		clients[0]     = client;
+		clients[0]   = client;
 
-		int duration   = 255;
-		int holdtime   = 255;
-		int flags      = 0x0002;
-		int color[4]   = { 0, 0, 0, 128 };
-		color[0]       = GetRandomInt(0, 255);
-		color[1]       = GetRandomInt(0, 255);
-		color[2]       = GetRandomInt(0, 255);
+		int duration = 255;
+		int holdtime = 255;
+		int flags    = 0x0002;
+		int color[4] = { 0, 0, 0, 128 };
+		color[0]     = GetRandomInt(0, 255);
+		color[1]     = GetRandomInt(0, 255);
+		color[2]     = GetRandomInt(0, 255);
+		SetEntityRenderColor(client, color[0], color[1], color[2], color[3]);
 
 		Handle message = StartMessageEx(GetUserMessageId("Fade"), clients, 1);
 		BfWriteShort(message, duration);
@@ -62,34 +65,39 @@ Action Timer_Drug(Handle timer, int client)
 	}
 	if (g_iDrugTicks[client] == 0)
 	{
-		float angs[3];
-		GetClientEyeAngles(client, angs);
-
-		angs[2] = 0.0;
-
-		TeleportEntity(client, NULL_VECTOR, angs, NULL_VECTOR);
-
-		int clients[2];
-		clients[0]	= client;
-
-		int    duration = 1536;
-		int    holdtime = 1536;
-		int    flags	= (0x0001 | 0x0010);
-		int    color[4] = { 0, 0, 0, 0 };
-
-		Handle message	= StartMessageEx(GetUserMessageId("Fade"), clients, 1);
-		BfWriteShort(message, duration);
-		BfWriteShort(message, holdtime);
-		BfWriteShort(message, flags);
-		BfWriteByte(message, color[0]);
-		BfWriteByte(message, color[1]);
-		BfWriteByte(message, color[2]);
-		BfWriteByte(message, color[3]);
-		EndMessage();
-
+		ClearDrugState(client);
 		delete g_hDrugTimers[client];
 		return Plugin_Stop;
 	}
 
 	return Plugin_Continue;
+}
+
+void ClearDrugState(int client)
+{
+	float angs[3];
+	GetClientEyeAngles(client, angs);
+
+	angs[2] = 0.0;
+
+	TeleportEntity(client, NULL_VECTOR, angs, NULL_VECTOR);
+
+	int clients[2];
+	clients[0]   = client;
+
+	int duration = 1536;
+	int holdtime = 1536;
+	int flags    = (0x0001 | 0x0010);
+	int color[4] = { 0, 0, 0, 0 };
+	SetEntityRenderColor(client, 255, 255, 255, 255);
+
+	Handle message = StartMessageEx(GetUserMessageId("Fade"), clients, 1);
+	BfWriteShort(message, duration);
+	BfWriteShort(message, holdtime);
+	BfWriteShort(message, flags);
+	BfWriteByte(message, color[0]);
+	BfWriteByte(message, color[1]);
+	BfWriteByte(message, color[2]);
+	BfWriteByte(message, color[3]);
+	EndMessage();
 }
