@@ -85,7 +85,7 @@ public void OnPluginStart()
 	ChanceDisableGlow		  = CreateConVar("l4d2_tank_draw_disable_glow_chance", "0", "取消人物光圈概率(取消人物轮廓光圈，人物头上的名字依然保留，不建议使用，很多插件会修改光圈) \nProbability of disabling survivor glow. Removes survivor outline glow but keeps name above the head. Not recommended as many plugins modify the glow", FCVAR_NONE);
 
 	ChanceIncreaseGravity		  = CreateConVar("l4d2_tank_draw_gravity_increased_chance", "0", "增加单人重力的概率(爬梯子可以解除buff) \nProbability of increasing gravity for a single player. Buff can be removed by climbing a ladder", FCVAR_NONE);
-	IncreasedGravity		  = CreateConVar("l4d2_tank_draw_gravity_increased_multiplier", "3.0", "抽奖增加单人重力的倍数，从1.0至8.0 \nMultiplier for increasing single player gravity during the draw, from 1.0 to 8.0", PLUGIN_FLAG, true, 1.0, true, 8.0);
+	IncreasedGravity		  = CreateConVar("l4d2_tank_draw_gravity_increased_multiplier", "3.0", "抽奖增加单人重力的倍数，从1.0至8.0 \nMultiplier for increasing single player gravity during the draw, from 1.0 to 8.0", FCVAR_NONE, true, 1.0, true, 8.0);
 
 	ChanceMoonGravityOneLimitedTime	  = CreateConVar("l4d2_tank_draw_gravity_moon_single_chance", "0", "抽奖者单人获得限时月球重力的概率(爬梯子可以解除buff) \nProbability of a single player receiving limited-time moon gravity. Buff can be removed by climbing a ladder", FCVAR_NONE);
 	SingleMoonGravity		  = CreateConVar("l4d2_tank_draw_gravity_moon_single", "0.1", "单人月球重力参数，人物正常重力值为1 \nMoon gravity parameter for a single player. Normal gravity value is 1", false, false);
