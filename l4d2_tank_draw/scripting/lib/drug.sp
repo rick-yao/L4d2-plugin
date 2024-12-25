@@ -66,7 +66,7 @@ Action Timer_Drug(Handle timer, int client)
 	if (g_iDrugTicks[client] == 0)
 	{
 		ClearDrugState(client);
-		delete g_hDrugTimers[client];
+		g_hDrugTimers[client] = null;
 		return Plugin_Stop;
 	}
 
