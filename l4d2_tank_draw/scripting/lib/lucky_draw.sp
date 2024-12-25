@@ -60,7 +60,10 @@ stock Action LuckyDraw(int victim, int attacker)
 	{
 		for (int i = 1; i <= MaxClients; i++)
 		{
-			SetDrug(i, DrugAllSurvivorDuration.IntValue);
+			if (IsValidAliveClient(i))
+			{
+				SetDrug(i, DrugAllSurvivorDuration.IntValue);
+			}
 		}
 
 		CPrintToChatAll("%t", "TankDrawResult_DrugAll", attackerName, DrugAllSurvivorDuration.IntValue);
