@@ -70,10 +70,20 @@ Handle g_hDrugTimers[MAXPLAYERS + 1];
 int    g_iDrugTicks[MAXPLAYERS + 1];
 float  g_fDrugAngles[20] = { 0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 20.0, 15.0, 10.0, 5.0, 0.0, -5.0, -10.0, -15.0, -20.0, -25.0, -20.0, -15.0, -10.0, -5.0 };
 
-int    g_GlowDisabled	 = 0;
+Handle g_hTimeBombTimer[MAXPLAYERS + 1];
+int    g_iTimeBombTicks[MAXPLAYERS + 1];
+
+Handle g_hFreezeBombTimer[MAXPLAYERS + 1];
+Handle g_hUnfreezeTimer[MAXPLAYERS + 1];
+int    g_iFreezeBombTicks[MAXPLAYERS + 1];
+
+int    g_GlowDisabled = 0;
 
 #define REPEAT_TIMER	TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE
 #define NO_REPEAT_TIMER TIMER_FLAG_NO_MAPCHANGE
+#define BEEP_SOUND	"weapons/hegrenade/beep.wav"
+#define EXPLODE_SOUND	"weapons/grenade_launcher/grenadefire/grenade_launcher_explode_1.wav"
+#define FREEZE_SOUND	"physics/glass/glass_impact_bullet4.wav"
 
 stock void ResetAllTimer()
 {

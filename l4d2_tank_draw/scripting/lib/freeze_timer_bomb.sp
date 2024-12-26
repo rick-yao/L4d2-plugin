@@ -1,12 +1,4 @@
-#define DEFAULT_FREEZE_RADIUS 300.0
-#define DEFAULT_FREEZE_TIME   10
-#define BEEP_SOUND	      "weapons/hegrenade/beep.wav"
-
 int	   iColorBlue[4] = { 0, 128, 255, 192 };
-
-Handle	   g_hFreezeBombTimer[MAXPLAYERS + 1];
-Handle	   g_hUnfreezeTimer[MAXPLAYERS + 1];
-int	   g_iFreezeBombTicks[MAXPLAYERS + 1];
 
 /**
  * Sets or removes a freeze bomb on a player
@@ -17,7 +9,7 @@ int	   g_iFreezeBombTicks[MAXPLAYERS + 1];
  * @param freezeTime    Time in seconds to freeze players (default: 10)
  * @return             True if bomb was set, false if removed or not a valid alive client
  */
-stock bool SetPlayerFreezeBomb(int target, int ticks = 8, float radius = DEFAULT_FREEZE_RADIUS, int freezeTime = DEFAULT_FREEZE_TIME)
+stock bool SetPlayerFreezeBomb(int target, int ticks = 8, float radius = 300.0, int freezeTime = 10)
 {
 	// Validate target
 	if (!IsValidAliveClient(target))

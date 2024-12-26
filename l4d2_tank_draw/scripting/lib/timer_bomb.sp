@@ -1,19 +1,9 @@
-// In timebomb.sp
-#define DAMAGE_BASE    100
-#define DEFAULT_RADIUS 300.0
-#define BEEP_SOUND     "weapons/hegrenade/beep.wav"
-#define EXPLODE_SOUND  "weapons/grenade_launcher/grenadefire/grenade_launcher_explode_1.wav"
-#define FREEZE_SOUND   "physics/glass/glass_impact_bullet4.wav"
-
 // Beam related variables
-int    g_BeamSprite	 = -1;
-int    g_HaloSprite	 = -1;
-int    g_ExplosionSprite = -1;
+int g_BeamSprite      = -1;
+int g_HaloSprite      = -1;
+int g_ExplosionSprite = -1;
 
-int    iColorRed[4]	 = { 255, 75, 75, 255 };
-
-Handle g_hTimeBombTimer[MAXPLAYERS + 1];
-int    g_iTimeBombTicks[MAXPLAYERS + 1];
+int iColorRed[4]      = { 255, 75, 75, 255 };
 
 public void OnMapStart()
 {
@@ -35,7 +25,7 @@ public void OnMapStart()
  * @param damage	Max damage that could be applied to survivor (default: 100)
  * @return             True if bomb was set, false if removed or not a valid alive client
  */
-stock bool SetPlayerTimeBomb(int target, int ticks = 5, float radius = DEFAULT_RADIUS, int damage = DAMAGE_BASE)
+stock bool SetPlayerTimeBomb(int target, int ticks = 5, float radius = 300.0, int damage = 100)
 {
 	// Validate target
 	if (!IsValidAliveClient(target))
