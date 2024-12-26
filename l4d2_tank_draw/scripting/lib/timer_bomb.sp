@@ -1,19 +1,9 @@
-// In timebomb.sp
-#define DAMAGE_BASE    100
-#define DEFAULT_RADIUS 300.0
-#define BEEP_SOUND     "weapons/hegrenade/beep.wav"
-#define EXPLODE_SOUND  "weapons/grenade_launcher/grenadefire/grenade_launcher_explode_1.wav"
-#define FREEZE_SOUND   "physics/glass/glass_impact_bullet4.wav"
-
 // Beam related variables
-int    g_BeamSprite			= -1;
-int    g_HaloSprite			= -1;
-int    g_ExplosionSprite		= -1;
+int g_BeamSprite      = -1;
+int g_HaloSprite      = -1;
+int g_ExplosionSprite = -1;
 
-int    iColorRed[4]			= { 255, 75, 75, 255 };
-
-Handle g_hTimeBombTimer[MAXPLAYERS + 1] = { INVALID_HANDLE, ... };
-int    g_iTimeBombTicks[MAXPLAYERS + 1];
+int iColorRed[4]      = { 255, 75, 75, 255 };
 
 public void OnMapStart()
 {
@@ -35,17 +25,16 @@ public void OnMapStart()
  * @param damage	Max damage that could be applied to survivor (default: 100)
  * @return             True if bomb was set, false if removed or not a valid alive client
  */
-stock bool SetPlayerTimeBomb(int target, int ticks = 5, float radius = DEFAULT_RADIUS, int damage = DAMAGE_BASE)
+stock bool SetPlayerTimeBomb(int target, int ticks = 5, float radius = 300.0, int damage = 100)
 {
 	// Validate target
 	if (!IsValidAliveClient(target))
 		return false;
 
 	// If timer exists, kill it
-	if (g_hTimeBombTimer[target] != INVALID_HANDLE)
+	if (g_hTimeBombTimer[target] != null)
 	{
-		KillTimer(g_hTimeBombTimer[target]);
-		g_hTimeBombTimer[target] = INVALID_HANDLE;
+		delete g_hTimeBombTimer[target];
 		g_iTimeBombTicks[target] = 0;
 
 		// Reset player color
@@ -75,7 +64,7 @@ public Action Timer_HandleBomb(Handle timer, DataPack data)
 
 	if (!IsValidAliveClient(target))
 	{
-		g_hTimeBombTimer[target] = INVALID_HANDLE;
+		g_hTimeBombTimer[target] = null;
 		return Plugin_Stop;
 	}
 
@@ -167,10 +156,9 @@ public Action Timer_HandleBomb(Handle timer, DataPack data)
 
 stock void KillTimeBomb(int client)
 {
-	if (g_hTimeBombTimer[client] != INVALID_HANDLE)
+	if (g_hTimeBombTimer[client] != null)
 	{
-		KillTimer(g_hTimeBombTimer[client]);
-		g_hTimeBombTimer[client] = INVALID_HANDLE;
+		delete g_hTimeBombTimer[client];
 		g_iTimeBombTicks[client] = 0;
 	}
 }

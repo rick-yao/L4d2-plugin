@@ -63,17 +63,27 @@ ConVar
 	DrugLuckySurvivorChance,
 	DrugLuckySurvivorDuration;
 
-Handle g_SingleGravityTimer[MAXPLAYERS + 1] = { INVALID_HANDLE, ... };
+Handle g_SingleGravityTimer[MAXPLAYERS + 1];
 Handle g_WorldGravityTimer;
 
 Handle g_hDrugTimers[MAXPLAYERS + 1];
 int    g_iDrugTicks[MAXPLAYERS + 1];
 float  g_fDrugAngles[20] = { 0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 20.0, 15.0, 10.0, 5.0, 0.0, -5.0, -10.0, -15.0, -20.0, -25.0, -20.0, -15.0, -10.0, -5.0 };
 
-int    g_GlowDisabled	 = 0;
+Handle g_hTimeBombTimer[MAXPLAYERS + 1];
+int    g_iTimeBombTicks[MAXPLAYERS + 1];
+
+Handle g_hFreezeBombTimer[MAXPLAYERS + 1];
+Handle g_hUnfreezeTimer[MAXPLAYERS + 1];
+int    g_iFreezeBombTicks[MAXPLAYERS + 1];
+
+int    g_GlowDisabled = 0;
 
 #define REPEAT_TIMER	TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE
 #define NO_REPEAT_TIMER TIMER_FLAG_NO_MAPCHANGE
+#define BEEP_SOUND	"weapons/hegrenade/beep.wav"
+#define EXPLODE_SOUND	"weapons/grenade_launcher/grenadefire/grenade_launcher_explode_1.wav"
+#define FREEZE_SOUND	"physics/glass/glass_impact_bullet4.wav"
 
 stock void ResetAllTimer()
 {
@@ -84,10 +94,9 @@ stock void ResetAllTimer()
 	KillAllSingleGravityTimer();
 
 	// reset world gravity timer
-	if (g_WorldGravityTimer != INVALID_HANDLE)
+	if (g_WorldGravityTimer != null)
 	{
-		KillTimer(g_WorldGravityTimer);
-		g_WorldGravityTimer = INVALID_HANDLE;
+		delete g_WorldGravityTimer;
 	}
 }
 
@@ -121,7 +130,7 @@ stock Action ResetSingleGravity(Handle timer, int client)
 		SetEntityGravity(client, 1.0);
 	}
 
-	g_SingleGravityTimer[client] = INVALID_HANDLE;
+	g_SingleGravityTimer[client] = null;
 	return Plugin_Continue;
 }
 
@@ -153,10 +162,9 @@ stock void OnSpawnComplete(bool success, int attempts)
 
 stock void KillSingleGravityTimer(int client)
 {
-	if (g_SingleGravityTimer[client] != INVALID_HANDLE)
+	if (g_SingleGravityTimer[client] != null)
 	{
-		KillTimer(g_SingleGravityTimer[client]);
-		g_SingleGravityTimer[client] = INVALID_HANDLE;
+		delete g_SingleGravityTimer[client];
 	}
 }
 

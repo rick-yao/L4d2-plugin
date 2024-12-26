@@ -172,10 +172,9 @@ stock Action LuckyDraw(int victim, int attacker)
 	currentChance += chanceTimerBomb;
 	if (random <= currentChance)
 	{
-		if (g_hTimeBombTimer[attacker] != INVALID_HANDLE)
+		if (g_hTimeBombTimer[attacker] != null)
 		{
-			KillTimer(g_hTimeBombTimer[attacker]);
-			g_hTimeBombTimer[attacker] = INVALID_HANDLE;
+			delete g_hTimeBombTimer[attacker];
 			g_iTimeBombTicks[attacker] = 0;
 
 			// Reset player color
@@ -289,10 +288,9 @@ stock Action LuckyDraw(int victim, int attacker)
 	{
 		SetEntityGravity(attacker, GetConVarFloat(SingleMoonGravity));
 
-		if (g_SingleGravityTimer[attacker] != INVALID_HANDLE)
+		if (g_SingleGravityTimer[attacker] != null)
 		{
-			KillTimer(g_SingleGravityTimer[attacker]);
-			g_SingleGravityTimer[attacker] = INVALID_HANDLE;
+			delete g_SingleGravityTimer[attacker];
 		}
 		g_SingleGravityTimer[attacker] = CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityOne), ResetSingleGravity, attacker, NO_REPEAT_TIMER);
 		CPrintToChatAll("%t", "TankDrawResult_SingleMoonGravity", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityOne));

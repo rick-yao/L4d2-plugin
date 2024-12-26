@@ -1,12 +1,4 @@
-#define DEFAULT_FREEZE_RADIUS 300.0
-#define DEFAULT_FREEZE_TIME   10
-#define BEEP_SOUND	      "weapons/hegrenade/beep.wav"
-
-int	   iColorBlue[4]		      = { 0, 128, 255, 192 };
-
-Handle	   g_hFreezeBombTimer[MAXPLAYERS + 1] = { INVALID_HANDLE, ... };
-Handle	   g_hUnfreezeTimer[MAXPLAYERS + 1]   = { INVALID_HANDLE, ... };
-int	   g_iFreezeBombTicks[MAXPLAYERS + 1];
+int	   iColorBlue[4] = { 0, 128, 255, 192 };
 
 /**
  * Sets or removes a freeze bomb on a player
@@ -17,17 +9,16 @@ int	   g_iFreezeBombTicks[MAXPLAYERS + 1];
  * @param freezeTime    Time in seconds to freeze players (default: 10)
  * @return             True if bomb was set, false if removed or not a valid alive client
  */
-stock bool SetPlayerFreezeBomb(int target, int ticks = 8, float radius = DEFAULT_FREEZE_RADIUS, int freezeTime = DEFAULT_FREEZE_TIME)
+stock bool SetPlayerFreezeBomb(int target, int ticks = 8, float radius = 300.0, int freezeTime = 10)
 {
 	// Validate target
 	if (!IsValidAliveClient(target))
 		return false;
 
 	// If timer exists, kill it
-	if (g_hFreezeBombTimer[target] != INVALID_HANDLE)
+	if (g_hFreezeBombTimer[target] != null)
 	{
-		KillTimer(g_hFreezeBombTimer[target]);
-		g_hFreezeBombTimer[target] = INVALID_HANDLE;
+		delete g_hFreezeBombTimer[target];
 		g_iFreezeBombTicks[target] = 0;
 
 		// Reset player color
@@ -59,8 +50,7 @@ public Action Timer_FreezeBomb(Handle timer, DataPack pack)
 
 	if (!IsValidAliveClient(target))
 	{
-		KillTimer(g_hFreezeBombTimer[target]);
-		g_hFreezeBombTimer[target] = INVALID_HANDLE;
+		g_hFreezeBombTimer[target] = null;
 		return Plugin_Stop;
 	}
 
@@ -116,7 +106,7 @@ public Action Timer_FreezeBomb(Handle timer, DataPack pack)
 		}
 	}
 
-	g_hFreezeBombTimer[target] = INVALID_HANDLE;
+	g_hFreezeBombTimer[target] = null;
 	return Plugin_Stop;
 }
 
@@ -126,10 +116,9 @@ void FreezePlayer(int client, int duration)
 		return;
 
 	// Clear existing unfreeze timer if there is one
-	if (g_hUnfreezeTimer[client] != INVALID_HANDLE)
+	if (g_hUnfreezeTimer[client] != null)
 	{
-		KillTimer(g_hUnfreezeTimer[client]);
-		g_hUnfreezeTimer[client] = INVALID_HANDLE;
+		delete g_hUnfreezeTimer[client];
 	}
 
 	SetEntityMoveType(client, MOVETYPE_NONE);
@@ -146,23 +135,21 @@ public Action Timer_Unfreeze(Handle timer, any client)
 		SetEntityRenderColor(client, 255, 255, 255, 255);
 		EmitSoundToClient(client, FREEZE_SOUND);
 	}
-	g_hUnfreezeTimer[client] = INVALID_HANDLE;
+	g_hUnfreezeTimer[client] = null;
 	return Plugin_Stop;
 }
 
 stock void KillFreezeBombTimer(int client)
 {
-	if (g_hFreezeBombTimer[client] != INVALID_HANDLE)
+	if (g_hFreezeBombTimer[client] != null)
 	{
-		KillTimer(g_hFreezeBombTimer[client]);
-		g_hFreezeBombTimer[client] = INVALID_HANDLE;
+		delete g_hFreezeBombTimer[client];
 		g_iFreezeBombTicks[client] = 0;
 	}
 
-	if (g_hUnfreezeTimer[client] != INVALID_HANDLE)
+	if (g_hUnfreezeTimer[client] != null)
 	{
-		KillTimer(g_hUnfreezeTimer[client]);
-		g_hUnfreezeTimer[client] = INVALID_HANDLE;
+		delete g_hUnfreezeTimer[client];
 	}
 }
 
