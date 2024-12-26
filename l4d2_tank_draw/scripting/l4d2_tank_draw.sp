@@ -49,7 +49,7 @@
 #include "lib/freeze_timer_bomb.sp"
 #include "lib/dev_menu.sp"
 #include "lib/lucky_draw.sp"
-#include "lib/drug_m.sp"
+#include "lib/drug.sp"
 
 #define PLUGIN_VERSION "2.9.0"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
@@ -133,6 +133,9 @@ public void OnPluginStart()
 	FreezeBombDuration		  = CreateConVar("l4d2_tank_draw_freeze_duration", "15", "冰冻持续时间 \nDuration of the freeze effect in seconds", FCVAR_NONE);
 	FreezeBombCountDown		  = CreateConVar("l4d2_tank_draw_freeze_bomb_countdown", "8", "冰冻炸弹倒计时秒数 \nCountdown duration in seconds before the freeze bomb explodes", FCVAR_NONE);
 	FreezeBombRadius		  = CreateConVar("l4d2_tank_draw_freeze_bomb_radius", "500.0", "冰冻炸弹范围 \nRadius of the freeze bomb effect", FCVAR_NONE);
+
+	DrugLuckySurvivorChance		  = CreateConVar("l4d2_tank_draw_drug_lucky_survivor_chance", "0", "幸运玩家中毒概率 \nProbability of drug luck drawer.", FCVAR_NONE);
+	DrugLuckySurvivorDuration	  = CreateConVar("l4d2_tank_draw_drug_lucky_survivor_duration", "30", "幸运玩家中毒秒数 \nDuration of drug luck drawer.", FCVAR_NONE);
 
 	AutoExecConfig(true, "l4d2_tank_draw");
 

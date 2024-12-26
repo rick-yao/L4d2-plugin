@@ -24,6 +24,7 @@ stock Action LuckyDraw(int victim, int attacker)
 	int chanceIncreaseGravity	      = ChanceIncreaseGravity.IntValue;
 	int chanceClearAllSurvivorHealth      = ChanceClearAllSurvivorHealth.IntValue;
 	int chanceReviveAllDead		      = ChanceReviveAllDead.IntValue;
+	int chanceDrugLuckySurvivor	      = DrugLuckySurvivorChance.IntValue;
 
 	int totalChance			      = chanceNoPrize + chanceResetAllSurvivorHealth + chanceInfinitePrimaryAmmo + chanceNewWitch + chanceFreezeBomb + chanceTimerBomb + chanceReviveAllDead + chanceNewTank + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor + chanceDisableGlow;
 	totalChance += chanceLimitedTimeWorldMoonGravity + chanceMoonGravityOneLimitedTime + chanceWorldMoonGravityToggle + chanceIncreaseGravity;
@@ -50,6 +51,23 @@ stock Action LuckyDraw(int victim, int attacker)
 		CPrintToChatAll("%t", "TankDrawResult_NoPrize", attackerName);
 		PrintHintTextToAll("%t", "TankDrawResult_NoPrize_NoColor", attackerName);
 
+		return Plugin_Continue;
+	}
+
+	currentChance += chanceDrugLuckySurvivor;
+	if (random <= currentChance)
+	{
+		if (g_hDrugTimers[attacker] != null)
+		{
+			SetDrug(attacker, DrugLuckySurvivorDuration.IntValue);
+			CPrintToChatAll("%t", "TankDrawResult_DrugExist", attackerName);
+			PrintHintTextToAll("%t", "TankDrawResult_DrugExist_NoColor", attackerName);
+		}
+		else {
+			SetDrug(attacker, DrugLuckySurvivorDuration.IntValue);
+			CPrintToChatAll("%t", "TankDrawResult_DrugLuckySurvivor", attackerName, DrugLuckySurvivorDuration.IntValue);
+			PrintHintTextToAll("%t", "TankDrawResult_DrugLuckySurvivor_NoColor", attackerName, DrugLuckySurvivorDuration.IntValue);
+		}
 		return Plugin_Continue;
 	}
 

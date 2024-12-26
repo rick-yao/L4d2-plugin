@@ -1,6 +1,3 @@
-Handle	   g_hDrugTimers[MAXPLAYERS + 1];
-int	   g_iDrugTicks[MAXPLAYERS + 1];
-float	   g_fDrugAngles[20] = { 0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 20.0, 15.0, 10.0, 5.0, 0.0, -5.0, -10.0, -15.0, -20.0, -25.0, -20.0, -15.0, -10.0, -5.0 };
 
 // Exposed function to set a player in a drugged state for a specific duration
 stock void SetDrug(int client, int ticks = 30)
