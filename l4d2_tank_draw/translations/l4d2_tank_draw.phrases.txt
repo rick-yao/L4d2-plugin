@@ -659,4 +659,16 @@
         "en"    "[Tank Draw] Player %s's lucky draw result: Drug for %d seconds."
         "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 中毒 %d 秒"
     }
+
+    "TankDrawResult_DrugAll"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen}'s lucky draw result: {olive}Drug all survivor for %d seconds."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 的幸运抽奖结果：{olive}全体中毒 %d 秒"
+    }
+
+    "TankDrawResult_DrugAll_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s's lucky draw result: Drug all survivor for %d seconds."
+        "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 全体中毒 %d 秒"
+    }
 }
