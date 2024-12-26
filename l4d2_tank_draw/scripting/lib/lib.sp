@@ -63,7 +63,7 @@ ConVar
 	DrugLuckySurvivorChance,
 	DrugLuckySurvivorDuration;
 
-Handle g_SingleGravityTimer[MAXPLAYERS + 1] = { INVALID_HANDLE, ... };
+Handle g_SingleGravityTimer[MAXPLAYERS + 1];
 Handle g_WorldGravityTimer;
 
 Handle g_hDrugTimers[MAXPLAYERS + 1];
@@ -84,10 +84,9 @@ stock void ResetAllTimer()
 	KillAllSingleGravityTimer();
 
 	// reset world gravity timer
-	if (g_WorldGravityTimer != INVALID_HANDLE)
+	if (g_WorldGravityTimer != null)
 	{
-		KillTimer(g_WorldGravityTimer);
-		g_WorldGravityTimer = INVALID_HANDLE;
+		delete g_WorldGravityTimer;
 	}
 }
 
@@ -121,7 +120,7 @@ stock Action ResetSingleGravity(Handle timer, int client)
 		SetEntityGravity(client, 1.0);
 	}
 
-	g_SingleGravityTimer[client] = INVALID_HANDLE;
+	g_SingleGravityTimer[client] = null;
 	return Plugin_Continue;
 }
 
@@ -153,10 +152,9 @@ stock void OnSpawnComplete(bool success, int attempts)
 
 stock void KillSingleGravityTimer(int client)
 {
-	if (g_SingleGravityTimer[client] != INVALID_HANDLE)
+	if (g_SingleGravityTimer[client] != null)
 	{
-		KillTimer(g_SingleGravityTimer[client]);
-		g_SingleGravityTimer[client] = INVALID_HANDLE;
+		delete g_SingleGravityTimer[client];
 	}
 }
 
