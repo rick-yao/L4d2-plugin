@@ -57,6 +57,9 @@ ConVar
 	ChanceResetAllSurvivorHealth,
 
 	ChanceInfinitePrimaryAmmo,
+
+	DrugAllSurvivorChance,
+	DrugAllSurvivorDuration,
 	DrugLuckySurvivorChance,
 	DrugLuckySurvivorDuration;
 
