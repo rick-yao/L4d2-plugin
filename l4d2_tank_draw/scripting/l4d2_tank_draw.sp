@@ -3,6 +3,9 @@
  * @repository https://github.com/rick-yao/L4d2-plugin
  *
  * Changelog
+ * v2.10.0 - 2024-12-26
+ * - add drug survivor
+ *
  * v2.9.0 - 2024-12-15
  * - change doc
  *
@@ -51,7 +54,7 @@
 #include "lib/lucky_draw.sp"
 #include "lib/drug.sp"
 
-#define PLUGIN_VERSION "2.9.0"
+#define PLUGIN_VERSION "2.10.0"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
 #define COMMAND_FILTER COMMAND_FILTER_CONNECTED | COMMAND_FILTER_NO_BOTS
 
