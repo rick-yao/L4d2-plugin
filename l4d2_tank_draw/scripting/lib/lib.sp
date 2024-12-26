@@ -64,7 +64,7 @@ ConVar
 	DrugLuckySurvivorDuration;
 
 Handle g_SingleGravityTimer[MAXPLAYERS + 1] = { INVALID_HANDLE, ... };
-Handle g_WorldGravityTimer		    = INVALID_HANDLE;
+Handle g_WorldGravityTimer;
 
 Handle g_hDrugTimers[MAXPLAYERS + 1];
 int    g_iDrugTicks[MAXPLAYERS + 1];
@@ -134,7 +134,7 @@ stock Action ResetWorldGravity(Handle timer, int initValue)
 	CPrintToChatAll("%t", "TankDraw_WorldGravityReset");
 	PrintHintTextToAll("%t", "TankDraw_WorldGravityReset_NoColor");
 
-	g_WorldGravityTimer = INVALID_HANDLE;
+	g_WorldGravityTimer = null;
 
 	return Plugin_Continue;
 }
