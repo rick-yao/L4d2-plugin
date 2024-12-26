@@ -56,12 +56,21 @@ ConVar
 
 	ChanceResetAllSurvivorHealth,
 
-	ChanceInfinitePrimaryAmmo;
+	ChanceInfinitePrimaryAmmo,
+
+	DrugAllSurvivorChance,
+	DrugAllSurvivorDuration,
+	DrugLuckySurvivorChance,
+	DrugLuckySurvivorDuration;
 
 Handle g_SingleGravityTimer[MAXPLAYERS + 1] = { INVALID_HANDLE, ... };
 Handle g_WorldGravityTimer		    = INVALID_HANDLE;
 
-int    g_GlowDisabled			    = 0;
+Handle g_hDrugTimers[MAXPLAYERS + 1];
+int    g_iDrugTicks[MAXPLAYERS + 1];
+float  g_fDrugAngles[20] = { 0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 20.0, 15.0, 10.0, 5.0, 0.0, -5.0, -10.0, -15.0, -20.0, -25.0, -20.0, -15.0, -10.0, -5.0 };
+
+int    g_GlowDisabled	 = 0;
 
 #define REPEAT_TIMER	TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE
 #define NO_REPEAT_TIMER TIMER_FLAG_NO_MAPCHANGE
@@ -161,6 +170,9 @@ stock void KillAllSingleGravityTimer()
 
 stock void ResetClient(int client)
 {
+	delete g_hDrugTimers[client];
+	g_iDrugTicks[client] = 0;
+
 	KillSingleGravityTimer(client);
 
 	KillTimeBomb(client);
