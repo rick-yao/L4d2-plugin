@@ -272,10 +272,9 @@ stock Action LuckyDraw(int victim, int attacker)
 
 		g_WorldGravity.IntValue = WorldMoonGravity.IntValue;
 
-		if (g_WorldGravityTimer != INVALID_HANDLE)
+		if (g_WorldGravityTimer != null)
 		{
-			KillTimer(g_WorldGravityTimer);
-			g_WorldGravityTimer = INVALID_HANDLE;
+			delete g_WorldGravityTimer;
 		}
 		g_WorldGravityTimer = CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityTimer), ResetWorldGravity, default_gravity_int, NO_REPEAT_TIMER);
 		CPrintToChatAll("%t", "TankDrawResult_LimitedMoonGravity", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityTimer));
@@ -319,6 +318,11 @@ stock Action LuckyDraw(int victim, int attacker)
 		}
 		else {
 			g_WorldGravity.RestoreDefault();
+			// before timer ends, if draw this prize, should clear timer
+			if (g_WorldGravityTimer != null)
+			{
+				delete g_WorldGravityTimer;
+			}
 			CPrintToChatAll("%t", "TankDrawResult_DisableMoonGravity", attackerName);
 			PrintHintTextToAll("%t", "TankDrawResult_DisableMoonGravity_NoColor", attackerName);
 		}
