@@ -39,6 +39,8 @@ The plugin includes the following possible prizes:
 21. Turn the lucky player into a "timer bomb" (Repeated draws will cancel the timer)
 22. Turn the lucky player into a "freeze bomb" (Repeated draws will cancel the timer)
 23. Remove survivor outlines (Removes survivor glow outlines, but names above players remain visible; not recommended as many plugins modify outlines)
+24. Temporarily Drug lucky player
+24. Temporarily Drug all survivors
 
 ## Configuration
 
