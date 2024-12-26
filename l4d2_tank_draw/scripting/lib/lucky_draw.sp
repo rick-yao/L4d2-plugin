@@ -264,12 +264,12 @@ stock Action LuckyDraw(int victim, int attacker)
 	currentChance += chanceLimitedTimeWorldMoonGravity;
 	if (random <= currentChance)
 	{
-		g_WorldGravity = FindConVar("sv_gravity");
+		g_hWorldGravity = FindConVar("sv_gravity");
 		char default_gravity[16];
-		g_WorldGravity.GetDefault(default_gravity, sizeof(default_gravity));
-		int default_gravity_int = StringToInt(default_gravity);
+		g_hWorldGravity.GetDefault(default_gravity, sizeof(default_gravity));
+		int default_gravity_int	 = StringToInt(default_gravity);
 
-		g_WorldGravity.IntValue = WorldMoonGravity.IntValue;
+		g_hWorldGravity.IntValue = WorldMoonGravity.IntValue;
 
 		if (g_WorldGravityTimer != null)
 		{
@@ -303,19 +303,19 @@ stock Action LuckyDraw(int victim, int attacker)
 	currentChance += chanceWorldMoonGravityToggle;
 	if (random <= currentChance)
 	{
-		g_WorldGravity = FindConVar("sv_gravity");
+		g_hWorldGravity = FindConVar("sv_gravity");
 		char default_gravity[16];
-		g_WorldGravity.GetDefault(default_gravity, sizeof(default_gravity));
+		g_hWorldGravity.GetDefault(default_gravity, sizeof(default_gravity));
 		int default_gravity_int = StringToInt(default_gravity);
 
-		if (g_WorldGravity.IntValue == default_gravity_int)
+		if (g_hWorldGravity.IntValue == default_gravity_int)
 		{
-			g_WorldGravity.IntValue = WorldMoonGravity.IntValue;
+			g_hWorldGravity.IntValue = WorldMoonGravity.IntValue;
 			CPrintToChatAll("%t", "TankDrawResult_EnableMoonGravity", attackerName);
 			PrintHintTextToAll("%t", "TankDrawResult_EnableMoonGravity_NoColor", attackerName);
 		}
 		else {
-			g_WorldGravity.RestoreDefault();
+			g_hWorldGravity.RestoreDefault();
 			// before timer ends, if draw this prize, should clear timer
 			if (g_WorldGravityTimer != null)
 			{
@@ -407,19 +407,19 @@ stock Action LuckyDraw(int victim, int attacker)
 	if (random <= currentChance)
 	{
 		// Infinite melee range
-		g_MeleeRange = FindConVar("melee_range");
+		g_hMeleeRange = FindConVar("melee_range");
 		char default_range[16];
-		g_MeleeRange.GetDefault(default_range, sizeof(default_range));
+		g_hMeleeRange.GetDefault(default_range, sizeof(default_range));
 		int default_range_int = StringToInt(default_range);
 
-		if (g_MeleeRange.IntValue == default_range_int)
+		if (g_hMeleeRange.IntValue == default_range_int)
 		{
-			g_MeleeRange.IntValue = GetConVarInt(InfiniteMeeleRange);
+			g_hMeleeRange.IntValue = GetConVarInt(InfiniteMeeleRange);
 			CPrintToChatAll("%t", "TankDrawResult_EnableInfiniteMelee", attackerName);
 			PrintHintTextToAll("%t", "TankDrawResult_EnableInfiniteMelee_NoColor", attackerName);
 		}
 		else {
-			g_MeleeRange.RestoreDefault();
+			g_hMeleeRange.RestoreDefault();
 			CPrintToChatAll("%t", "TankDrawResult_DisableInfiniteMelee", attackerName);
 			PrintHintTextToAll("%t", "TankDrawResult_DisableInfiniteMelee_NoColor", attackerName);
 		}

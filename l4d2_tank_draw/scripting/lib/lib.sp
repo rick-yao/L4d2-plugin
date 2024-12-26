@@ -4,8 +4,8 @@ int g_iClearBuffIfMissionLost;
 ConVar
 	g_hInfiniteAmmo,
 	g_hInfinitePrimaryAmmo,
-	g_MeleeRange,
-	g_WorldGravity;
+	g_hMeleeRange,
+	g_hWorldGravity;
 
 // Custom ConVars for the plugin
 ConVar
@@ -112,11 +112,11 @@ stock void ResetAllValue()
 	g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_primary_ammo");
 	g_hInfinitePrimaryAmmo.RestoreDefault();
 
-	g_MeleeRange = FindConVar("melee_range");
-	g_MeleeRange.RestoreDefault();
+	g_hMeleeRange = FindConVar("melee_range");
+	g_hMeleeRange.RestoreDefault();
 
-	g_WorldGravity = FindConVar("sv_gravity");
-	g_WorldGravity.RestoreDefault();
+	g_hWorldGravity = FindConVar("sv_gravity");
+	g_hWorldGravity.RestoreDefault();
 
 	g_GlowDisabled = 0;
 }
@@ -139,9 +139,9 @@ stock Action ResetSingleGravity(Handle timer, int client)
 
 stock Action ResetWorldGravity(Handle timer, int initValue)
 {
-	g_WorldGravity = FindConVar("sv_gravity");
+	g_hWorldGravity = FindConVar("sv_gravity");
 
-	g_WorldGravity.RestoreDefault();
+	g_hWorldGravity.RestoreDefault();
 
 	CPrintToChatAll("%t", "TankDraw_WorldGravityReset");
 	PrintHintTextToAll("%t", "TankDraw_WorldGravityReset_NoColor");
