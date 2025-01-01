@@ -213,13 +213,6 @@ public void OnPluginStart()
 	SetConVar();
 
 	PrintToServer("[Tank Draw] Plugin loaded");
-	PrintToServer("[Tank Draw] debug mode: %d", g_iL4D2TankDrawDebugMode);
-
-	if (g_iL4D2TankDrawDebugMode == 1)
-	{
-		PrintToServer("调试菜单打开 / debug menu on");
-		RegAdminCmd("sm_tankdraw", MenuFunc_MainMenu, ADMFLAG_CHEATS);
-	}
 }
 
 public Action Event_PlayerIncapacitated(Event event, const char[] name, bool dontBroadcast)
@@ -555,5 +548,11 @@ void SetConVar()
 		PrintToServer("g_iDrugLuckySurvivorChance: %d", g_iChanceDrugLuckySurvivor);
 		PrintToServer("g_iDrugLuckySurvivorDuration: %d", g_iDrugLuckySurvivorDuration);
 		PrintToServer("==============================");
+	}
+
+	if (g_iL4D2TankDrawDebugMode == 1)
+	{
+		PrintToServer("调试菜单打开 / debug menu on");
+		RegAdminCmd("sm_tankdraw", MenuFunc_MainMenu, ADMFLAG_CHEATS);
 	}
 }
