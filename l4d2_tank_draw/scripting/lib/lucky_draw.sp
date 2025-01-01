@@ -141,9 +141,9 @@ stock Action LuckyDraw(int victim, int attacker)
 	currentChance += chanceDisableGlow;
 	if (random <= currentChance)
 	{
-		if (g_GlowDisabled == 0)
+		if (g_iGlowDisabled == 0)
 		{
-			g_GlowDisabled = 1;
+			g_iGlowDisabled = 1;
 			CPrintToChatAll("%t", "TankDraw_DisableGlow", attackerName);
 			PrintHintTextToAll("%t", "TankDraw_DisableGlow_NoColor", attackerName);
 			for (int i = 1; i <= MaxClients; i++)
@@ -155,7 +155,7 @@ stock Action LuckyDraw(int victim, int attacker)
 			}
 		}
 		else {
-			g_GlowDisabled = 0;
+			g_iGlowDisabled = 0;
 			CPrintToChatAll("%t", "TankDraw_RestoreGlow", attackerName);
 			PrintHintTextToAll("%t", "TankDraw_RestoreGlow_NoColor", attackerName);
 			for (int i = 1; i <= MaxClients; i++)

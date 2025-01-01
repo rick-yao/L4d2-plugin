@@ -43,7 +43,9 @@ int
 	g_iDrugAllSurvivorChance,
 	g_iDrugAllSurvivorDuration,
 	g_iDrugLuckySurvivorChance,
-	g_iDrugLuckySurvivorDuration;
+	g_iDrugLuckySurvivorDuration,
+
+	g_iGlowDisabled;
 
 float
 	g_fTimerBombRadius,
@@ -130,8 +132,6 @@ Handle g_hFreezeBombTimer[MAXPLAYERS + 1];
 Handle g_hUnfreezeTimer[MAXPLAYERS + 1];
 int    g_iFreezeBombTicks[MAXPLAYERS + 1];
 
-int    g_GlowDisabled = 0;
-
 #define REPEAT_TIMER	TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE
 #define NO_REPEAT_TIMER TIMER_FLAG_NO_MAPCHANGE
 #define BEEP_SOUND	"weapons/hegrenade/beep.wav"
@@ -168,7 +168,7 @@ stock void ResetAllValue()
 	g_hWorldGravity = FindConVar("sv_gravity");
 	g_hWorldGravity.RestoreDefault();
 
-	g_GlowDisabled = 0;
+	g_iGlowDisabled = 0;
 }
 
 stock Action ResetSingleGravity(Handle timer, int client)
