@@ -316,16 +316,13 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 	g_hInfiniteAmmo = FindConVar("sv_infinite_ammo");
 	if (g_hInfiniteAmmo.IntValue == 1)
 	{
-		int  random			 = GetRandomInt(1, 100);
-		int  chanceDisarmSurvivorMolotov = g_iChanceDisarmSurvivorMolotov;
-		int  chanceKillSurvivorMolotov	 = g_iChanceKillSurvivorMolotov;
-		int  chanceTimerBombMolotov	 = g_iChanceTimerBombMolotov;
+		int  random   = GetRandomInt(1, 100);
 
-		int  attacker			 = GetClientOfUserId(event.GetInt("userid"));
+		int  attacker = GetClientOfUserId(event.GetInt("userid"));
 		char attackerName[MAX_NAME_LENGTH];
 		GetClientName(attacker, attackerName, sizeof(attackerName));
 
-		if (random <= chanceDisarmSurvivorMolotov)
+		if (random <= g_iChanceDisarmSurvivorMolotov)
 		{
 			L4D_RemoveAllWeapons(attacker);
 
@@ -333,7 +330,7 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 			PrintHintTextToAll("%t", "TankDraw_MolotovDisarmMsg_NoColor", attackerName);
 			return Plugin_Continue;
 		}
-		if (random <= chanceDisarmSurvivorMolotov + chanceKillSurvivorMolotov)
+		if (random <= g_iChanceDisarmSurvivorMolotov + g_iChanceKillSurvivorMolotov)
 		{
 			ForcePlayerSuicide(attacker);
 
@@ -341,7 +338,7 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 			PrintHintTextToAll("%t", "TankDraw_MolotovDeathMsg_NoColor", attackerName);
 			return Plugin_Continue;
 		}
-		if (random <= chanceDisarmSurvivorMolotov + chanceKillSurvivorMolotov + chanceTimerBombMolotov)
+		if (random <= g_iChanceDisarmSurvivorMolotov + g_iChanceKillSurvivorMolotov + g_iChanceTimerBombMolotov)
 		{
 			if (g_hTimeBombTimer[attacker] != null)
 			{
