@@ -517,9 +517,9 @@ void SetConVar()
 		PrintToServer("g_iTankDrawEnable: %d", g_iTankDrawEnable);
 		PrintToServer("g_iChanceDisableGlow: %d", g_iChanceDisableGlow);
 		PrintToServer("g_iChanceIncreaseGravity: %d", g_iChanceIncreaseGravity);
-		PrintToServer("g_fIncreasedGravity: %.2f", g_fIncreasedGravity);
+		PrintToServer("g_fIncreasedGravity: %.1f", g_fIncreasedGravity);
 		PrintToServer("g_iChanceMoonGravityOneLimitedTime: %d", g_iChanceMoonGravityOneLimitedTime);
-		PrintToServer("g_fSingleMoonGravity: %.2f", g_fSingleMoonGravity);
+		PrintToServer("g_fSingleMoonGravity: %.1f", g_fSingleMoonGravity);
 		PrintToServer("g_iLimitedTimeWorldMoonGravityOne: %d", g_iLimitedTimeWorldMoonGravityOne);
 		PrintToServer("g_iWorldMoonGravity: %d", g_iWorldMoonGravity);
 		PrintToServer("g_iChanceLimitedTimeWorldMoonGravity: %d", g_iChanceLimitedTimeWorldMoonGravity);
@@ -545,11 +545,11 @@ void SetConVar()
 		PrintToServer("g_iChanceTimerBomb: %d", g_iChanceTimerBomb);
 		PrintToServer("g_iTimerBombRangeDamage: %d", g_iTimerBombRangeDamage);
 		PrintToServer("g_iTimerBombSecond: %d", g_iTimerBombSecond);
-		PrintToServer("g_fTimerBombRadius: %.2f", g_fTimerBombRadius);
+		PrintToServer("g_fTimerBombRadius: %.1f", g_fTimerBombRadius);
 		PrintToServer("g_iChanceFreezeBomb: %d", g_iChanceFreezeBomb);
 		PrintToServer("g_iFreezeBombDuration: %d", g_iFreezeBombDuration);
 		PrintToServer("g_iFreezeBombCountDown: %d", g_iFreezeBombCountDown);
-		PrintToServer("g_fFreezeBombRadius: %.2f", g_fFreezeBombRadius);
+		PrintToServer("g_fFreezeBombRadius: %.1f", g_fFreezeBombRadius);
 		PrintToServer("g_iDrugAllSurvivorChance: %d", g_iChanceDrugAllSurvivor);
 		PrintToServer("g_iDrugAllSurvivorDuration: %d", g_iDrugAllSurvivorDuration);
 		PrintToServer("g_iDrugLuckySurvivorChance: %d", g_iChanceDrugLuckySurvivor);
