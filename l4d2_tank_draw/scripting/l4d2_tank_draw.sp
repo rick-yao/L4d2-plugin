@@ -210,9 +210,9 @@ public void OnPluginStart()
 	SetConVar();
 
 	PrintToServer("[Tank Draw] Plugin loaded");
-	PrintToServer("[Tank Draw] debug mode: %d", L4D2TankDrawDebugMode.IntValue);
+	PrintToServer("[Tank Draw] debug mode: %d", g_iL4D2TankDrawDebugMode);
 
-	if (L4D2TankDrawDebugMode.IntValue == 1)
+	if (g_iL4D2TankDrawDebugMode == 1)
 	{
 		PrintToServer("调试菜单打开 / debug menu on");
 		RegConsoleCmd("sm_x", MenuFunc_MainMenu, "打开调试菜单 / open debug menu");
@@ -221,7 +221,7 @@ public void OnPluginStart()
 
 public Action Event_PlayerIncapacitated(Event event, const char[] name, bool dontBroadcast)
 {
-	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
+	if (g_iTankDrawEnable == 0) { return Plugin_Continue; }
 	PrintToServer("[Tank Draw] Event_PlayerIncapacitated triggered.");
 
 	// Check if the victim is a Tank
@@ -235,7 +235,7 @@ public Action Event_PlayerIncapacitated(Event event, const char[] name, bool don
 	// if the victim is a tank, check if the weapon is a melee weapon
 	char weapon[64];
 	event.GetString("weapon", weapon, sizeof(weapon));
-	if (StrEqual(weapon, "melee", false) || L4D2TankDrawDebugMode.IntValue == 1)
+	if (StrEqual(weapon, "melee", false) || g_iL4D2TankDrawDebugMode == 1)
 	{
 		// check if the attacker is an alive client
 		int attacker = GetClientOfUserId(event.GetInt("attacker"));
@@ -283,7 +283,7 @@ public Action Event_PlayerIncapacitated(Event event, const char[] name, bool don
 // reset value when player died
 public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast)
 {
-	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
+	if (g_iTankDrawEnable == 0) { return Plugin_Continue; }
 	PrintToServer("[Tank Draw] Event_PlayerDeath triggered.");
 
 	int victim = GetClientOfUserId(event.GetInt("userid"));
@@ -300,7 +300,7 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 // reset value when player disconnect
 public void OnClientDisconnect(int client)
 {
-	if (TankDrawEnable.IntValue == 0) { return; }
+	if (g_iTankDrawEnable == 0) { return; }
 	PrintToServer("[Tank Draw] OnClientDisconnect triggered.");
 
 	if (IsValidSurvivor(client))
@@ -321,9 +321,9 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 	if (g_hInfiniteAmmo.IntValue == 1)
 	{
 		int  random			 = GetRandomInt(1, 100);
-		int  chanceDisarmSurvivorMolotov = ChanceDisarmSurvivorMolotov.IntValue;
-		int  chanceKillSurvivorMolotov	 = ChanceKillSurvivorMolotov.IntValue;
-		int  chanceTimerBombMolotov	 = ChanceTimerBombMolotov.IntValue;
+		int  chanceDisarmSurvivorMolotov = g_iChanceDisarmSurvivorMolotov;
+		int  chanceKillSurvivorMolotov	 = g_iChanceKillSurvivorMolotov;
+		int  chanceTimerBombMolotov	 = g_iChanceTimerBombMolotov;
 
 		int  attacker			 = GetClientOfUserId(event.GetInt("userid"));
 		char attackerName[MAX_NAME_LENGTH];
@@ -361,7 +361,7 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 				return Plugin_Continue;
 			}
 			else {
-				SetPlayerTimeBomb(attacker, TimerBombSecond.IntValue, TimerBombRadius.FloatValue, TimerBombRangeDamage.IntValue);
+				SetPlayerTimeBomb(attacker, g_iTimerBombSecond, g_fTimerBombRadius, g_iTimerBombRangeDamage);
 				CheatCommand(attacker, "give", "adrenaline");
 
 				CPrintToChatAll("%t", "TankDraw_TimerBomb_Molotov", attackerName);
@@ -375,7 +375,7 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 
 public void OnMapEnd()
 {
-	if (TankDrawEnable.IntValue == 0) { return; }
+	if (g_iTankDrawEnable == 0) { return; }
 	PrintToServer("[Tank Draw] MapEnd triggered.");
 
 	ResetAllTimer();
@@ -384,7 +384,7 @@ public void OnMapEnd()
 
 public Action Event_RoundEnd(Event event, const char[] name, bool dontBroadcast)
 {
-	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
+	if (g_iTankDrawEnable == 0) { return Plugin_Continue; }
 	PrintToServer("[Tank Draw] Event_RoundEnd triggered.");
 
 	ResetAllTimer();
@@ -395,7 +395,7 @@ public Action Event_RoundEnd(Event event, const char[] name, bool dontBroadcast)
 
 public Action Event_Lost(Event event, const char[] name, bool dontBroadcast)
 {
-	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
+	if (g_iTankDrawEnable == 0) { return Plugin_Continue; }
 	PrintToServer("[Tank Draw] Event_Lost triggered.");
 
 	KillAllTimeBombs();
