@@ -21,6 +21,7 @@ public Plugin Info = {
 	author	    = "Rick",
 	name	    = "L4D2 Tank Trigger",
 	description = "Spawn tank randomly when something happens",
+	url	    = "https://github.com/rick-yao/L4d2-plugin",
 	version	    = PLUGIN_VERSION,
 };
 
