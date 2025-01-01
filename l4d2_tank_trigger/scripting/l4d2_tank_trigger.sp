@@ -7,7 +7,7 @@
 
 #include "../../lib/helper.sp"
 
-#define PLUGIN_VERSION "0.1"
+#define PLUGIN_VERSION "1.0"
 
 int
 	g_iChanceCarAlarm,
