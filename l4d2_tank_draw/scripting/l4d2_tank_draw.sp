@@ -422,6 +422,10 @@ void ConVarChanged(Handle convar, const char[] oldValue, const char[] newValue)
 
 void SetConVar()
 {
+	g_fIncreasedGravity		     = IncreasedGravity.FloatValue;
+	g_fSingleMoonGravity		     = SingleMoonGravity.FloatValue;
+	g_fFreezeBombRadius		     = FreezeBombRadius.FloatValue;
+	g_fTimerBombRadius		     = TimerBombRadius.FloatValue;
 	g_iClearBuffIfMissionLost	     = ClearBuffIfMissionLost.IntValue;
 	g_iChanceAverageHealth		     = ChanceAverageHealth.IntValue;
 	g_iChanceClearAllSurvivorHealth	     = ChanceClearAllSurvivorHealth.IntValue;
@@ -434,9 +438,7 @@ void SetConVar()
 	g_iTankDrawEnable		     = TankDrawEnable.IntValue;
 	g_iChanceDisableGlow		     = ChanceDisableGlow.IntValue;
 	g_iChanceIncreaseGravity	     = ChanceIncreaseGravity.IntValue;
-	g_fIncreasedGravity		     = IncreasedGravity.FloatValue;
 	g_iChanceMoonGravityOneLimitedTime   = ChanceMoonGravityOneLimitedTime.IntValue;
-	g_fSingleMoonGravity		     = SingleMoonGravity.FloatValue;
 	g_iLimitedTimeWorldMoonGravityOne    = LimitedTimeWorldMoonGravityOne.IntValue;
 	g_iWorldMoonGravity		     = WorldMoonGravity.IntValue;
 	g_iChanceLimitedTimeWorldMoonGravity = ChanceLimitedTimeWorldMoonGravity.IntValue;
@@ -462,11 +464,9 @@ void SetConVar()
 	g_iChanceTimerBomb		     = ChanceTimerBomb.IntValue;
 	g_iTimerBombRangeDamage		     = TimerBombRangeDamage.IntValue;
 	g_iTimerBombSecond		     = TimerBombSecond.IntValue;
-	g_fTimerBombRadius		     = TimerBombRadius.FloatValue;
 	g_iChanceFreezeBomb		     = ChanceFreezeBomb.IntValue;
 	g_iFreezeBombDuration		     = FreezeBombDuration.IntValue;
 	g_iFreezeBombCountDown		     = FreezeBombCountDown.IntValue;
-	g_fFreezeBombRadius		     = FreezeBombRadius.FloatValue;
 	g_iChanceDrugAllSurvivor	     = DrugAllSurvivorChance.IntValue;
 	g_iDrugAllSurvivorDuration	     = DrugAllSurvivorDuration.IntValue;
 	g_iChanceDrugLuckySurvivor	     = DrugLuckySurvivorChance.IntValue;
