@@ -496,4 +496,61 @@ void SetConVar()
 	g_iTotalChance += g_iChanceFreezeBomb;
 	g_iTotalChance += g_iChanceDrugAllSurvivor;
 	g_iTotalChance += g_iChanceDrugLuckySurvivor;
+
+	// Debug block: Print all variables if debug mode is enabled
+	if (g_iL4D2TankDrawDebugMode == 1)
+	{
+		PrintToServer("===== Debug ConVar Values =====");
+		PrintToServer("g_iL4D2TankDrawDebugMode: %d", g_iL4D2TankDrawDebugMode);
+		PrintToServer("g_iTotalChance: %d", g_iTotalChance);
+		PrintToServer("g_iClearBuffIfMissionLost: %d", g_iClearBuffIfMissionLost);
+		PrintToServer("g_iChanceAverageHealth: %d", g_iChanceAverageHealth);
+		PrintToServer("g_iChanceClearAllSurvivorHealth: %d", g_iChanceClearAllSurvivorHealth);
+		PrintToServer("g_iChanceDecreaseHealth: %d", g_iChanceDecreaseHealth);
+		PrintToServer("g_iMaxHealthDecrease: %d", g_iMaxHealthDecrease);
+		PrintToServer("g_iMinHealthDecrease: %d", g_iMinHealthDecrease);
+		PrintToServer("g_iChanceDisarmAllSurvivor: %d", g_iChanceDisarmAllSurvivor);
+		PrintToServer("g_iChanceDisarmSingleSurvivor: %d", g_iChanceDisarmSingleSurvivor);
+		PrintToServer("g_iTankDrawEnable: %d", g_iTankDrawEnable);
+		PrintToServer("g_iChanceDisableGlow: %d", g_iChanceDisableGlow);
+		PrintToServer("g_iChanceIncreaseGravity: %d", g_iChanceIncreaseGravity);
+		PrintToServer("g_fIncreasedGravity: %.2f", g_fIncreasedGravity);
+		PrintToServer("g_iChanceMoonGravityOneLimitedTime: %d", g_iChanceMoonGravityOneLimitedTime);
+		PrintToServer("g_fSingleMoonGravity: %.2f", g_fSingleMoonGravity);
+		PrintToServer("g_iLimitedTimeWorldMoonGravityOne: %d", g_iLimitedTimeWorldMoonGravityOne);
+		PrintToServer("g_iWorldMoonGravity: %d", g_iWorldMoonGravity);
+		PrintToServer("g_iChanceLimitedTimeWorldMoonGravity: %d", g_iChanceLimitedTimeWorldMoonGravity);
+		PrintToServer("g_iLimitedTimeWorldMoonGravityTimer: %d", g_iLimitedTimeWorldMoonGravityTimer);
+		PrintToServer("g_iChanceWorldMoonGravityToggle: %d", g_iChanceWorldMoonGravityToggle);
+		PrintToServer("g_iChanceIncreaseHealth: %d", g_iChanceIncreaseHealth);
+		PrintToServer("g_iMaxHealthIncrease: %d", g_iMaxHealthIncrease);
+		PrintToServer("g_iMinHealthIncrease: %d", g_iMinHealthIncrease);
+		PrintToServer("g_iChanceInfiniteAmmo: %d", g_iChanceInfiniteAmmo);
+		PrintToServer("g_iChanceKillSurvivorMolotov: %d", g_iChanceKillSurvivorMolotov);
+		PrintToServer("g_iChanceDisarmSurvivorMolotov: %d", g_iChanceDisarmSurvivorMolotov);
+		PrintToServer("g_iChanceTimerBombMolotov: %d", g_iChanceTimerBombMolotov);
+		PrintToServer("g_iChanceInfinitePrimaryAmmo: %d", g_iChanceInfinitePrimaryAmmo);
+		PrintToServer("g_iChanceInfiniteMelee: %d", g_iChanceInfiniteMelee);
+		PrintToServer("g_iInfiniteMeeleRange: %d", g_iInfiniteMeeleRange);
+		PrintToServer("g_iChanceKillAllSurvivor: %d", g_iChanceKillAllSurvivor);
+		PrintToServer("g_iChanceKillSingleSurvivor: %d", g_iChanceKillSingleSurvivor);
+		PrintToServer("g_iChanceResetAllSurvivorHealth: %d", g_iChanceResetAllSurvivorHealth);
+		PrintToServer("g_iChanceNewTank: %d", g_iChanceNewTank);
+		PrintToServer("g_iChanceNewWitch: %d", g_iChanceNewWitch);
+		PrintToServer("g_iChanceNoPrize: %d", g_iChanceNoPrize);
+		PrintToServer("g_iChanceReviveAllDead: %d", g_iChanceReviveAllDead);
+		PrintToServer("g_iChanceTimerBomb: %d", g_iChanceTimerBomb);
+		PrintToServer("g_iTimerBombRangeDamage: %d", g_iTimerBombRangeDamage);
+		PrintToServer("g_iTimerBombSecond: %d", g_iTimerBombSecond);
+		PrintToServer("g_fTimerBombRadius: %.2f", g_fTimerBombRadius);
+		PrintToServer("g_iChanceFreezeBomb: %d", g_iChanceFreezeBomb);
+		PrintToServer("g_iFreezeBombDuration: %d", g_iFreezeBombDuration);
+		PrintToServer("g_iFreezeBombCountDown: %d", g_iFreezeBombCountDown);
+		PrintToServer("g_fFreezeBombRadius: %.2f", g_fFreezeBombRadius);
+		PrintToServer("g_iDrugAllSurvivorChance: %d", g_iChanceDrugAllSurvivor);
+		PrintToServer("g_iDrugAllSurvivorDuration: %d", g_iDrugAllSurvivorDuration);
+		PrintToServer("g_iDrugLuckySurvivorChance: %d", g_iChanceDrugLuckySurvivor);
+		PrintToServer("g_iDrugLuckySurvivorDuration: %d", g_iDrugLuckySurvivorDuration);
+		PrintToServer("==============================");
+	}
 }
