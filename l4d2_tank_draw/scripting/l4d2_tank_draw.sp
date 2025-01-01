@@ -464,8 +464,35 @@ void SetConVar()
 	g_iFreezeBombDuration		     = FreezeBombDuration.IntValue;
 	g_iFreezeBombCountDown		     = FreezeBombCountDown.IntValue;
 	g_fFreezeBombRadius		     = FreezeBombRadius.FloatValue;
-	g_iDrugAllSurvivorChance	     = DrugAllSurvivorChance.IntValue;
+	g_iChanceDrugAllSurvivor	     = DrugAllSurvivorChance.IntValue;
 	g_iDrugAllSurvivorDuration	     = DrugAllSurvivorDuration.IntValue;
-	g_iDrugLuckySurvivorChance	     = DrugLuckySurvivorChance.IntValue;
+	g_iChanceDrugLuckySurvivor	     = DrugLuckySurvivorChance.IntValue;
 	g_iDrugLuckySurvivorDuration	     = DrugLuckySurvivorDuration.IntValue;
+
+	// Add all the g_iChance*** variables to the total
+	g_iTotalChance += g_iChanceAverageHealth;
+	g_iTotalChance += g_iChanceClearAllSurvivorHealth;
+	g_iTotalChance += g_iChanceDecreaseHealth;
+	g_iTotalChance += g_iChanceDisarmAllSurvivor;
+	g_iTotalChance += g_iChanceDisarmSingleSurvivor;
+	g_iTotalChance += g_iChanceDisableGlow;
+	g_iTotalChance += g_iChanceIncreaseGravity;
+	g_iTotalChance += g_iChanceMoonGravityOneLimitedTime;
+	g_iTotalChance += g_iChanceLimitedTimeWorldMoonGravity;
+	g_iTotalChance += g_iChanceWorldMoonGravityToggle;
+	g_iTotalChance += g_iChanceIncreaseHealth;
+	g_iTotalChance += g_iChanceInfiniteAmmo;
+	g_iTotalChance += g_iChanceInfinitePrimaryAmmo;
+	g_iTotalChance += g_iChanceInfiniteMelee;
+	g_iTotalChance += g_iChanceKillAllSurvivor;
+	g_iTotalChance += g_iChanceKillSingleSurvivor;
+	g_iTotalChance += g_iChanceResetAllSurvivorHealth;
+	g_iTotalChance += g_iChanceNewTank;
+	g_iTotalChance += g_iChanceNewWitch;
+	g_iTotalChance += g_iChanceNoPrize;
+	g_iTotalChance += g_iChanceReviveAllDead;
+	g_iTotalChance += g_iChanceTimerBomb;
+	g_iTotalChance += g_iChanceFreezeBomb;
+	g_iTotalChance += g_iChanceDrugAllSurvivor;
+	g_iTotalChance += g_iChanceDrugLuckySurvivor;
 }

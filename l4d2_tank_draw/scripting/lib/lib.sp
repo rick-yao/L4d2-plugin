@@ -1,4 +1,5 @@
 int
+	g_iTotalChance,
 	g_iClearBuffIfMissionLost,
 	g_iChanceAverageHealth,
 	g_iChanceClearAllSurvivorHealth,
@@ -40,9 +41,9 @@ int
 	g_iChanceFreezeBomb,
 	g_iFreezeBombDuration,
 	g_iFreezeBombCountDown,
-	g_iDrugAllSurvivorChance,
+	g_iChanceDrugAllSurvivor,
 	g_iDrugAllSurvivorDuration,
-	g_iDrugLuckySurvivorChance,
+	g_iChanceDrugLuckySurvivor,
 	g_iDrugLuckySurvivorDuration,
 
 	g_iGlowDisabled;
