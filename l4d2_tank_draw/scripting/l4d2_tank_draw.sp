@@ -470,6 +470,7 @@ void SetConVar()
 	g_iDrugLuckySurvivorDuration	     = DrugLuckySurvivorDuration.IntValue;
 
 	// Add all the g_iChance*** variables to the total
+	g_iTotalChance			     = 0;
 	g_iTotalChance += g_iChanceAverageHealth;
 	g_iTotalChance += g_iChanceClearAllSurvivorHealth;
 	g_iTotalChance += g_iChanceDecreaseHealth;
