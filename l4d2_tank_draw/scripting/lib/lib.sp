@@ -1,5 +1,56 @@
-int g_iClearBuffIfMissionLost;
+int
+	g_iClearBuffIfMissionLost,
+	g_iChanceAverageHealth,
+	g_iChanceClearAllSurvivorHealth,
+	g_iL4D2TankDrawDebugMode,
+	g_iChanceDecreaseHealth,
+	g_iMaxHealthDecrease,
+	g_iMinHealthDecrease,
+	g_iChanceDisarmAllSurvivor,
+	g_iChanceDisarmSingleSurvivor,
+	g_iTankDrawEnable,
+	g_iChanceDisableGlow,
+	g_iChanceIncreaseGravity,
+	g_iChanceMoonGravityOneLimitedTime,
+	g_iLimitedTimeWorldMoonGravityOne,
+	g_iWorldMoonGravity,
+	g_iChanceLimitedTimeWorldMoonGravity,
+	g_iLimitedTimeWorldMoonGravityTimer,
+	g_iChanceWorldMoonGravityToggle,
+	g_iChanceIncreaseHealth,
+	g_iMaxHealthIncrease,
+	g_iMinHealthIncrease,
+	g_iChanceInfiniteAmmo,
+	g_iChanceKillSurvivorMolotov,
+	g_iChanceDisarmSurvivorMolotov,
+	g_iChanceTimerBombMolotov,
+	g_iChanceInfinitePrimaryAmmo,
+	g_iChanceInfiniteMelee,
+	g_iInfiniteMeeleRange,
+	g_iChanceKillAllSurvivor,
+	g_iChanceKillSingleSurvivor,
+	g_iChanceResetAllSurvivorHealth,
+	g_iChanceNewTank,
+	g_iChanceNewWitch,
+	g_iChanceNoPrize,
+	g_iChanceReviveAllDead,
+	g_iChanceTimerBomb,
+	g_iTimerBombRangeDamage,
+	g_iTimerBombSecond,
+	g_iChanceFreezeBomb,
+	g_iFreezeBombDuration,
+	g_iFreezeBombCountDown,
+	g_iDrugAllSurvivorChance,
+	g_iDrugAllSurvivorDuration,
+	g_iDrugLuckySurvivorChance,
+	g_iDrugLuckySurvivorDuration;
 
+float
+	g_fTimerBombRadius,
+	g_fFreezeBombRadius,
+	g_fSingleMoonGravity,
+	g_fIncreasedGravity,
+	g_fDrugAngles[20] = { 0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 20.0, 15.0, 10.0, 5.0, 0.0, -5.0, -10.0, -15.0, -20.0, -25.0, -20.0, -15.0, -10.0, -5.0 };
 // built-in convar
 ConVar
 	g_hInfiniteAmmo,
@@ -71,7 +122,6 @@ Handle g_WorldGravityTimer;
 
 Handle g_hDrugTimers[MAXPLAYERS + 1];
 int    g_iDrugTicks[MAXPLAYERS + 1];
-float  g_fDrugAngles[20] = { 0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 20.0, 15.0, 10.0, 5.0, 0.0, -5.0, -10.0, -15.0, -20.0, -25.0, -20.0, -15.0, -10.0, -5.0 };
 
 Handle g_hTimeBombTimer[MAXPLAYERS + 1];
 int    g_iTimeBombTicks[MAXPLAYERS + 1];

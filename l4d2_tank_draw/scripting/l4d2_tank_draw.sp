@@ -419,5 +419,53 @@ void ConVarChanged(Handle convar, const char[] oldValue, const char[] newValue)
 
 void SetConVar()
 {
-	g_iClearBuffIfMissionLost = ClearBuffIfMissionLost.IntValue;
+	g_iClearBuffIfMissionLost	     = ClearBuffIfMissionLost.IntValue;
+	g_iChanceAverageHealth		     = ChanceAverageHealth.IntValue;
+	g_iChanceClearAllSurvivorHealth	     = ChanceClearAllSurvivorHealth.IntValue;
+	g_iL4D2TankDrawDebugMode	     = L4D2TankDrawDebugMode.IntValue;
+	g_iChanceDecreaseHealth		     = ChanceDecreaseHealth.IntValue;
+	g_iMaxHealthDecrease		     = MaxHealthDecrease.IntValue;
+	g_iMinHealthDecrease		     = MinHealthDecrease.IntValue;
+	g_iChanceDisarmAllSurvivor	     = ChanceDisarmAllSurvivor.IntValue;
+	g_iChanceDisarmSingleSurvivor	     = ChanceDisarmSingleSurvivor.IntValue;
+	g_iTankDrawEnable		     = TankDrawEnable.IntValue;
+	g_iChanceDisableGlow		     = ChanceDisableGlow.IntValue;
+	g_iChanceIncreaseGravity	     = ChanceIncreaseGravity.IntValue;
+	g_fIncreasedGravity		     = IncreasedGravity.FloatValue;
+	g_iChanceMoonGravityOneLimitedTime   = ChanceMoonGravityOneLimitedTime.IntValue;
+	g_fSingleMoonGravity		     = SingleMoonGravity.FloatValue;
+	g_iLimitedTimeWorldMoonGravityOne    = LimitedTimeWorldMoonGravityOne.IntValue;
+	g_iWorldMoonGravity		     = WorldMoonGravity.IntValue;
+	g_iChanceLimitedTimeWorldMoonGravity = ChanceLimitedTimeWorldMoonGravity.IntValue;
+	g_iLimitedTimeWorldMoonGravityTimer  = LimitedTimeWorldMoonGravityTimer.IntValue;
+	g_iChanceWorldMoonGravityToggle	     = ChanceWorldMoonGravityToggle.IntValue;
+	g_iChanceIncreaseHealth		     = ChanceIncreaseHealth.IntValue;
+	g_iMaxHealthIncrease		     = MaxHealthIncrease.IntValue;
+	g_iMinHealthIncrease		     = MinHealthIncrease.IntValue;
+	g_iChanceInfiniteAmmo		     = ChanceInfiniteAmmo.IntValue;
+	g_iChanceKillSurvivorMolotov	     = ChanceKillSurvivorMolotov.IntValue;
+	g_iChanceDisarmSurvivorMolotov	     = ChanceDisarmSurvivorMolotov.IntValue;
+	g_iChanceTimerBombMolotov	     = ChanceTimerBombMolotov.IntValue;
+	g_iChanceInfinitePrimaryAmmo	     = ChanceInfinitePrimaryAmmo.IntValue;
+	g_iChanceInfiniteMelee		     = ChanceInfiniteMelee.IntValue;
+	g_iInfiniteMeeleRange		     = InfiniteMeeleRange.IntValue;
+	g_iChanceKillAllSurvivor	     = ChanceKillAllSurvivor.IntValue;
+	g_iChanceKillSingleSurvivor	     = ChanceKillSingleSurvivor.IntValue;
+	g_iChanceResetAllSurvivorHealth	     = ChanceResetAllSurvivorHealth.IntValue;
+	g_iChanceNewTank		     = ChanceNewTank.IntValue;
+	g_iChanceNewWitch		     = ChanceNewWitch.IntValue;
+	g_iChanceNoPrize		     = ChanceNoPrize.IntValue;
+	g_iChanceReviveAllDead		     = ChanceReviveAllDead.IntValue;
+	g_iChanceTimerBomb		     = ChanceTimerBomb.IntValue;
+	g_iTimerBombRangeDamage		     = TimerBombRangeDamage.IntValue;
+	g_iTimerBombSecond		     = TimerBombSecond.IntValue;
+	g_fTimerBombRadius		     = TimerBombRadius.FloatValue;
+	g_iChanceFreezeBomb		     = ChanceFreezeBomb.IntValue;
+	g_iFreezeBombDuration		     = FreezeBombDuration.IntValue;
+	g_iFreezeBombCountDown		     = FreezeBombCountDown.IntValue;
+	g_fFreezeBombRadius		     = FreezeBombRadius.FloatValue;
+	g_iDrugAllSurvivorChance	     = DrugAllSurvivorChance.IntValue;
+	g_iDrugAllSurvivorDuration	     = DrugAllSurvivorDuration.IntValue;
+	g_iDrugLuckySurvivorChance	     = DrugLuckySurvivorChance.IntValue;
+	g_iDrugLuckySurvivorDuration	     = DrugLuckySurvivorDuration.IntValue;
 }
