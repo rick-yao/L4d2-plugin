@@ -3,6 +3,9 @@
  * @repository https://github.com/rick-yao/L4d2-plugin
  *
  * Changelog
+ * v3.0.0 - 2025-01-01
+ * - HookConVarChange for all ConVars
+ *
  * v2.10.0 - 2024-12-26
  * - add drug survivor
  *
@@ -54,7 +57,7 @@
 #include "lib/lucky_draw.sp"
 #include "lib/drug.sp"
 
-#define PLUGIN_VERSION "2.10.0"
+#define PLUGIN_VERSION "3.0.0"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
 #define COMMAND_FILTER COMMAND_FILTER_CONNECTED | COMMAND_FILTER_NO_BOTS
 
