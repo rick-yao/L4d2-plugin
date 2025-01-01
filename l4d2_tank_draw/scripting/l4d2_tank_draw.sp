@@ -78,7 +78,7 @@ public void OnPluginStart()
 
 	ChanceClearAllSurvivorHealth	  = CreateConVar("l4d2_tank_draw_clear_all_survivor_health_chance", "0", "清空所有人血量概率(将所有站立状态幸存者实际血量变成1，清空临时血量) \nProbability of setting all standing survivors' actual health to 1 and clearing temporary health", FCVAR_NONE);
 
-	L4D2TankDrawDebugMode		  = CreateConVar("l4d2_tank_draw_debug_mode", "0", "是否开启调试模式，修改后tank被任意武器击杀即可抽奖，使用!x开启击杀tank菜单 \nEnable debug mode. When enabled, any weapon killing a tank triggers a draw. Use !x to open the kill tank menu", false, false);
+	L4D2TankDrawDebugMode		  = CreateConVar("l4d2_tank_draw_debug_mode", "0", "是否开启调试模式，修改后tank被任意武器击杀即可抽奖，使用!tankdraw开启击杀tank菜单 \nEnable debug mode. When enabled, any weapon killing a tank triggers a draw. Use !tankdraw to open the kill tank menu", false, false);
 
 	ChanceDecreaseHealth		  = CreateConVar("l4d2_tank_draw_decrease_health_chance", "0", "抽奖受到伤害的概率(伤害超过血量时，将血量设置为1而不是倒地) \nProbability of taking damage. If damage exceeds health, health is set to 1 instead of incapacitation", FCVAR_NONE);
 	MaxHealthDecrease		  = CreateConVar("l4d2_tank_draw_decrease_health_max", "500", "抽奖受到伤害的最大值 \nMaximum damage value received during the draw", false, false);
@@ -218,7 +218,7 @@ public void OnPluginStart()
 	if (g_iL4D2TankDrawDebugMode == 1)
 	{
 		PrintToServer("调试菜单打开 / debug menu on");
-		RegConsoleCmd("sm_x", MenuFunc_MainMenu, "打开调试菜单 / open debug menu");
+		RegAdminCmd("sm_tankdraw", MenuFunc_MainMenu, ADMFLAG_CHEATS);
 	}
 }
 
