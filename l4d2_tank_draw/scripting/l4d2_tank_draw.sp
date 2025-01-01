@@ -142,6 +142,9 @@ public void OnPluginStart()
 	DrugLuckySurvivorChance		  = CreateConVar("l4d2_tank_draw_drug_lucky_survivor_chance", "0", "幸运玩家中毒概率 \nProbability of drug luck drawer.", FCVAR_NONE);
 	DrugLuckySurvivorDuration	  = CreateConVar("l4d2_tank_draw_drug_lucky_survivor_duration", "30", "幸运玩家中毒秒数 \nDuration of drug luck drawer.", FCVAR_NONE);
 
+	ClearBuffIfMissionLost		  = CreateConVar("l4d2_tank_draw_clear_buff_if_mission_lost", "0", "关卡失败时清除buff[1=是|0=否] \nClear buff if mission lost[1=yes|0=no].", FCVAR_NONE);
+	HookConVarChange(ClearBuffIfMissionLost, ConVarChanged);
+
 	AutoExecConfig(true, "l4d2_tank_draw");
 
 	PrintToServer("[Tank Draw] Plugin loaded");
@@ -157,6 +160,8 @@ public void OnPluginStart()
 	HookEvent("finale_vehicle_leaving", Event_RoundEnd, EventHookMode_Pre);
 	HookEvent("map_transition", Event_RoundEnd, EventHookMode_Pre);
 	HookEvent("finale_win", Event_RoundEnd, EventHookMode_Pre);
+
+	SetConVar();
 
 	if (L4D2TankDrawDebugMode.IntValue == 1)
 	{
@@ -349,5 +354,21 @@ public Action Event_Lost(Event event, const char[] name, bool dontBroadcast)
 
 	KillAllSingleGravityTimer();
 
+	if (g_iClearBuffIfMissionLost == 1)
+	{
+		ResetAllTimer();
+		ResetAllValue();
+	}
+
 	return Plugin_Continue;
+}
+
+void ConVarChanged(Handle convar, const char[] oldValue, const char[] newValue)
+{
+	SetConVar();
+}
+
+void SetConVar()
+{
+	g_iClearBuffIfMissionLost = ClearBuffIfMissionLost.IntValue;
 }

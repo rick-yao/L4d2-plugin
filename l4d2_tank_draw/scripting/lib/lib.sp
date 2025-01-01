@@ -1,3 +1,5 @@
+int g_iClearBuffIfMissionLost;
+
 // built-in convar
 ConVar
 	g_hInfiniteAmmo,
@@ -61,7 +63,8 @@ ConVar
 	DrugAllSurvivorChance,
 	DrugAllSurvivorDuration,
 	DrugLuckySurvivorChance,
-	DrugLuckySurvivorDuration;
+	DrugLuckySurvivorDuration,
+	ClearBuffIfMissionLost;
 
 Handle g_SingleGravityTimer[MAXPLAYERS + 1];
 Handle g_WorldGravityTimer;
