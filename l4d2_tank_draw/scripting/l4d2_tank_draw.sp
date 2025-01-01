@@ -3,6 +3,9 @@
  * @repository https://github.com/rick-yao/L4d2-plugin
  *
  * Changelog
+ * v3.0.0 - 2025-01-01
+ * - HookConVarChange for all ConVars
+ *
  * v2.10.0 - 2024-12-26
  * - add drug survivor
  *
@@ -54,7 +57,7 @@
 #include "lib/lucky_draw.sp"
 #include "lib/drug.sp"
 
-#define PLUGIN_VERSION "2.10.0"
+#define PLUGIN_VERSION "3.0.0"
 #define PLUGIN_FLAG    FCVAR_SPONLY | FCVAR_NOTIFY
 #define COMMAND_FILTER COMMAND_FILTER_CONNECTED | COMMAND_FILTER_NO_BOTS
 
@@ -75,7 +78,7 @@ public void OnPluginStart()
 
 	ChanceClearAllSurvivorHealth	  = CreateConVar("l4d2_tank_draw_clear_all_survivor_health_chance", "0", "清空所有人血量概率(将所有站立状态幸存者实际血量变成1，清空临时血量) \nProbability of setting all standing survivors' actual health to 1 and clearing temporary health", FCVAR_NONE);
 
-	L4D2TankDrawDebugMode		  = CreateConVar("l4d2_tank_draw_debug_mode", "0", "是否开启调试模式，修改后tank被任意武器击杀即可抽奖，使用!x开启击杀tank菜单 \nEnable debug mode. When enabled, any weapon killing a tank triggers a draw. Use !x to open the kill tank menu", false, false);
+	L4D2TankDrawDebugMode		  = CreateConVar("l4d2_tank_draw_debug_mode", "0", "是否开启调试模式，修改后tank被任意武器击杀即可抽奖，使用!tankdraw开启击杀tank菜单 \nEnable debug mode. When enabled, any weapon killing a tank triggers a draw. Use !tankdraw to open the kill tank menu", false, false);
 
 	ChanceDecreaseHealth		  = CreateConVar("l4d2_tank_draw_decrease_health_chance", "0", "抽奖受到伤害的概率(伤害超过血量时，将血量设置为1而不是倒地) \nProbability of taking damage. If damage exceeds health, health is set to 1 instead of incapacitation", FCVAR_NONE);
 	MaxHealthDecrease		  = CreateConVar("l4d2_tank_draw_decrease_health_max", "500", "抽奖受到伤害的最大值 \nMaximum damage value received during the draw", false, false);
@@ -143,12 +146,6 @@ public void OnPluginStart()
 	DrugLuckySurvivorDuration	  = CreateConVar("l4d2_tank_draw_drug_lucky_survivor_duration", "30", "幸运玩家中毒秒数 \nDuration of drug luck drawer.", FCVAR_NONE);
 
 	ClearBuffIfMissionLost		  = CreateConVar("l4d2_tank_draw_clear_buff_if_mission_lost", "0", "关卡失败时清除buff[1=是|0=否] \nClear buff if mission lost[1=yes|0=no].", FCVAR_NONE);
-	HookConVarChange(ClearBuffIfMissionLost, ConVarChanged);
-
-	AutoExecConfig(true, "l4d2_tank_draw");
-
-	PrintToServer("[Tank Draw] Plugin loaded");
-	PrintToServer("[Tank Draw] debug mode: %d", L4D2TankDrawDebugMode.IntValue);
 
 	HookEvent("player_incapacitated", Event_PlayerIncapacitated);
 
@@ -161,18 +158,66 @@ public void OnPluginStart()
 	HookEvent("map_transition", Event_RoundEnd, EventHookMode_Pre);
 	HookEvent("finale_win", Event_RoundEnd, EventHookMode_Pre);
 
+	HookConVarChange(ClearBuffIfMissionLost, ConVarChanged);
+	HookConVarChange(ChanceAverageHealth, ConVarChanged);
+	HookConVarChange(ChanceClearAllSurvivorHealth, ConVarChanged);
+	HookConVarChange(L4D2TankDrawDebugMode, ConVarChanged);
+	HookConVarChange(ChanceDecreaseHealth, ConVarChanged);
+	HookConVarChange(MaxHealthDecrease, ConVarChanged);
+	HookConVarChange(MinHealthDecrease, ConVarChanged);
+	HookConVarChange(ChanceDisarmAllSurvivor, ConVarChanged);
+	HookConVarChange(ChanceDisarmSingleSurvivor, ConVarChanged);
+	HookConVarChange(TankDrawEnable, ConVarChanged);
+	HookConVarChange(ChanceDisableGlow, ConVarChanged);
+	HookConVarChange(ChanceIncreaseGravity, ConVarChanged);
+	HookConVarChange(IncreasedGravity, ConVarChanged);
+	HookConVarChange(ChanceMoonGravityOneLimitedTime, ConVarChanged);
+	HookConVarChange(SingleMoonGravity, ConVarChanged);
+	HookConVarChange(LimitedTimeWorldMoonGravityOne, ConVarChanged);
+	HookConVarChange(WorldMoonGravity, ConVarChanged);
+	HookConVarChange(ChanceLimitedTimeWorldMoonGravity, ConVarChanged);
+	HookConVarChange(LimitedTimeWorldMoonGravityTimer, ConVarChanged);
+	HookConVarChange(ChanceWorldMoonGravityToggle, ConVarChanged);
+	HookConVarChange(ChanceIncreaseHealth, ConVarChanged);
+	HookConVarChange(MaxHealthIncrease, ConVarChanged);
+	HookConVarChange(MinHealthIncrease, ConVarChanged);
+	HookConVarChange(ChanceInfiniteAmmo, ConVarChanged);
+	HookConVarChange(ChanceKillSurvivorMolotov, ConVarChanged);
+	HookConVarChange(ChanceDisarmSurvivorMolotov, ConVarChanged);
+	HookConVarChange(ChanceTimerBombMolotov, ConVarChanged);
+	HookConVarChange(ChanceInfinitePrimaryAmmo, ConVarChanged);
+	HookConVarChange(ChanceInfiniteMelee, ConVarChanged);
+	HookConVarChange(InfiniteMeeleRange, ConVarChanged);
+	HookConVarChange(ChanceKillAllSurvivor, ConVarChanged);
+	HookConVarChange(ChanceKillSingleSurvivor, ConVarChanged);
+	HookConVarChange(ChanceResetAllSurvivorHealth, ConVarChanged);
+	HookConVarChange(ChanceNewTank, ConVarChanged);
+	HookConVarChange(ChanceNewWitch, ConVarChanged);
+	HookConVarChange(ChanceNoPrize, ConVarChanged);
+	HookConVarChange(ChanceReviveAllDead, ConVarChanged);
+	HookConVarChange(ChanceTimerBomb, ConVarChanged);
+	HookConVarChange(TimerBombRangeDamage, ConVarChanged);
+	HookConVarChange(TimerBombSecond, ConVarChanged);
+	HookConVarChange(TimerBombRadius, ConVarChanged);
+	HookConVarChange(ChanceFreezeBomb, ConVarChanged);
+	HookConVarChange(FreezeBombDuration, ConVarChanged);
+	HookConVarChange(FreezeBombCountDown, ConVarChanged);
+	HookConVarChange(FreezeBombRadius, ConVarChanged);
+	HookConVarChange(DrugAllSurvivorChance, ConVarChanged);
+	HookConVarChange(DrugAllSurvivorDuration, ConVarChanged);
+	HookConVarChange(DrugLuckySurvivorChance, ConVarChanged);
+	HookConVarChange(DrugLuckySurvivorDuration, ConVarChanged);
+
+	AutoExecConfig(true, "l4d2_tank_draw");
+
 	SetConVar();
 
-	if (L4D2TankDrawDebugMode.IntValue == 1)
-	{
-		PrintToServer("调试菜单打开 / debug menu on");
-		RegConsoleCmd("sm_x", MenuFunc_MainMenu, "打开调试菜单 / open debug menu");
-	}
+	PrintToServer("[Tank Draw] Plugin loaded");
 }
 
 public Action Event_PlayerIncapacitated(Event event, const char[] name, bool dontBroadcast)
 {
-	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
+	if (g_iTankDrawEnable == 0) { return Plugin_Continue; }
 	PrintToServer("[Tank Draw] Event_PlayerIncapacitated triggered.");
 
 	// Check if the victim is a Tank
@@ -186,7 +231,7 @@ public Action Event_PlayerIncapacitated(Event event, const char[] name, bool don
 	// if the victim is a tank, check if the weapon is a melee weapon
 	char weapon[64];
 	event.GetString("weapon", weapon, sizeof(weapon));
-	if (StrEqual(weapon, "melee", false) || L4D2TankDrawDebugMode.IntValue == 1)
+	if (StrEqual(weapon, "melee", false) || g_iL4D2TankDrawDebugMode == 1)
 	{
 		// check if the attacker is an alive client
 		int attacker = GetClientOfUserId(event.GetInt("attacker"));
@@ -234,7 +279,7 @@ public Action Event_PlayerIncapacitated(Event event, const char[] name, bool don
 // reset value when player died
 public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast)
 {
-	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
+	if (g_iTankDrawEnable == 0) { return Plugin_Continue; }
 	PrintToServer("[Tank Draw] Event_PlayerDeath triggered.");
 
 	int victim = GetClientOfUserId(event.GetInt("userid"));
@@ -251,7 +296,7 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 // reset value when player disconnect
 public void OnClientDisconnect(int client)
 {
-	if (TankDrawEnable.IntValue == 0) { return; }
+	if (g_iTankDrawEnable == 0) { return; }
 	PrintToServer("[Tank Draw] OnClientDisconnect triggered.");
 
 	if (IsValidSurvivor(client))
@@ -271,16 +316,13 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 	g_hInfiniteAmmo = FindConVar("sv_infinite_ammo");
 	if (g_hInfiniteAmmo.IntValue == 1)
 	{
-		int  random			 = GetRandomInt(1, 100);
-		int  chanceDisarmSurvivorMolotov = ChanceDisarmSurvivorMolotov.IntValue;
-		int  chanceKillSurvivorMolotov	 = ChanceKillSurvivorMolotov.IntValue;
-		int  chanceTimerBombMolotov	 = ChanceTimerBombMolotov.IntValue;
+		int  random   = GetRandomInt(1, 100);
 
-		int  attacker			 = GetClientOfUserId(event.GetInt("userid"));
+		int  attacker = GetClientOfUserId(event.GetInt("userid"));
 		char attackerName[MAX_NAME_LENGTH];
 		GetClientName(attacker, attackerName, sizeof(attackerName));
 
-		if (random <= chanceDisarmSurvivorMolotov)
+		if (random <= g_iChanceDisarmSurvivorMolotov)
 		{
 			L4D_RemoveAllWeapons(attacker);
 
@@ -288,7 +330,7 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 			PrintHintTextToAll("%t", "TankDraw_MolotovDisarmMsg_NoColor", attackerName);
 			return Plugin_Continue;
 		}
-		if (random <= chanceDisarmSurvivorMolotov + chanceKillSurvivorMolotov)
+		if (random <= g_iChanceDisarmSurvivorMolotov + g_iChanceKillSurvivorMolotov)
 		{
 			ForcePlayerSuicide(attacker);
 
@@ -296,7 +338,7 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 			PrintHintTextToAll("%t", "TankDraw_MolotovDeathMsg_NoColor", attackerName);
 			return Plugin_Continue;
 		}
-		if (random <= chanceDisarmSurvivorMolotov + chanceKillSurvivorMolotov + chanceTimerBombMolotov)
+		if (random <= g_iChanceDisarmSurvivorMolotov + g_iChanceKillSurvivorMolotov + g_iChanceTimerBombMolotov)
 		{
 			if (g_hTimeBombTimer[attacker] != null)
 			{
@@ -312,7 +354,7 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 				return Plugin_Continue;
 			}
 			else {
-				SetPlayerTimeBomb(attacker, TimerBombSecond.IntValue, TimerBombRadius.FloatValue, TimerBombRangeDamage.IntValue);
+				SetPlayerTimeBomb(attacker, g_iTimerBombSecond, g_fTimerBombRadius, g_iTimerBombRangeDamage);
 				CheatCommand(attacker, "give", "adrenaline");
 
 				CPrintToChatAll("%t", "TankDraw_TimerBomb_Molotov", attackerName);
@@ -326,7 +368,7 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 
 public void OnMapEnd()
 {
-	if (TankDrawEnable.IntValue == 0) { return; }
+	if (g_iTankDrawEnable == 0) { return; }
 	PrintToServer("[Tank Draw] MapEnd triggered.");
 
 	ResetAllTimer();
@@ -335,7 +377,7 @@ public void OnMapEnd()
 
 public Action Event_RoundEnd(Event event, const char[] name, bool dontBroadcast)
 {
-	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
+	if (g_iTankDrawEnable == 0) { return Plugin_Continue; }
 	PrintToServer("[Tank Draw] Event_RoundEnd triggered.");
 
 	ResetAllTimer();
@@ -346,7 +388,7 @@ public Action Event_RoundEnd(Event event, const char[] name, bool dontBroadcast)
 
 public Action Event_Lost(Event event, const char[] name, bool dontBroadcast)
 {
-	if (TankDrawEnable.IntValue == 0) { return Plugin_Continue; }
+	if (g_iTankDrawEnable == 0) { return Plugin_Continue; }
 	PrintToServer("[Tank Draw] Event_Lost triggered.");
 
 	KillAllTimeBombs();
@@ -365,10 +407,159 @@ public Action Event_Lost(Event event, const char[] name, bool dontBroadcast)
 
 void ConVarChanged(Handle convar, const char[] oldValue, const char[] newValue)
 {
+	if (g_iL4D2TankDrawDebugMode == 1)
+	{
+		// Get the name of the convar
+		char convarName[64];
+		GetConVarName(convar, convarName, sizeof(convarName));
+
+		// Print the convar name, old value, and new value
+		PrintToServer("[Tank Draw] ConVarChanged triggered. ConVar: %s | Old Value: %s | New Value: %s", convarName, oldValue, newValue);
+	}
+
 	SetConVar();
 }
 
 void SetConVar()
 {
-	g_iClearBuffIfMissionLost = ClearBuffIfMissionLost.IntValue;
+	g_fIncreasedGravity		     = IncreasedGravity.FloatValue;
+	g_fSingleMoonGravity		     = SingleMoonGravity.FloatValue;
+	g_fFreezeBombRadius		     = FreezeBombRadius.FloatValue;
+	g_fTimerBombRadius		     = TimerBombRadius.FloatValue;
+	g_iClearBuffIfMissionLost	     = ClearBuffIfMissionLost.IntValue;
+	g_iChanceAverageHealth		     = ChanceAverageHealth.IntValue;
+	g_iChanceClearAllSurvivorHealth	     = ChanceClearAllSurvivorHealth.IntValue;
+	g_iL4D2TankDrawDebugMode	     = L4D2TankDrawDebugMode.IntValue;
+	g_iChanceDecreaseHealth		     = ChanceDecreaseHealth.IntValue;
+	g_iMaxHealthDecrease		     = MaxHealthDecrease.IntValue;
+	g_iMinHealthDecrease		     = MinHealthDecrease.IntValue;
+	g_iChanceDisarmAllSurvivor	     = ChanceDisarmAllSurvivor.IntValue;
+	g_iChanceDisarmSingleSurvivor	     = ChanceDisarmSingleSurvivor.IntValue;
+	g_iTankDrawEnable		     = TankDrawEnable.IntValue;
+	g_iChanceDisableGlow		     = ChanceDisableGlow.IntValue;
+	g_iChanceIncreaseGravity	     = ChanceIncreaseGravity.IntValue;
+	g_iChanceMoonGravityOneLimitedTime   = ChanceMoonGravityOneLimitedTime.IntValue;
+	g_iLimitedTimeWorldMoonGravityOne    = LimitedTimeWorldMoonGravityOne.IntValue;
+	g_iWorldMoonGravity		     = WorldMoonGravity.IntValue;
+	g_iChanceLimitedTimeWorldMoonGravity = ChanceLimitedTimeWorldMoonGravity.IntValue;
+	g_iLimitedTimeWorldMoonGravityTimer  = LimitedTimeWorldMoonGravityTimer.IntValue;
+	g_iChanceWorldMoonGravityToggle	     = ChanceWorldMoonGravityToggle.IntValue;
+	g_iChanceIncreaseHealth		     = ChanceIncreaseHealth.IntValue;
+	g_iMaxHealthIncrease		     = MaxHealthIncrease.IntValue;
+	g_iMinHealthIncrease		     = MinHealthIncrease.IntValue;
+	g_iChanceInfiniteAmmo		     = ChanceInfiniteAmmo.IntValue;
+	g_iChanceKillSurvivorMolotov	     = ChanceKillSurvivorMolotov.IntValue;
+	g_iChanceDisarmSurvivorMolotov	     = ChanceDisarmSurvivorMolotov.IntValue;
+	g_iChanceTimerBombMolotov	     = ChanceTimerBombMolotov.IntValue;
+	g_iChanceInfinitePrimaryAmmo	     = ChanceInfinitePrimaryAmmo.IntValue;
+	g_iChanceInfiniteMelee		     = ChanceInfiniteMelee.IntValue;
+	g_iInfiniteMeeleRange		     = InfiniteMeeleRange.IntValue;
+	g_iChanceKillAllSurvivor	     = ChanceKillAllSurvivor.IntValue;
+	g_iChanceKillSingleSurvivor	     = ChanceKillSingleSurvivor.IntValue;
+	g_iChanceResetAllSurvivorHealth	     = ChanceResetAllSurvivorHealth.IntValue;
+	g_iChanceNewTank		     = ChanceNewTank.IntValue;
+	g_iChanceNewWitch		     = ChanceNewWitch.IntValue;
+	g_iChanceNoPrize		     = ChanceNoPrize.IntValue;
+	g_iChanceReviveAllDead		     = ChanceReviveAllDead.IntValue;
+	g_iChanceTimerBomb		     = ChanceTimerBomb.IntValue;
+	g_iTimerBombRangeDamage		     = TimerBombRangeDamage.IntValue;
+	g_iTimerBombSecond		     = TimerBombSecond.IntValue;
+	g_iChanceFreezeBomb		     = ChanceFreezeBomb.IntValue;
+	g_iFreezeBombDuration		     = FreezeBombDuration.IntValue;
+	g_iFreezeBombCountDown		     = FreezeBombCountDown.IntValue;
+	g_iChanceDrugAllSurvivor	     = DrugAllSurvivorChance.IntValue;
+	g_iDrugAllSurvivorDuration	     = DrugAllSurvivorDuration.IntValue;
+	g_iChanceDrugLuckySurvivor	     = DrugLuckySurvivorChance.IntValue;
+	g_iDrugLuckySurvivorDuration	     = DrugLuckySurvivorDuration.IntValue;
+
+	// Add all the g_iChance*** variables to the total
+	g_iTotalChance			     = 0;
+	g_iTotalChance += g_iChanceAverageHealth;
+	g_iTotalChance += g_iChanceClearAllSurvivorHealth;
+	g_iTotalChance += g_iChanceDecreaseHealth;
+	g_iTotalChance += g_iChanceDisarmAllSurvivor;
+	g_iTotalChance += g_iChanceDisarmSingleSurvivor;
+	g_iTotalChance += g_iChanceDisableGlow;
+	g_iTotalChance += g_iChanceIncreaseGravity;
+	g_iTotalChance += g_iChanceMoonGravityOneLimitedTime;
+	g_iTotalChance += g_iChanceLimitedTimeWorldMoonGravity;
+	g_iTotalChance += g_iChanceWorldMoonGravityToggle;
+	g_iTotalChance += g_iChanceIncreaseHealth;
+	g_iTotalChance += g_iChanceInfiniteAmmo;
+	g_iTotalChance += g_iChanceInfinitePrimaryAmmo;
+	g_iTotalChance += g_iChanceInfiniteMelee;
+	g_iTotalChance += g_iChanceKillAllSurvivor;
+	g_iTotalChance += g_iChanceKillSingleSurvivor;
+	g_iTotalChance += g_iChanceResetAllSurvivorHealth;
+	g_iTotalChance += g_iChanceNewTank;
+	g_iTotalChance += g_iChanceNewWitch;
+	g_iTotalChance += g_iChanceNoPrize;
+	g_iTotalChance += g_iChanceReviveAllDead;
+	g_iTotalChance += g_iChanceTimerBomb;
+	g_iTotalChance += g_iChanceFreezeBomb;
+	g_iTotalChance += g_iChanceDrugAllSurvivor;
+	g_iTotalChance += g_iChanceDrugLuckySurvivor;
+
+	// Debug block: Print all variables if debug mode is enabled
+	if (g_iL4D2TankDrawDebugMode == 1)
+	{
+		PrintToServer("===== Debug ConVar Values =====");
+		PrintToServer("g_iL4D2TankDrawDebugMode: %d", g_iL4D2TankDrawDebugMode);
+		PrintToServer("g_iTotalChance: %d", g_iTotalChance);
+		PrintToServer("g_iClearBuffIfMissionLost: %d", g_iClearBuffIfMissionLost);
+		PrintToServer("g_iChanceAverageHealth: %d", g_iChanceAverageHealth);
+		PrintToServer("g_iChanceClearAllSurvivorHealth: %d", g_iChanceClearAllSurvivorHealth);
+		PrintToServer("g_iChanceDecreaseHealth: %d", g_iChanceDecreaseHealth);
+		PrintToServer("g_iMaxHealthDecrease: %d", g_iMaxHealthDecrease);
+		PrintToServer("g_iMinHealthDecrease: %d", g_iMinHealthDecrease);
+		PrintToServer("g_iChanceDisarmAllSurvivor: %d", g_iChanceDisarmAllSurvivor);
+		PrintToServer("g_iChanceDisarmSingleSurvivor: %d", g_iChanceDisarmSingleSurvivor);
+		PrintToServer("g_iTankDrawEnable: %d", g_iTankDrawEnable);
+		PrintToServer("g_iChanceDisableGlow: %d", g_iChanceDisableGlow);
+		PrintToServer("g_iChanceIncreaseGravity: %d", g_iChanceIncreaseGravity);
+		PrintToServer("g_fIncreasedGravity: %.1f", g_fIncreasedGravity);
+		PrintToServer("g_iChanceMoonGravityOneLimitedTime: %d", g_iChanceMoonGravityOneLimitedTime);
+		PrintToServer("g_fSingleMoonGravity: %.1f", g_fSingleMoonGravity);
+		PrintToServer("g_iLimitedTimeWorldMoonGravityOne: %d", g_iLimitedTimeWorldMoonGravityOne);
+		PrintToServer("g_iWorldMoonGravity: %d", g_iWorldMoonGravity);
+		PrintToServer("g_iChanceLimitedTimeWorldMoonGravity: %d", g_iChanceLimitedTimeWorldMoonGravity);
+		PrintToServer("g_iLimitedTimeWorldMoonGravityTimer: %d", g_iLimitedTimeWorldMoonGravityTimer);
+		PrintToServer("g_iChanceWorldMoonGravityToggle: %d", g_iChanceWorldMoonGravityToggle);
+		PrintToServer("g_iChanceIncreaseHealth: %d", g_iChanceIncreaseHealth);
+		PrintToServer("g_iMaxHealthIncrease: %d", g_iMaxHealthIncrease);
+		PrintToServer("g_iMinHealthIncrease: %d", g_iMinHealthIncrease);
+		PrintToServer("g_iChanceInfiniteAmmo: %d", g_iChanceInfiniteAmmo);
+		PrintToServer("g_iChanceKillSurvivorMolotov: %d", g_iChanceKillSurvivorMolotov);
+		PrintToServer("g_iChanceDisarmSurvivorMolotov: %d", g_iChanceDisarmSurvivorMolotov);
+		PrintToServer("g_iChanceTimerBombMolotov: %d", g_iChanceTimerBombMolotov);
+		PrintToServer("g_iChanceInfinitePrimaryAmmo: %d", g_iChanceInfinitePrimaryAmmo);
+		PrintToServer("g_iChanceInfiniteMelee: %d", g_iChanceInfiniteMelee);
+		PrintToServer("g_iInfiniteMeeleRange: %d", g_iInfiniteMeeleRange);
+		PrintToServer("g_iChanceKillAllSurvivor: %d", g_iChanceKillAllSurvivor);
+		PrintToServer("g_iChanceKillSingleSurvivor: %d", g_iChanceKillSingleSurvivor);
+		PrintToServer("g_iChanceResetAllSurvivorHealth: %d", g_iChanceResetAllSurvivorHealth);
+		PrintToServer("g_iChanceNewTank: %d", g_iChanceNewTank);
+		PrintToServer("g_iChanceNewWitch: %d", g_iChanceNewWitch);
+		PrintToServer("g_iChanceNoPrize: %d", g_iChanceNoPrize);
+		PrintToServer("g_iChanceReviveAllDead: %d", g_iChanceReviveAllDead);
+		PrintToServer("g_iChanceTimerBomb: %d", g_iChanceTimerBomb);
+		PrintToServer("g_iTimerBombRangeDamage: %d", g_iTimerBombRangeDamage);
+		PrintToServer("g_iTimerBombSecond: %d", g_iTimerBombSecond);
+		PrintToServer("g_fTimerBombRadius: %.1f", g_fTimerBombRadius);
+		PrintToServer("g_iChanceFreezeBomb: %d", g_iChanceFreezeBomb);
+		PrintToServer("g_iFreezeBombDuration: %d", g_iFreezeBombDuration);
+		PrintToServer("g_iFreezeBombCountDown: %d", g_iFreezeBombCountDown);
+		PrintToServer("g_fFreezeBombRadius: %.1f", g_fFreezeBombRadius);
+		PrintToServer("g_iDrugAllSurvivorChance: %d", g_iChanceDrugAllSurvivor);
+		PrintToServer("g_iDrugAllSurvivorDuration: %d", g_iDrugAllSurvivorDuration);
+		PrintToServer("g_iDrugLuckySurvivorChance: %d", g_iChanceDrugLuckySurvivor);
+		PrintToServer("g_iDrugLuckySurvivorDuration: %d", g_iDrugLuckySurvivorDuration);
+		PrintToServer("==============================");
+	}
+
+	if (g_iL4D2TankDrawDebugMode == 1)
+	{
+		PrintToServer("调试菜单打开 / debug menu on");
+		RegAdminCmd("sm_tankdraw", MenuFunc_MainMenu, ADMFLAG_CHEATS);
+	}
 }

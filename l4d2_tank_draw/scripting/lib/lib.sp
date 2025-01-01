@@ -1,11 +1,65 @@
-int g_iClearBuffIfMissionLost;
+int
+	g_iTotalChance,
+	g_iClearBuffIfMissionLost,
+	g_iChanceAverageHealth,
+	g_iChanceClearAllSurvivorHealth,
+	g_iL4D2TankDrawDebugMode,
+	g_iChanceDecreaseHealth,
+	g_iMaxHealthDecrease,
+	g_iMinHealthDecrease,
+	g_iChanceDisarmAllSurvivor,
+	g_iChanceDisarmSingleSurvivor,
+	g_iTankDrawEnable,
+	g_iChanceDisableGlow,
+	g_iChanceIncreaseGravity,
+	g_iChanceMoonGravityOneLimitedTime,
+	g_iLimitedTimeWorldMoonGravityOne,
+	g_iWorldMoonGravity,
+	g_iChanceLimitedTimeWorldMoonGravity,
+	g_iLimitedTimeWorldMoonGravityTimer,
+	g_iChanceWorldMoonGravityToggle,
+	g_iChanceIncreaseHealth,
+	g_iMaxHealthIncrease,
+	g_iMinHealthIncrease,
+	g_iChanceInfiniteAmmo,
+	g_iChanceKillSurvivorMolotov,
+	g_iChanceDisarmSurvivorMolotov,
+	g_iChanceTimerBombMolotov,
+	g_iChanceInfinitePrimaryAmmo,
+	g_iChanceInfiniteMelee,
+	g_iInfiniteMeeleRange,
+	g_iChanceKillAllSurvivor,
+	g_iChanceKillSingleSurvivor,
+	g_iChanceResetAllSurvivorHealth,
+	g_iChanceNewTank,
+	g_iChanceNewWitch,
+	g_iChanceNoPrize,
+	g_iChanceReviveAllDead,
+	g_iChanceTimerBomb,
+	g_iTimerBombRangeDamage,
+	g_iTimerBombSecond,
+	g_iChanceFreezeBomb,
+	g_iFreezeBombDuration,
+	g_iFreezeBombCountDown,
+	g_iChanceDrugAllSurvivor,
+	g_iDrugAllSurvivorDuration,
+	g_iChanceDrugLuckySurvivor,
+	g_iDrugLuckySurvivorDuration,
 
+	g_iGlowDisabled;
+
+float
+	g_fTimerBombRadius,
+	g_fFreezeBombRadius,
+	g_fSingleMoonGravity,
+	g_fIncreasedGravity,
+	g_fDrugAngles[20] = { 0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 20.0, 15.0, 10.0, 5.0, 0.0, -5.0, -10.0, -15.0, -20.0, -25.0, -20.0, -15.0, -10.0, -5.0 };
 // built-in convar
 ConVar
 	g_hInfiniteAmmo,
 	g_hInfinitePrimaryAmmo,
-	g_MeleeRange,
-	g_WorldGravity;
+	g_hMeleeRange,
+	g_hWorldGravity;
 
 // Custom ConVars for the plugin
 ConVar
@@ -71,7 +125,6 @@ Handle g_WorldGravityTimer;
 
 Handle g_hDrugTimers[MAXPLAYERS + 1];
 int    g_iDrugTicks[MAXPLAYERS + 1];
-float  g_fDrugAngles[20] = { 0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 20.0, 15.0, 10.0, 5.0, 0.0, -5.0, -10.0, -15.0, -20.0, -25.0, -20.0, -15.0, -10.0, -5.0 };
 
 Handle g_hTimeBombTimer[MAXPLAYERS + 1];
 int    g_iTimeBombTicks[MAXPLAYERS + 1];
@@ -79,8 +132,6 @@ int    g_iTimeBombTicks[MAXPLAYERS + 1];
 Handle g_hFreezeBombTimer[MAXPLAYERS + 1];
 Handle g_hUnfreezeTimer[MAXPLAYERS + 1];
 int    g_iFreezeBombTicks[MAXPLAYERS + 1];
-
-int    g_GlowDisabled = 0;
 
 #define REPEAT_TIMER	TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE
 #define NO_REPEAT_TIMER TIMER_FLAG_NO_MAPCHANGE
@@ -112,13 +163,13 @@ stock void ResetAllValue()
 	g_hInfinitePrimaryAmmo = FindConVar("sv_infinite_primary_ammo");
 	g_hInfinitePrimaryAmmo.RestoreDefault();
 
-	g_MeleeRange = FindConVar("melee_range");
-	g_MeleeRange.RestoreDefault();
+	g_hMeleeRange = FindConVar("melee_range");
+	g_hMeleeRange.RestoreDefault();
 
-	g_WorldGravity = FindConVar("sv_gravity");
-	g_WorldGravity.RestoreDefault();
+	g_hWorldGravity = FindConVar("sv_gravity");
+	g_hWorldGravity.RestoreDefault();
 
-	g_GlowDisabled = 0;
+	g_iGlowDisabled = 0;
 }
 
 stock Action ResetSingleGravity(Handle timer, int client)
@@ -139,9 +190,9 @@ stock Action ResetSingleGravity(Handle timer, int client)
 
 stock Action ResetWorldGravity(Handle timer, int initValue)
 {
-	g_WorldGravity = FindConVar("sv_gravity");
+	g_hWorldGravity = FindConVar("sv_gravity");
 
-	g_WorldGravity.RestoreDefault();
+	g_hWorldGravity.RestoreDefault();
 
 	CPrintToChatAll("%t", "TankDraw_WorldGravityReset");
 	PrintHintTextToAll("%t", "TankDraw_WorldGravityReset_NoColor");
