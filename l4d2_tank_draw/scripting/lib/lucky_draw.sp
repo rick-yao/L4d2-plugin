@@ -22,6 +22,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		CPrintToChatAll("%t", "TankDrawResult_NoPrize", attackerName);
 		PrintHintTextToAll("%t", "TankDrawResult_NoPrize_NoColor", attackerName);
 
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -38,6 +39,8 @@ stock Action LuckyDraw(int victim, int attacker)
 
 		CPrintToChatAll("%t", "TankDrawResult_DrugAll", attackerName, g_iDrugAllSurvivorDuration);
 		PrintHintTextToAll("%t", "TankDrawResult_DrugAll_NoColor", attackerName, g_iDrugAllSurvivorDuration);
+
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -55,6 +58,8 @@ stock Action LuckyDraw(int victim, int attacker)
 			CPrintToChatAll("%t", "TankDrawResult_DrugLuckySurvivor", attackerName, g_iDrugLuckySurvivorDuration);
 			PrintHintTextToAll("%t", "TankDrawResult_DrugLuckySurvivor_NoColor", attackerName, g_iDrugLuckySurvivorDuration);
 		}
+
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -79,6 +84,8 @@ stock Action LuckyDraw(int victim, int attacker)
 			CPrintToChatAll("%t", "TankDrawResult_DisableInfinitePrimaryAmmo", attackerName);
 			PrintHintTextToAll("%t", "TankDrawResult_DisableInfinitePrimaryAmmo_NoColor", attackerName);
 		}
+
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -95,6 +102,8 @@ stock Action LuckyDraw(int victim, int attacker)
 		}
 		CPrintToChatAll("%t", "TankDrawResult_ResetAllSurvivorHealth", attackerName);
 		PrintHintTextToAll("%t", "TankDrawResult_ResetAllSurvivorHealth_NoColor", attackerName);
+
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -105,6 +114,8 @@ stock Action LuckyDraw(int victim, int attacker)
 		CheatCommand(attacker, "give", "adrenaline");
 		CPrintToChatAll("%t", "TankDraw_FreezeBomb", attackerName);
 		PrintHintTextToAll("%t", "TankDraw_FreezeBomb_NoColor", attackerName);
+
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -136,6 +147,8 @@ stock Action LuckyDraw(int victim, int attacker)
 				}
 			}
 		}
+
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -160,6 +173,7 @@ stock Action LuckyDraw(int victim, int attacker)
 			CheatCommand(attacker, "give", "adrenaline");
 		}
 
+		Tank_ZedTime();
 		return Plugin_Handled;
 	}
 
@@ -180,6 +194,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		GetClientAbsOrigin(attacker, fPos);
 		TrySpawnTank(fPos, OnSpawnComplete);
 
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -200,6 +215,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		GetClientAbsOrigin(attacker, fPos);
 		L4D2_SpawnWitch(fPos, NULL_VECTOR);
 
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -227,6 +243,8 @@ stock Action LuckyDraw(int victim, int attacker)
 
 		CPrintToChatAll("%t", "TankDraw_ReviveAllDead", attackerName);
 		PrintHintTextToAll("%t", "TankDraw_ReviveAllDead_NoColor", attackerName);
+
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -249,6 +267,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		CPrintToChatAll("%t", "TankDrawResult_LimitedMoonGravity", attackerName, g_iLimitedTimeWorldMoonGravityTimer);
 		PrintHintTextToAll("%t", "TankDrawResult_LimitedMoonGravity_NoColor", attackerName, g_iLimitedTimeWorldMoonGravityTimer);
 
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -266,6 +285,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		CPrintToChatAll("%t", "TankDrawResult_SingleMoonGravity", attackerName, g_iLimitedTimeWorldMoonGravityOne);
 		PrintHintTextToAll("%t", "TankDrawResult_SingleMoonGravity_NoColor", attackerName, g_iLimitedTimeWorldMoonGravityOne);
 
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -294,6 +314,8 @@ stock Action LuckyDraw(int victim, int attacker)
 			CPrintToChatAll("%t", "TankDrawResult_DisableMoonGravity", attackerName);
 			PrintHintTextToAll("%t", "TankDrawResult_DisableMoonGravity_NoColor", attackerName);
 		}
+
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -305,6 +327,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		CPrintToChatAll("%t", "TankDrawResult_IncreaseGravity", attackerName, g_fIncreasedGravity);
 		PrintHintTextToAll("%t", "TankDrawResult_IncreaseGravity_NoColor", attackerName, g_fIncreasedGravity);
 
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -315,6 +338,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		CPrintToChatAll("%t", "TankDrawResult_KillSingleSurvivor", attackerName);
 		PrintHintTextToAll("%t", "TankDrawResult_KillSingleSurvivor_NoColor", attackerName);
 
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -331,6 +355,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		CPrintToChatAll("%t", "TankDrawResult_KillAllSurvivors", attackerName);
 		PrintHintTextToAll("%t", "TankDrawResult_KillAllSurvivors_NoColor", attackerName);
 
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -344,6 +369,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		CPrintToChatAll("%t", "TankDrawResult_IncreaseHealth", attackerName, randomHealth);
 		PrintHintTextToAll("%t", "TankDrawResult_IncreaseHealth_NoColor", attackerName, randomHealth);
 
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -368,6 +394,8 @@ stock Action LuckyDraw(int victim, int attacker)
 			CPrintToChatAll("%t", "TankDrawResult_DisableInfiniteAmmo", attackerName);
 			PrintHintTextToAll("%t", "TankDrawResult_DisableInfiniteAmmo_NoColor", attackerName);
 		}
+
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -391,6 +419,8 @@ stock Action LuckyDraw(int victim, int attacker)
 			CPrintToChatAll("%t", "TankDrawResult_DisableInfiniteMelee", attackerName);
 			PrintHintTextToAll("%t", "TankDrawResult_DisableInfiniteMelee_NoColor", attackerName);
 		}
+
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -421,6 +451,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		CPrintToChatAll("%t", "TankDrawResult_AverageHealth", attackerName, averageHealth);
 		PrintHintTextToAll("%t", "TankDrawResult_AverageHealth_NoColor", attackerName, averageHealth);
 
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -444,6 +475,7 @@ stock Action LuckyDraw(int victim, int attacker)
 			PrintHintTextToAll("%t", "TankDrawResult_DecreaseHealthNotEnough_NoColor", attackerName, randomHealth, health - 1);
 		}
 
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -464,6 +496,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		CPrintToChatAll("%t", "TankDrawResult_ClearAllSurvivorHealth", attackerName);
 		PrintHintTextToAll("%t", "TankDrawResult_ClearAllSurvivorHealth_NoColor", attackerName);
 
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -480,6 +513,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		CPrintToChatAll("%t", "TankDrawResult_DisarmAllSurvivors", attackerName);
 		PrintHintTextToAll("%t", "TankDrawResult_DisarmAllSurvivors_NoColor", attackerName);
 
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 
@@ -490,10 +524,13 @@ stock Action LuckyDraw(int victim, int attacker)
 		CPrintToChatAll("%t", "TankDrawResult_DisarmSingleSurvivor", attackerName);
 		PrintHintTextToAll("%t", "TankDrawResult_DisarmSingleSurvivor_NoColor", attackerName);
 
+		Tank_ZedTime();
 		return Plugin_Continue;
 	}
 	// This shouldn't happen, but just in case
 	CPrintToChatAll("%t", "TankDraw_SomeThingWrong");
 	PrintHintTextToAll("%t", "TankDraw_SomeThingWrong_NoColor");
+
+	Tank_ZedTime();
 	return Plugin_Continue;
 }

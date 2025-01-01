@@ -297,3 +297,51 @@ stock char[] GetUserNameFromIndex(int entity)
 	GetClientName(entity, name, sizeof(name));
 	return name;
 }
+
+Handle	   g_hZeding;
+stock void ZedTime(float duration = 1.2, float scale = 0.3)
+{
+	if (g_hZeding)
+	{
+		TriggerTimer(g_hZeding);
+	}
+
+	int	    entity = CreateEntityByName("func_timescale");
+
+	static char sScale[8];
+	FloatToString(scale, sScale, sizeof(sScale));
+	DispatchKeyValue(entity, "desiredTimescale", sScale);
+	DispatchKeyValue(entity, "acceleration", "2.0");
+	DispatchKeyValue(entity, "minBlendRate", "1.0");
+	DispatchKeyValue(entity, "blendDeltaMultiplier", "2.0");
+	DispatchSpawn(entity);
+	AcceptEntityInput(entity, "Start");
+
+	g_hZeding = CreateTimer(duration, ZedBack, EntIndexToEntRef(entity));
+}
+
+Action ZedBack(Handle Timer, int entity)
+{
+	entity = EntRefToEntIndex(entity);
+
+	if (entity != INVALID_ENT_REFERENCE && IsValidEdict(entity))
+	{
+		StopTimescaler(entity);
+	}
+	else {
+		int found = -1;
+		while ((found = FindEntityByClassname(found, "func_timescale")) != -1)
+			if (IsValidEdict(found))
+				StopTimescaler(found);
+	}
+	g_hZeding = null;
+	return Plugin_Continue;
+}
+
+void StopTimescaler(int entity)
+{
+	AcceptEntityInput(entity, "Stop");
+	SetVariantString("OnUser1 !self:Kill::3.0:-1");
+	AcceptEntityInput(entity, "AddOutput");
+	AcceptEntityInput(entity, "FireUser1");
+}

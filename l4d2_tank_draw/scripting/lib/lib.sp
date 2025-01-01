@@ -45,6 +45,7 @@ int
 	g_iDrugAllSurvivorDuration,
 	g_iChanceDrugLuckySurvivor,
 	g_iDrugLuckySurvivorDuration,
+	g_iZedTimeEnable,
 
 	g_iGlowDisabled;
 
@@ -118,7 +119,8 @@ ConVar
 	DrugAllSurvivorDuration,
 	DrugLuckySurvivorChance,
 	DrugLuckySurvivorDuration,
-	ClearBuffIfMissionLost;
+	ClearBuffIfMissionLost,
+	ZedTimeEnable;
 
 Handle g_SingleGravityTimer[MAXPLAYERS + 1];
 Handle g_WorldGravityTimer;
@@ -246,4 +248,12 @@ stock void ResetClient(int client)
 	SetEntityRenderColor(client, 255, 255, 255, 255);
 
 	SetEntProp(client, Prop_Send, "m_bSurvivorGlowEnabled", 1);
+}
+
+stock void Tank_ZedTime(float duration = 1.2, float scale = 0.3)
+{
+	if (g_iZedTimeEnable == 1)
+	{
+		ZedTime(duration, scale);
+	}
 }

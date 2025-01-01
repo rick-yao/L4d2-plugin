@@ -147,6 +147,8 @@ public void OnPluginStart()
 
 	ClearBuffIfMissionLost		  = CreateConVar("l4d2_tank_draw_clear_buff_if_mission_lost", "0", "关卡失败时清除buff[1=是|0=否] \nClear buff if mission lost[1=yes|0=no].", FCVAR_NONE);
 
+	ZedTimeEnable			  = CreateConVar("l4d2_tank_draw_zed_time_enable", "1", "中奖时是否激活子弹时间[1=是|0=否] \nActivate bullet time when winning prize[1=yes|0=no].", FCVAR_NONE);
+
 	HookEvent("player_incapacitated", Event_PlayerIncapacitated);
 
 	HookEvent("player_death", Event_PlayerDeath, EventHookMode_Pre);
@@ -471,6 +473,7 @@ void SetConVar()
 	g_iDrugAllSurvivorDuration	     = DrugAllSurvivorDuration.IntValue;
 	g_iChanceDrugLuckySurvivor	     = DrugLuckySurvivorChance.IntValue;
 	g_iDrugLuckySurvivorDuration	     = DrugLuckySurvivorDuration.IntValue;
+	g_iZedTimeEnable		     = ZedTimeEnable.IntValue;
 
 	// Add all the g_iChance*** variables to the total
 	g_iTotalChance			     = 0;
