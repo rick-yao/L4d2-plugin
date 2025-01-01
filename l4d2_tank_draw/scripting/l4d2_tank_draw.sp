@@ -143,12 +143,6 @@ public void OnPluginStart()
 	DrugLuckySurvivorDuration	  = CreateConVar("l4d2_tank_draw_drug_lucky_survivor_duration", "30", "幸运玩家中毒秒数 \nDuration of drug luck drawer.", FCVAR_NONE);
 
 	ClearBuffIfMissionLost		  = CreateConVar("l4d2_tank_draw_clear_buff_if_mission_lost", "0", "关卡失败时清除buff[1=是|0=否] \nClear buff if mission lost[1=yes|0=no].", FCVAR_NONE);
-	HookConVarChange(ClearBuffIfMissionLost, ConVarChanged);
-
-	AutoExecConfig(true, "l4d2_tank_draw");
-
-	PrintToServer("[Tank Draw] Plugin loaded");
-	PrintToServer("[Tank Draw] debug mode: %d", L4D2TankDrawDebugMode.IntValue);
 
 	HookEvent("player_incapacitated", Event_PlayerIncapacitated);
 
@@ -161,7 +155,62 @@ public void OnPluginStart()
 	HookEvent("map_transition", Event_RoundEnd, EventHookMode_Pre);
 	HookEvent("finale_win", Event_RoundEnd, EventHookMode_Pre);
 
+	HookConVarChange(ClearBuffIfMissionLost, ConVarChanged);
+	HookConVarChange(ChanceAverageHealth, ConVarChanged);
+	HookConVarChange(ChanceClearAllSurvivorHealth, ConVarChanged);
+	HookConVarChange(L4D2TankDrawDebugMode, ConVarChanged);
+	HookConVarChange(ChanceDecreaseHealth, ConVarChanged);
+	HookConVarChange(MaxHealthDecrease, ConVarChanged);
+	HookConVarChange(MinHealthDecrease, ConVarChanged);
+	HookConVarChange(ChanceDisarmAllSurvivor, ConVarChanged);
+	HookConVarChange(ChanceDisarmSingleSurvivor, ConVarChanged);
+	HookConVarChange(TankDrawEnable, ConVarChanged);
+	HookConVarChange(ChanceDisableGlow, ConVarChanged);
+	HookConVarChange(ChanceIncreaseGravity, ConVarChanged);
+	HookConVarChange(IncreasedGravity, ConVarChanged);
+	HookConVarChange(ChanceMoonGravityOneLimitedTime, ConVarChanged);
+	HookConVarChange(SingleMoonGravity, ConVarChanged);
+	HookConVarChange(LimitedTimeWorldMoonGravityOne, ConVarChanged);
+	HookConVarChange(WorldMoonGravity, ConVarChanged);
+	HookConVarChange(ChanceLimitedTimeWorldMoonGravity, ConVarChanged);
+	HookConVarChange(LimitedTimeWorldMoonGravityTimer, ConVarChanged);
+	HookConVarChange(ChanceWorldMoonGravityToggle, ConVarChanged);
+	HookConVarChange(ChanceIncreaseHealth, ConVarChanged);
+	HookConVarChange(MaxHealthIncrease, ConVarChanged);
+	HookConVarChange(MinHealthIncrease, ConVarChanged);
+	HookConVarChange(ChanceInfiniteAmmo, ConVarChanged);
+	HookConVarChange(ChanceKillSurvivorMolotov, ConVarChanged);
+	HookConVarChange(ChanceDisarmSurvivorMolotov, ConVarChanged);
+	HookConVarChange(ChanceTimerBombMolotov, ConVarChanged);
+	HookConVarChange(ChanceInfinitePrimaryAmmo, ConVarChanged);
+	HookConVarChange(ChanceInfiniteMelee, ConVarChanged);
+	HookConVarChange(InfiniteMeeleRange, ConVarChanged);
+	HookConVarChange(ChanceKillAllSurvivor, ConVarChanged);
+	HookConVarChange(ChanceKillSingleSurvivor, ConVarChanged);
+	HookConVarChange(ChanceResetAllSurvivorHealth, ConVarChanged);
+	HookConVarChange(ChanceNewTank, ConVarChanged);
+	HookConVarChange(ChanceNewWitch, ConVarChanged);
+	HookConVarChange(ChanceNoPrize, ConVarChanged);
+	HookConVarChange(ChanceReviveAllDead, ConVarChanged);
+	HookConVarChange(ChanceTimerBomb, ConVarChanged);
+	HookConVarChange(TimerBombRangeDamage, ConVarChanged);
+	HookConVarChange(TimerBombSecond, ConVarChanged);
+	HookConVarChange(TimerBombRadius, ConVarChanged);
+	HookConVarChange(ChanceFreezeBomb, ConVarChanged);
+	HookConVarChange(FreezeBombDuration, ConVarChanged);
+	HookConVarChange(FreezeBombCountDown, ConVarChanged);
+	HookConVarChange(FreezeBombRadius, ConVarChanged);
+	HookConVarChange(DrugAllSurvivorChance, ConVarChanged);
+	HookConVarChange(DrugAllSurvivorDuration, ConVarChanged);
+	HookConVarChange(DrugLuckySurvivorChance, ConVarChanged);
+	HookConVarChange(DrugLuckySurvivorDuration, ConVarChanged);
+
+	AutoExecConfig(true, "l4d2_tank_draw");
+
 	SetConVar();
+
+	PrintToServer("[Tank Draw] Plugin loaded");
+	PrintToServer("[Tank Draw] debug mode: %d", L4D2TankDrawDebugMode.IntValue);
 
 	if (L4D2TankDrawDebugMode.IntValue == 1)
 	{
