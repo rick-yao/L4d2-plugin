@@ -410,6 +410,16 @@ public Action Event_Lost(Event event, const char[] name, bool dontBroadcast)
 
 void ConVarChanged(Handle convar, const char[] oldValue, const char[] newValue)
 {
+	if (g_iL4D2TankDrawDebugMode == 1)
+	{
+		// Get the name of the convar
+		char convarName[64];
+		GetConVarName(convar, convarName, sizeof(convarName));
+
+		// Print the convar name, old value, and new value
+		PrintToServer("[Tank Draw] ConVarChanged triggered. ConVar: %s | Old Value: %s | New Value: %s", convarName, oldValue, newValue);
+	}
+
 	SetConVar();
 }
 
