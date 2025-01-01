@@ -1,36 +1,6 @@
 stock Action LuckyDraw(int victim, int attacker)
 {
-	int chanceNoPrize		      = ChanceNoPrize.IntValue;
-	int chanceIncreaseHealth	      = ChanceIncreaseHealth.IntValue;
-	int chanceInfiniteAmmo		      = ChanceInfiniteAmmo.IntValue;
-	int chanceInfiniteMelee		      = ChanceInfiniteMelee.IntValue;
-	int chanceAverageHealth		      = ChanceAverageHealth.IntValue;
-	int chanceDecreaseHealth	      = ChanceDecreaseHealth.IntValue;
-	int chanceKillAllSurvivor	      = ChanceKillAllSurvivor.IntValue;
-	int chanceKillSingleSurvivor	      = ChanceKillSingleSurvivor.IntValue;
-	int chanceDisarmAllSurvivor	      = ChanceDisarmAllSurvivor.IntValue;
-	int chanceDisarmSingleSurvivor	      = ChanceDisarmSingleSurvivor.IntValue;
-	int chanceNewTank		      = ChanceNewTank.IntValue;
-	int chanceNewWitch		      = ChanceNewWitch.IntValue;
-	int chanceTimerBomb		      = ChanceTimerBomb.IntValue;
-	int chanceDisableGlow		      = ChanceDisableGlow.IntValue;
-	int chanceFreezeBomb		      = ChanceFreezeBomb.IntValue;
-	int chanceResetAllSurvivorHealth      = ChanceResetAllSurvivorHealth.IntValue;
-	int chanceInfinitePrimaryAmmo	      = ChanceInfinitePrimaryAmmo.IntValue;
-
-	int chanceLimitedTimeWorldMoonGravity = ChanceLimitedTimeWorldMoonGravity.IntValue;
-	int chanceMoonGravityOneLimitedTime   = ChanceMoonGravityOneLimitedTime.IntValue;
-	int chanceWorldMoonGravityToggle      = ChanceWorldMoonGravityToggle.IntValue;
-	int chanceIncreaseGravity	      = ChanceIncreaseGravity.IntValue;
-	int chanceClearAllSurvivorHealth      = ChanceClearAllSurvivorHealth.IntValue;
-	int chanceReviveAllDead		      = ChanceReviveAllDead.IntValue;
-	int chanceDrugLuckySurvivor	      = DrugLuckySurvivorChance.IntValue;
-	int chanceDrugAllSurvivor	      = DrugAllSurvivorChance.IntValue;
-
-	int totalChance			      = chanceNoPrize + chanceDrugAllSurvivor + chanceDrugLuckySurvivor + chanceResetAllSurvivorHealth + chanceInfinitePrimaryAmmo + chanceNewWitch + chanceFreezeBomb + chanceTimerBomb + chanceReviveAllDead + chanceNewTank + chanceDisarmSingleSurvivor + chanceDisarmAllSurvivor + chanceDecreaseHealth + chanceClearAllSurvivorHealth + chanceIncreaseHealth + chanceInfiniteAmmo + chanceInfiniteMelee + chanceAverageHealth + chanceKillAllSurvivor + chanceKillSingleSurvivor + chanceDisableGlow;
-	totalChance += chanceLimitedTimeWorldMoonGravity + chanceMoonGravityOneLimitedTime + chanceWorldMoonGravityToggle + chanceIncreaseGravity;
-
-	if (totalChance == 0)
+	if (g_iTotalChance == 0)
 	{
 		PrintToServer("所有概率总和为0，跳过抽奖 / total change equals to 0, do not draw");
 		return Plugin_Continue;
@@ -40,13 +10,13 @@ stock Action LuckyDraw(int victim, int attacker)
 	GetClientName(victim, victimName, sizeof(victimName));
 	GetClientName(attacker, attackerName, sizeof(attackerName));
 
-	int random = GetRandomInt(1, totalChance);
-	PrintToServer("total chance: %d, random: %d", totalChance, random);
+	int random = GetRandomInt(1, g_iTotalChance);
+	PrintToServer("total chance: %d, random: %d", g_iTotalChance, random);
 
 	int currentChance = 0;
 
 	// no prize
-	currentChance += chanceNoPrize;
+	currentChance += g_iChanceNoPrize;
 	if (random <= currentChance)
 	{
 		CPrintToChatAll("%t", "TankDrawResult_NoPrize", attackerName);
@@ -55,40 +25,40 @@ stock Action LuckyDraw(int victim, int attacker)
 		return Plugin_Continue;
 	}
 
-	currentChance += chanceDrugAllSurvivor;
+	currentChance += g_iChanceDrugAllSurvivor;
 	if (random <= currentChance)
 	{
 		for (int i = 1; i <= MaxClients; i++)
 		{
 			if (IsValidAliveClient(i))
 			{
-				SetDrug(i, DrugAllSurvivorDuration.IntValue);
+				SetDrug(i, g_iDrugAllSurvivorDuration);
 			}
 		}
 
-		CPrintToChatAll("%t", "TankDrawResult_DrugAll", attackerName, DrugAllSurvivorDuration.IntValue);
-		PrintHintTextToAll("%t", "TankDrawResult_DrugAll_NoColor", attackerName, DrugAllSurvivorDuration.IntValue);
+		CPrintToChatAll("%t", "TankDrawResult_DrugAll", attackerName, g_iDrugAllSurvivorDuration);
+		PrintHintTextToAll("%t", "TankDrawResult_DrugAll_NoColor", attackerName, g_iDrugAllSurvivorDuration);
 		return Plugin_Continue;
 	}
 
-	currentChance += chanceDrugLuckySurvivor;
+	currentChance += g_iChanceDrugLuckySurvivor;
 	if (random <= currentChance)
 	{
 		if (g_hDrugTimers[attacker] != null)
 		{
-			SetDrug(attacker, DrugLuckySurvivorDuration.IntValue);
+			SetDrug(attacker, g_iDrugLuckySurvivorDuration);
 			CPrintToChatAll("%t", "TankDrawResult_DrugExist", attackerName);
 			PrintHintTextToAll("%t", "TankDrawResult_DrugExist_NoColor", attackerName);
 		}
 		else {
-			SetDrug(attacker, DrugLuckySurvivorDuration.IntValue);
-			CPrintToChatAll("%t", "TankDrawResult_DrugLuckySurvivor", attackerName, DrugLuckySurvivorDuration.IntValue);
-			PrintHintTextToAll("%t", "TankDrawResult_DrugLuckySurvivor_NoColor", attackerName, DrugLuckySurvivorDuration.IntValue);
+			SetDrug(attacker, g_iDrugLuckySurvivorDuration);
+			CPrintToChatAll("%t", "TankDrawResult_DrugLuckySurvivor", attackerName, g_iDrugLuckySurvivorDuration);
+			PrintHintTextToAll("%t", "TankDrawResult_DrugLuckySurvivor_NoColor", attackerName, g_iDrugLuckySurvivorDuration);
 		}
 		return Plugin_Continue;
 	}
 
-	currentChance += chanceInfinitePrimaryAmmo;
+	currentChance += g_iChanceInfinitePrimaryAmmo;
 	if (random <= currentChance)
 	{
 		// Infinite ammo
@@ -112,7 +82,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		return Plugin_Continue;
 	}
 
-	currentChance += chanceResetAllSurvivorHealth;
+	currentChance += g_iChanceResetAllSurvivorHealth;
 	if (random <= currentChance)
 	{
 		for (int i = 1; i <= MaxClients; i++)
@@ -128,17 +98,17 @@ stock Action LuckyDraw(int victim, int attacker)
 		return Plugin_Continue;
 	}
 
-	currentChance += chanceFreezeBomb;
+	currentChance += g_iChanceFreezeBomb;
 	if (random <= currentChance)
 	{
-		SetPlayerFreezeBomb(attacker, FreezeBombCountDown.IntValue, FreezeBombRadius.FloatValue, FreezeBombDuration.IntValue);	      // 5 second countdown, 300 unit radius, 5 second freeze
+		SetPlayerFreezeBomb(attacker, g_iFreezeBombCountDown, g_fFreezeBombRadius, g_iFreezeBombDuration);
 		CheatCommand(attacker, "give", "adrenaline");
 		CPrintToChatAll("%t", "TankDraw_FreezeBomb", attackerName);
 		PrintHintTextToAll("%t", "TankDraw_FreezeBomb_NoColor", attackerName);
 		return Plugin_Continue;
 	}
 
-	currentChance += chanceDisableGlow;
+	currentChance += g_iChanceDisableGlow;
 	if (random <= currentChance)
 	{
 		if (g_iGlowDisabled == 0)
@@ -169,7 +139,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		return Plugin_Continue;
 	}
 
-	currentChance += chanceTimerBomb;
+	currentChance += g_iChanceTimerBomb;
 	if (random <= currentChance)
 	{
 		if (g_hTimeBombTimer[attacker] != null)
@@ -186,14 +156,14 @@ stock Action LuckyDraw(int victim, int attacker)
 		else {
 			CPrintToChatAll("%t", "TankDraw_TimerBomb", attackerName);
 			PrintHintTextToAll("%t", "TankDraw_TimerBomb_NoColor", attackerName);
-			SetPlayerTimeBomb(attacker, TimerBombSecond.IntValue, TimerBombRadius.FloatValue, TimerBombRangeDamage.IntValue);
+			SetPlayerTimeBomb(attacker, g_iTimerBombSecond, g_fTimerBombRadius, g_iTimerBombRangeDamage);
 			CheatCommand(attacker, "give", "adrenaline");
 		}
 
 		return Plugin_Handled;
 	}
 
-	currentChance += chanceNewTank;
+	currentChance += g_iChanceNewTank;
 	if (random <= currentChance)
 	{
 		if (!IsValidAliveClient(attacker))
@@ -213,7 +183,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		return Plugin_Continue;
 	}
 
-	currentChance += chanceNewWitch;
+	currentChance += g_iChanceNewWitch;
 	if (random <= currentChance)
 	{
 		if (!IsValidAliveClient(attacker))
@@ -233,7 +203,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		return Plugin_Continue;
 	}
 
-	currentChance += chanceReviveAllDead;
+	currentChance += g_iChanceReviveAllDead;
 	if (random <= currentChance)
 	{
 		if (!IsValidAliveClient(attacker))
@@ -261,7 +231,7 @@ stock Action LuckyDraw(int victim, int attacker)
 	}
 
 	// limited time world moon gravity
-	currentChance += chanceLimitedTimeWorldMoonGravity;
+	currentChance += g_iChanceLimitedTimeWorldMoonGravity;
 	if (random <= currentChance)
 	{
 		g_hWorldGravity = FindConVar("sv_gravity");
@@ -269,38 +239,38 @@ stock Action LuckyDraw(int victim, int attacker)
 		g_hWorldGravity.GetDefault(default_gravity, sizeof(default_gravity));
 		int default_gravity_int	 = StringToInt(default_gravity);
 
-		g_hWorldGravity.IntValue = WorldMoonGravity.IntValue;
+		g_hWorldGravity.IntValue = g_iWorldMoonGravity;
 
 		if (g_WorldGravityTimer != null)
 		{
 			delete g_WorldGravityTimer;
 		}
-		g_WorldGravityTimer = CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityTimer), ResetWorldGravity, default_gravity_int, NO_REPEAT_TIMER);
-		CPrintToChatAll("%t", "TankDrawResult_LimitedMoonGravity", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityTimer));
-		PrintHintTextToAll("%t", "TankDrawResult_LimitedMoonGravity_NoColor", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityTimer));
+		g_WorldGravityTimer = CreateTimer(float(g_iLimitedTimeWorldMoonGravityTimer), ResetWorldGravity, default_gravity_int, NO_REPEAT_TIMER);
+		CPrintToChatAll("%t", "TankDrawResult_LimitedMoonGravity", attackerName, g_iLimitedTimeWorldMoonGravityTimer);
+		PrintHintTextToAll("%t", "TankDrawResult_LimitedMoonGravity_NoColor", attackerName, g_iLimitedTimeWorldMoonGravityTimer);
 
 		return Plugin_Continue;
 	}
 
 	// Limited time moon gravity for drawer
-	currentChance += chanceMoonGravityOneLimitedTime;
+	currentChance += g_iChanceMoonGravityOneLimitedTime;
 	if (random <= currentChance)
 	{
-		SetEntityGravity(attacker, GetConVarFloat(SingleMoonGravity));
+		SetEntityGravity(attacker, g_fSingleMoonGravity);
 
 		if (g_SingleGravityTimer[attacker] != null)
 		{
 			delete g_SingleGravityTimer[attacker];
 		}
-		g_SingleGravityTimer[attacker] = CreateTimer(GetConVarFloat(LimitedTimeWorldMoonGravityOne), ResetSingleGravity, attacker, NO_REPEAT_TIMER);
-		CPrintToChatAll("%t", "TankDrawResult_SingleMoonGravity", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityOne));
-		PrintHintTextToAll("%t", "TankDrawResult_SingleMoonGravity_NoColor", attackerName, GetConVarInt(LimitedTimeWorldMoonGravityOne));
+		g_SingleGravityTimer[attacker] = CreateTimer(float(g_iLimitedTimeWorldMoonGravityOne), ResetSingleGravity, attacker, NO_REPEAT_TIMER);
+		CPrintToChatAll("%t", "TankDrawResult_SingleMoonGravity", attackerName, g_iLimitedTimeWorldMoonGravityOne);
+		PrintHintTextToAll("%t", "TankDrawResult_SingleMoonGravity_NoColor", attackerName, g_iLimitedTimeWorldMoonGravityOne);
 
 		return Plugin_Continue;
 	}
 
 	// Toggle world moon gravity
-	currentChance += chanceWorldMoonGravityToggle;
+	currentChance += g_iChanceWorldMoonGravityToggle;
 	if (random <= currentChance)
 	{
 		g_hWorldGravity = FindConVar("sv_gravity");
@@ -310,7 +280,7 @@ stock Action LuckyDraw(int victim, int attacker)
 
 		if (g_hWorldGravity.IntValue == default_gravity_int)
 		{
-			g_hWorldGravity.IntValue = WorldMoonGravity.IntValue;
+			g_hWorldGravity.IntValue = g_iWorldMoonGravity;
 			CPrintToChatAll("%t", "TankDrawResult_EnableMoonGravity", attackerName);
 			PrintHintTextToAll("%t", "TankDrawResult_EnableMoonGravity_NoColor", attackerName);
 		}
@@ -328,17 +298,17 @@ stock Action LuckyDraw(int victim, int attacker)
 	}
 
 	// Increase gravity for drawer
-	currentChance += chanceIncreaseGravity;
+	currentChance += g_iChanceIncreaseGravity;
 	if (random <= currentChance)
 	{
-		SetEntityGravity(attacker, GetConVarFloat(IncreasedGravity));
-		CPrintToChatAll("%t", "TankDrawResult_IncreaseGravity", attackerName, GetConVarFloat(IncreasedGravity));
-		PrintHintTextToAll("%t", "TankDrawResult_IncreaseGravity_NoColor", attackerName, GetConVarFloat(IncreasedGravity));
+		SetEntityGravity(attacker, g_fIncreasedGravity);
+		CPrintToChatAll("%t", "TankDrawResult_IncreaseGravity", attackerName, g_fIncreasedGravity);
+		PrintHintTextToAll("%t", "TankDrawResult_IncreaseGravity_NoColor", attackerName, g_fIncreasedGravity);
 
 		return Plugin_Continue;
 	}
 
-	currentChance += chanceKillSingleSurvivor;
+	currentChance += g_iChanceKillSingleSurvivor;
 	if (random <= currentChance)
 	{
 		ForcePlayerSuicide(attacker);
@@ -348,7 +318,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		return Plugin_Continue;
 	}
 
-	currentChance += chanceKillAllSurvivor;
+	currentChance += g_iChanceKillAllSurvivor;
 	if (random <= currentChance)
 	{
 		for (int i = 1; i <= MaxClients; i++)
@@ -364,13 +334,11 @@ stock Action LuckyDraw(int victim, int attacker)
 		return Plugin_Continue;
 	}
 
-	currentChance += chanceIncreaseHealth;
+	currentChance += g_iChanceIncreaseHealth;
 	if (random <= currentChance)
 	{
 		// Increase player's health randomly
-		int minHealth	 = GetConVarInt(MinHealthIncrease);
-		int maxHealth	 = GetConVarInt(MaxHealthIncrease);
-		int randomHealth = GetRandomInt(minHealth, maxHealth);
+		int randomHealth = GetRandomInt(g_iMinHealthIncrease, g_iMaxHealthIncrease);
 		int health	 = GetClientHealth(attacker) + randomHealth;
 		SetEntityHealth(attacker, health);
 		CPrintToChatAll("%t", "TankDrawResult_IncreaseHealth", attackerName, randomHealth);
@@ -379,7 +347,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		return Plugin_Continue;
 	}
 
-	currentChance += chanceInfiniteAmmo;
+	currentChance += g_iChanceInfiniteAmmo;
 	if (random <= currentChance)
 	{
 		// Infinite ammo
@@ -403,7 +371,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		return Plugin_Continue;
 	}
 
-	currentChance += chanceInfiniteMelee;
+	currentChance += g_iChanceInfiniteMelee;
 	if (random <= currentChance)
 	{
 		// Infinite melee range
@@ -414,7 +382,7 @@ stock Action LuckyDraw(int victim, int attacker)
 
 		if (g_hMeleeRange.IntValue == default_range_int)
 		{
-			g_hMeleeRange.IntValue = GetConVarInt(InfiniteMeeleRange);
+			g_hMeleeRange.IntValue = g_iInfiniteMeeleRange;
 			CPrintToChatAll("%t", "TankDrawResult_EnableInfiniteMelee", attackerName);
 			PrintHintTextToAll("%t", "TankDrawResult_EnableInfiniteMelee_NoColor", attackerName);
 		}
@@ -426,7 +394,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		return Plugin_Continue;
 	}
 
-	currentChance += chanceAverageHealth;
+	currentChance += g_iChanceAverageHealth;
 	if (random <= currentChance)
 	{
 		// Average all survivors' health
@@ -456,12 +424,10 @@ stock Action LuckyDraw(int victim, int attacker)
 		return Plugin_Continue;
 	}
 
-	currentChance += chanceDecreaseHealth;
+	currentChance += g_iChanceDecreaseHealth;
 	if (random <= currentChance)
 	{
-		int minDecrease	 = GetConVarInt(MinHealthDecrease);
-		int maxDecrease	 = GetConVarInt(MaxHealthDecrease);
-		int randomHealth = GetRandomInt(minDecrease, maxDecrease);
+		int randomHealth = GetRandomInt(g_iMinHealthDecrease, g_iMaxHealthDecrease);
 		int health	 = GetClientHealth(attacker);
 
 		if (health > randomHealth)
@@ -481,7 +447,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		return Plugin_Continue;
 	}
 
-	currentChance += chanceClearAllSurvivorHealth;
+	currentChance += g_iChanceClearAllSurvivorHealth;
 	if (random <= currentChance)
 	{
 		for (int i = 1; i <= MaxClients; i++)
@@ -501,7 +467,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		return Plugin_Continue;
 	}
 
-	currentChance += chanceDisarmAllSurvivor;
+	currentChance += g_iChanceDisarmAllSurvivor;
 	if (random <= currentChance)
 	{
 		for (int i = 1; i <= MaxClients; i++)
@@ -517,7 +483,7 @@ stock Action LuckyDraw(int victim, int attacker)
 		return Plugin_Continue;
 	}
 
-	currentChance += chanceDisarmSingleSurvivor;
+	currentChance += g_iChanceDisarmSingleSurvivor;
 	if (random <= currentChance)
 	{
 		L4D_RemoveAllWeapons(attacker);
