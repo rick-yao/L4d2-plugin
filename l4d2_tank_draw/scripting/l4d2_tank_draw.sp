@@ -209,6 +209,7 @@ public void OnPluginStart()
 	HookConVarChange(DrugAllSurvivorDuration, ConVarChanged);
 	HookConVarChange(DrugLuckySurvivorChance, ConVarChanged);
 	HookConVarChange(DrugLuckySurvivorDuration, ConVarChanged);
+	HookConVarChange(ZedTimeEnable, ConVarChanged);
 
 	AutoExecConfig(true, "l4d2_tank_draw");
 
