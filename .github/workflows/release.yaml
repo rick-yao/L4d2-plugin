@@ -55,6 +55,7 @@ jobs:
           files: |
             build/*.smx
             l4d2_*/translations/*.txt
+            l4d2_*/cfg/*.cfg
           generate_release_notes: true
           token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
           body: |
