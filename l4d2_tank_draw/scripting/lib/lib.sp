@@ -261,10 +261,13 @@ stock void Tank_ZedTime(float duration = 1.2, float scale = 0.3)
 stock void DebugPrint(const char[] format, any...)
 {
 	char buffer[2048];
-	VFormat(buffer, sizeof(buffer), format, 2);	   // 2 represents the starting parameter number
+	VFormat(buffer, sizeof(buffer), format, 2);
+
+	char finalBuffer[2048];
+	Format(finalBuffer, sizeof(finalBuffer), "[Tank Draw] %s", buffer);
 
 	if (g_iL4D2TankDrawDebugMode == 1)
 	{
-		PrintToServer(buffer);
+		PrintToServer(finalBuffer);
 	}
 }

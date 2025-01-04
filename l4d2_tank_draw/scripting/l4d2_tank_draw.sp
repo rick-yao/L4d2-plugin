@@ -215,19 +215,19 @@ public void OnPluginStart()
 
 	SetConVar();
 
-	DebugPrint("[Tank Draw] Plugin loaded");
+	DebugPrint("Plugin loaded");
 }
 
 public Action Event_PlayerIncapacitated(Event event, const char[] name, bool dontBroadcast)
 {
 	if (g_iTankDrawEnable == 0) { return Plugin_Continue; }
-	DebugPrint("[Tank Draw] Event_PlayerIncapacitated triggered.");
+	DebugPrint("Event_PlayerIncapacitated triggered.");
 
 	// Check if the victim is a Tank
 	int victim = GetClientOfUserId(event.GetInt("userid"));
 	if (!IsTank(victim))
 	{
-		DebugPrint("[Tank Draw] Victim is not a Tank. Exiting event.");
+		DebugPrint("Victim is not a Tank. Exiting event.");
 		return Plugin_Continue;
 	}
 
@@ -240,13 +240,13 @@ public Action Event_PlayerIncapacitated(Event event, const char[] name, bool don
 		int attacker = GetClientOfUserId(event.GetInt("attacker"));
 		if (!IsValidAliveClient(attacker))
 		{
-			DebugPrint("[Tank Draw] Attacker %d is not a valid alive client. Exiting event.", attacker);
+			DebugPrint("Attacker %d is not a valid alive client. Exiting event.", attacker);
 			return Plugin_Continue;
 		}
 
 		// now the attacker is a valid client and the weapon is a melee weapon
 		// so we can make the tank draw
-		DebugPrint("[Tank Draw] Event_PlayerDeath triggered. Victim: %d, Attacker: %d, weapon: %s", victim, attacker, weapon);
+		DebugPrint("Event_PlayerDeath triggered. Victim: %d, Attacker: %d, weapon: %s", victim, attacker, weapon);
 
 		char victimName[MAX_NAME_LENGTH], attackerName[MAX_NAME_LENGTH];
 		GetClientName(victim, victimName, sizeof(victimName));
@@ -260,7 +260,7 @@ public Action Event_PlayerIncapacitated(Event event, const char[] name, bool don
 		return Plugin_Continue;
 	}
 	else {
-		DebugPrint("[Tank Draw] No Melee weapon detected. Exiting event.");
+		DebugPrint("No Melee weapon detected. Exiting event.");
 		int  attacker = GetClientOfUserId(event.GetInt("attacker"));
 		char attackerName[MAX_NAME_LENGTH];
 		GetClientName(attacker, attackerName, sizeof(attackerName));
@@ -269,7 +269,7 @@ public Action Event_PlayerIncapacitated(Event event, const char[] name, bool don
 		{
 			CPrintToChatAll("%t", "TankDraw_NotKilledByHuman", attackerName);
 			PrintHintTextToAll("%t", "TankDraw_NotKilledByHuman_NoColor", attackerName);
-			DebugPrint("[Tank Draw] Attacker is not a valid alive client. Exiting event.");
+			DebugPrint("Attacker is not a valid alive client. Exiting event.");
 			return Plugin_Continue;
 		}
 
@@ -283,7 +283,7 @@ public Action Event_PlayerIncapacitated(Event event, const char[] name, bool don
 public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast)
 {
 	if (g_iTankDrawEnable == 0) { return Plugin_Continue; }
-	DebugPrint("[Tank Draw] Event_PlayerDeath triggered.");
+	DebugPrint("Event_PlayerDeath triggered.");
 
 	int victim = GetClientOfUserId(event.GetInt("userid"));
 	if (IsValidSurvivor(victim))
@@ -300,7 +300,7 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 public void OnClientDisconnect(int client)
 {
 	if (g_iTankDrawEnable == 0) { return; }
-	DebugPrint("[Tank Draw] OnClientDisconnect triggered.");
+	DebugPrint("OnClientDisconnect triggered.");
 
 	if (IsValidSurvivor(client))
 	{
@@ -314,7 +314,7 @@ public void OnClientDisconnect(int client)
 
 public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 {
-	DebugPrint("[Tank Draw] Event_Molotov triggered.");
+	DebugPrint("Event_Molotov triggered.");
 
 	g_hInfiniteAmmo = FindConVar("sv_infinite_ammo");
 	if (g_hInfiniteAmmo.IntValue == 1)
@@ -372,7 +372,7 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 public void OnMapEnd()
 {
 	if (g_iTankDrawEnable == 0) { return; }
-	DebugPrint("[Tank Draw] MapEnd triggered.");
+	DebugPrint("MapEnd triggered.");
 
 	ResetAllTimer();
 	ResetAllValue();
@@ -381,7 +381,7 @@ public void OnMapEnd()
 public Action Event_RoundEnd(Event event, const char[] name, bool dontBroadcast)
 {
 	if (g_iTankDrawEnable == 0) { return Plugin_Continue; }
-	DebugPrint("[Tank Draw] Event_RoundEnd triggered.");
+	DebugPrint("Event_RoundEnd triggered.");
 
 	ResetAllTimer();
 	ResetAllValue();
@@ -392,7 +392,7 @@ public Action Event_RoundEnd(Event event, const char[] name, bool dontBroadcast)
 public Action Event_Lost(Event event, const char[] name, bool dontBroadcast)
 {
 	if (g_iTankDrawEnable == 0) { return Plugin_Continue; }
-	DebugPrint("[Tank Draw] Event_Lost triggered.");
+	DebugPrint("Event_Lost triggered.");
 
 	KillAllTimeBombs();
 	KillAllFreezeBombs();
@@ -417,7 +417,7 @@ void ConVarChanged(Handle convar, const char[] oldValue, const char[] newValue)
 		GetConVarName(convar, convarName, sizeof(convarName));
 
 		// Print the convar name, old value, and new value
-		DebugPrint("[Tank Draw] ConVarChanged triggered. ConVar: %s | Old Value: %s | New Value: %s", convarName, oldValue, newValue);
+		DebugPrint("ConVarChanged triggered. ConVar: %s | Old Value: %s | New Value: %s", convarName, oldValue, newValue);
 	}
 
 	SetConVar();
