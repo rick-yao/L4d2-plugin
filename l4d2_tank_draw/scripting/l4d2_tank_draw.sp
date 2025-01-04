@@ -215,19 +215,19 @@ public void OnPluginStart()
 
 	SetConVar();
 
-	PrintToServer("[Tank Draw] Plugin loaded");
+	DebugPrint("[Tank Draw] Plugin loaded");
 }
 
 public Action Event_PlayerIncapacitated(Event event, const char[] name, bool dontBroadcast)
 {
 	if (g_iTankDrawEnable == 0) { return Plugin_Continue; }
-	PrintToServer("[Tank Draw] Event_PlayerIncapacitated triggered.");
+	DebugPrint("[Tank Draw] Event_PlayerIncapacitated triggered.");
 
 	// Check if the victim is a Tank
 	int victim = GetClientOfUserId(event.GetInt("userid"));
 	if (!IsTank(victim))
 	{
-		PrintToServer("[Tank Draw] Victim is not a Tank. Exiting event.");
+		DebugPrint("[Tank Draw] Victim is not a Tank. Exiting event.");
 		return Plugin_Continue;
 	}
 
@@ -240,13 +240,13 @@ public Action Event_PlayerIncapacitated(Event event, const char[] name, bool don
 		int attacker = GetClientOfUserId(event.GetInt("attacker"));
 		if (!IsValidAliveClient(attacker))
 		{
-			PrintToServer("[Tank Draw] Attacker %d is not a valid alive client. Exiting event.", attacker);
+			DebugPrint("[Tank Draw] Attacker %d is not a valid alive client. Exiting event.", attacker);
 			return Plugin_Continue;
 		}
 
 		// now the attacker is a valid client and the weapon is a melee weapon
 		// so we can make the tank draw
-		PrintToServer("[Tank Draw] Event_PlayerDeath triggered. Victim: %d, Attacker: %d, weapon: %s", victim, attacker, weapon);
+		DebugPrint("[Tank Draw] Event_PlayerDeath triggered. Victim: %d, Attacker: %d, weapon: %s", victim, attacker, weapon);
 
 		char victimName[MAX_NAME_LENGTH], attackerName[MAX_NAME_LENGTH];
 		GetClientName(victim, victimName, sizeof(victimName));
@@ -260,7 +260,7 @@ public Action Event_PlayerIncapacitated(Event event, const char[] name, bool don
 		return Plugin_Continue;
 	}
 	else {
-		PrintToServer("[Tank Draw] No Melee weapon detected. Exiting event.");
+		DebugPrint("[Tank Draw] No Melee weapon detected. Exiting event.");
 		int  attacker = GetClientOfUserId(event.GetInt("attacker"));
 		char attackerName[MAX_NAME_LENGTH];
 		GetClientName(attacker, attackerName, sizeof(attackerName));
@@ -269,7 +269,7 @@ public Action Event_PlayerIncapacitated(Event event, const char[] name, bool don
 		{
 			CPrintToChatAll("%t", "TankDraw_NotKilledByHuman", attackerName);
 			PrintHintTextToAll("%t", "TankDraw_NotKilledByHuman_NoColor", attackerName);
-			PrintToServer("[Tank Draw] Attacker is not a valid alive client. Exiting event.");
+			DebugPrint("[Tank Draw] Attacker is not a valid alive client. Exiting event.");
 			return Plugin_Continue;
 		}
 
@@ -283,12 +283,12 @@ public Action Event_PlayerIncapacitated(Event event, const char[] name, bool don
 public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast)
 {
 	if (g_iTankDrawEnable == 0) { return Plugin_Continue; }
-	PrintToServer("[Tank Draw] Event_PlayerDeath triggered.");
+	DebugPrint("[Tank Draw] Event_PlayerDeath triggered.");
 
 	int victim = GetClientOfUserId(event.GetInt("userid"));
 	if (IsValidSurvivor(victim))
 	{
-		PrintToServer("player %d dead, reset player value", victim);
+		DebugPrint("player %d dead, reset player value", victim);
 
 		ResetClient(victim);
 	}
@@ -300,11 +300,11 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 public void OnClientDisconnect(int client)
 {
 	if (g_iTankDrawEnable == 0) { return; }
-	PrintToServer("[Tank Draw] OnClientDisconnect triggered.");
+	DebugPrint("[Tank Draw] OnClientDisconnect triggered.");
 
 	if (IsValidSurvivor(client))
 	{
-		PrintToServer("player %d disconnect, reset player value", client);
+		DebugPrint("player %d disconnect, reset player value", client);
 
 		ResetClient(client);
 	}
@@ -314,7 +314,7 @@ public void OnClientDisconnect(int client)
 
 public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 {
-	PrintToServer("[Tank Draw] Event_Molotov triggered.");
+	DebugPrint("[Tank Draw] Event_Molotov triggered.");
 
 	g_hInfiniteAmmo = FindConVar("sv_infinite_ammo");
 	if (g_hInfiniteAmmo.IntValue == 1)
@@ -372,7 +372,7 @@ public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
 public void OnMapEnd()
 {
 	if (g_iTankDrawEnable == 0) { return; }
-	PrintToServer("[Tank Draw] MapEnd triggered.");
+	DebugPrint("[Tank Draw] MapEnd triggered.");
 
 	ResetAllTimer();
 	ResetAllValue();
@@ -381,7 +381,7 @@ public void OnMapEnd()
 public Action Event_RoundEnd(Event event, const char[] name, bool dontBroadcast)
 {
 	if (g_iTankDrawEnable == 0) { return Plugin_Continue; }
-	PrintToServer("[Tank Draw] Event_RoundEnd triggered.");
+	DebugPrint("[Tank Draw] Event_RoundEnd triggered.");
 
 	ResetAllTimer();
 	ResetAllValue();
@@ -392,7 +392,7 @@ public Action Event_RoundEnd(Event event, const char[] name, bool dontBroadcast)
 public Action Event_Lost(Event event, const char[] name, bool dontBroadcast)
 {
 	if (g_iTankDrawEnable == 0) { return Plugin_Continue; }
-	PrintToServer("[Tank Draw] Event_Lost triggered.");
+	DebugPrint("[Tank Draw] Event_Lost triggered.");
 
 	KillAllTimeBombs();
 	KillAllFreezeBombs();
@@ -417,7 +417,7 @@ void ConVarChanged(Handle convar, const char[] oldValue, const char[] newValue)
 		GetConVarName(convar, convarName, sizeof(convarName));
 
 		// Print the convar name, old value, and new value
-		PrintToServer("[Tank Draw] ConVarChanged triggered. ConVar: %s | Old Value: %s | New Value: %s", convarName, oldValue, newValue);
+		DebugPrint("[Tank Draw] ConVarChanged triggered. ConVar: %s | Old Value: %s | New Value: %s", convarName, oldValue, newValue);
 	}
 
 	SetConVar();
@@ -505,65 +505,62 @@ void SetConVar()
 	g_iTotalChance += g_iChanceDrugLuckySurvivor;
 
 	// Debug block: Print all variables if debug mode is enabled
-	if (g_iL4D2TankDrawDebugMode == 1)
-	{
-		PrintToServer("===== Debug ConVar Values =====");
-		PrintToServer("g_iL4D2TankDrawDebugMode: %d", g_iL4D2TankDrawDebugMode);
-		PrintToServer("g_iTotalChance: %d", g_iTotalChance);
-		PrintToServer("g_iClearBuffIfMissionLost: %d", g_iClearBuffIfMissionLost);
-		PrintToServer("g_iChanceAverageHealth: %d", g_iChanceAverageHealth);
-		PrintToServer("g_iChanceClearAllSurvivorHealth: %d", g_iChanceClearAllSurvivorHealth);
-		PrintToServer("g_iChanceDecreaseHealth: %d", g_iChanceDecreaseHealth);
-		PrintToServer("g_iMaxHealthDecrease: %d", g_iMaxHealthDecrease);
-		PrintToServer("g_iMinHealthDecrease: %d", g_iMinHealthDecrease);
-		PrintToServer("g_iChanceDisarmAllSurvivor: %d", g_iChanceDisarmAllSurvivor);
-		PrintToServer("g_iChanceDisarmSingleSurvivor: %d", g_iChanceDisarmSingleSurvivor);
-		PrintToServer("g_iTankDrawEnable: %d", g_iTankDrawEnable);
-		PrintToServer("g_iChanceDisableGlow: %d", g_iChanceDisableGlow);
-		PrintToServer("g_iChanceIncreaseGravity: %d", g_iChanceIncreaseGravity);
-		PrintToServer("g_fIncreasedGravity: %.1f", g_fIncreasedGravity);
-		PrintToServer("g_iChanceMoonGravityOneLimitedTime: %d", g_iChanceMoonGravityOneLimitedTime);
-		PrintToServer("g_fSingleMoonGravity: %.1f", g_fSingleMoonGravity);
-		PrintToServer("g_iLimitedTimeWorldMoonGravityOne: %d", g_iLimitedTimeWorldMoonGravityOne);
-		PrintToServer("g_iWorldMoonGravity: %d", g_iWorldMoonGravity);
-		PrintToServer("g_iChanceLimitedTimeWorldMoonGravity: %d", g_iChanceLimitedTimeWorldMoonGravity);
-		PrintToServer("g_iLimitedTimeWorldMoonGravityTimer: %d", g_iLimitedTimeWorldMoonGravityTimer);
-		PrintToServer("g_iChanceWorldMoonGravityToggle: %d", g_iChanceWorldMoonGravityToggle);
-		PrintToServer("g_iChanceIncreaseHealth: %d", g_iChanceIncreaseHealth);
-		PrintToServer("g_iMaxHealthIncrease: %d", g_iMaxHealthIncrease);
-		PrintToServer("g_iMinHealthIncrease: %d", g_iMinHealthIncrease);
-		PrintToServer("g_iChanceInfiniteAmmo: %d", g_iChanceInfiniteAmmo);
-		PrintToServer("g_iChanceKillSurvivorMolotov: %d", g_iChanceKillSurvivorMolotov);
-		PrintToServer("g_iChanceDisarmSurvivorMolotov: %d", g_iChanceDisarmSurvivorMolotov);
-		PrintToServer("g_iChanceTimerBombMolotov: %d", g_iChanceTimerBombMolotov);
-		PrintToServer("g_iChanceInfinitePrimaryAmmo: %d", g_iChanceInfinitePrimaryAmmo);
-		PrintToServer("g_iChanceInfiniteMelee: %d", g_iChanceInfiniteMelee);
-		PrintToServer("g_iInfiniteMeeleRange: %d", g_iInfiniteMeeleRange);
-		PrintToServer("g_iChanceKillAllSurvivor: %d", g_iChanceKillAllSurvivor);
-		PrintToServer("g_iChanceKillSingleSurvivor: %d", g_iChanceKillSingleSurvivor);
-		PrintToServer("g_iChanceResetAllSurvivorHealth: %d", g_iChanceResetAllSurvivorHealth);
-		PrintToServer("g_iChanceNewTank: %d", g_iChanceNewTank);
-		PrintToServer("g_iChanceNewWitch: %d", g_iChanceNewWitch);
-		PrintToServer("g_iChanceNoPrize: %d", g_iChanceNoPrize);
-		PrintToServer("g_iChanceReviveAllDead: %d", g_iChanceReviveAllDead);
-		PrintToServer("g_iChanceTimerBomb: %d", g_iChanceTimerBomb);
-		PrintToServer("g_iTimerBombRangeDamage: %d", g_iTimerBombRangeDamage);
-		PrintToServer("g_iTimerBombSecond: %d", g_iTimerBombSecond);
-		PrintToServer("g_fTimerBombRadius: %.1f", g_fTimerBombRadius);
-		PrintToServer("g_iChanceFreezeBomb: %d", g_iChanceFreezeBomb);
-		PrintToServer("g_iFreezeBombDuration: %d", g_iFreezeBombDuration);
-		PrintToServer("g_iFreezeBombCountDown: %d", g_iFreezeBombCountDown);
-		PrintToServer("g_fFreezeBombRadius: %.1f", g_fFreezeBombRadius);
-		PrintToServer("g_iDrugAllSurvivorChance: %d", g_iChanceDrugAllSurvivor);
-		PrintToServer("g_iDrugAllSurvivorDuration: %d", g_iDrugAllSurvivorDuration);
-		PrintToServer("g_iDrugLuckySurvivorChance: %d", g_iChanceDrugLuckySurvivor);
-		PrintToServer("g_iDrugLuckySurvivorDuration: %d", g_iDrugLuckySurvivorDuration);
-		PrintToServer("==============================");
-	}
+	DebugPrint("===== Debug ConVar Values =====");
+	DebugPrint("g_iL4D2TankDrawDebugMode: %d", g_iL4D2TankDrawDebugMode);
+	DebugPrint("g_iTotalChance: %d", g_iTotalChance);
+	DebugPrint("g_iClearBuffIfMissionLost: %d", g_iClearBuffIfMissionLost);
+	DebugPrint("g_iChanceAverageHealth: %d", g_iChanceAverageHealth);
+	DebugPrint("g_iChanceClearAllSurvivorHealth: %d", g_iChanceClearAllSurvivorHealth);
+	DebugPrint("g_iChanceDecreaseHealth: %d", g_iChanceDecreaseHealth);
+	DebugPrint("g_iMaxHealthDecrease: %d", g_iMaxHealthDecrease);
+	DebugPrint("g_iMinHealthDecrease: %d", g_iMinHealthDecrease);
+	DebugPrint("g_iChanceDisarmAllSurvivor: %d", g_iChanceDisarmAllSurvivor);
+	DebugPrint("g_iChanceDisarmSingleSurvivor: %d", g_iChanceDisarmSingleSurvivor);
+	DebugPrint("g_iTankDrawEnable: %d", g_iTankDrawEnable);
+	DebugPrint("g_iChanceDisableGlow: %d", g_iChanceDisableGlow);
+	DebugPrint("g_iChanceIncreaseGravity: %d", g_iChanceIncreaseGravity);
+	DebugPrint("g_fIncreasedGravity: %.1f", g_fIncreasedGravity);
+	DebugPrint("g_iChanceMoonGravityOneLimitedTime: %d", g_iChanceMoonGravityOneLimitedTime);
+	DebugPrint("g_fSingleMoonGravity: %.1f", g_fSingleMoonGravity);
+	DebugPrint("g_iLimitedTimeWorldMoonGravityOne: %d", g_iLimitedTimeWorldMoonGravityOne);
+	DebugPrint("g_iWorldMoonGravity: %d", g_iWorldMoonGravity);
+	DebugPrint("g_iChanceLimitedTimeWorldMoonGravity: %d", g_iChanceLimitedTimeWorldMoonGravity);
+	DebugPrint("g_iLimitedTimeWorldMoonGravityTimer: %d", g_iLimitedTimeWorldMoonGravityTimer);
+	DebugPrint("g_iChanceWorldMoonGravityToggle: %d", g_iChanceWorldMoonGravityToggle);
+	DebugPrint("g_iChanceIncreaseHealth: %d", g_iChanceIncreaseHealth);
+	DebugPrint("g_iMaxHealthIncrease: %d", g_iMaxHealthIncrease);
+	DebugPrint("g_iMinHealthIncrease: %d", g_iMinHealthIncrease);
+	DebugPrint("g_iChanceInfiniteAmmo: %d", g_iChanceInfiniteAmmo);
+	DebugPrint("g_iChanceKillSurvivorMolotov: %d", g_iChanceKillSurvivorMolotov);
+	DebugPrint("g_iChanceDisarmSurvivorMolotov: %d", g_iChanceDisarmSurvivorMolotov);
+	DebugPrint("g_iChanceTimerBombMolotov: %d", g_iChanceTimerBombMolotov);
+	DebugPrint("g_iChanceInfinitePrimaryAmmo: %d", g_iChanceInfinitePrimaryAmmo);
+	DebugPrint("g_iChanceInfiniteMelee: %d", g_iChanceInfiniteMelee);
+	DebugPrint("g_iInfiniteMeeleRange: %d", g_iInfiniteMeeleRange);
+	DebugPrint("g_iChanceKillAllSurvivor: %d", g_iChanceKillAllSurvivor);
+	DebugPrint("g_iChanceKillSingleSurvivor: %d", g_iChanceKillSingleSurvivor);
+	DebugPrint("g_iChanceResetAllSurvivorHealth: %d", g_iChanceResetAllSurvivorHealth);
+	DebugPrint("g_iChanceNewTank: %d", g_iChanceNewTank);
+	DebugPrint("g_iChanceNewWitch: %d", g_iChanceNewWitch);
+	DebugPrint("g_iChanceNoPrize: %d", g_iChanceNoPrize);
+	DebugPrint("g_iChanceReviveAllDead: %d", g_iChanceReviveAllDead);
+	DebugPrint("g_iChanceTimerBomb: %d", g_iChanceTimerBomb);
+	DebugPrint("g_iTimerBombRangeDamage: %d", g_iTimerBombRangeDamage);
+	DebugPrint("g_iTimerBombSecond: %d", g_iTimerBombSecond);
+	DebugPrint("g_fTimerBombRadius: %.1f", g_fTimerBombRadius);
+	DebugPrint("g_iChanceFreezeBomb: %d", g_iChanceFreezeBomb);
+	DebugPrint("g_iFreezeBombDuration: %d", g_iFreezeBombDuration);
+	DebugPrint("g_iFreezeBombCountDown: %d", g_iFreezeBombCountDown);
+	DebugPrint("g_fFreezeBombRadius: %.1f", g_fFreezeBombRadius);
+	DebugPrint("g_iDrugAllSurvivorChance: %d", g_iChanceDrugAllSurvivor);
+	DebugPrint("g_iDrugAllSurvivorDuration: %d", g_iDrugAllSurvivorDuration);
+	DebugPrint("g_iDrugLuckySurvivorChance: %d", g_iChanceDrugLuckySurvivor);
+	DebugPrint("g_iDrugLuckySurvivorDuration: %d", g_iDrugLuckySurvivorDuration);
+	DebugPrint("==============================");
 
 	if (g_iL4D2TankDrawDebugMode == 1)
 	{
-		PrintToServer("调试菜单打开 / debug menu on");
+		DebugPrint("调试菜单打开 / debug menu on");
 		RegAdminCmd("sm_tankdraw", MenuFunc_MainMenu, ADMFLAG_CHEATS);
 	}
 }

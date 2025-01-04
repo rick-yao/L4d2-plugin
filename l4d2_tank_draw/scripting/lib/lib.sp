@@ -257,3 +257,14 @@ stock void Tank_ZedTime(float duration = 1.2, float scale = 0.3)
 		ZedTime(duration, scale);
 	}
 }
+
+stock void DebugPrint(const char[] format, any...)
+{
+	char buffer[2048];
+	VFormat(buffer, sizeof(buffer), format, 2);	   // 2 represents the starting parameter number
+
+	if (g_iL4D2TankDrawDebugMode == 1)
+	{
+		PrintToServer(buffer);
+	}
+}

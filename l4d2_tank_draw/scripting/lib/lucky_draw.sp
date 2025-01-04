@@ -2,7 +2,7 @@ stock Action LuckyDraw(int victim, int attacker)
 {
 	if (g_iTotalChance == 0)
 	{
-		PrintToServer("所有概率总和为0，跳过抽奖 / total change equals to 0, do not draw");
+		DebugPrint("所有概率总和为0，跳过抽奖 / total change equals to 0, do not draw");
 		return Plugin_Continue;
 	}
 
@@ -11,7 +11,7 @@ stock Action LuckyDraw(int victim, int attacker)
 	GetClientName(attacker, attackerName, sizeof(attackerName));
 
 	int random = GetRandomInt(1, g_iTotalChance);
-	PrintToServer("total chance: %d, random: %d", g_iTotalChance, random);
+	DebugPrint("total chance: %d, random: %d", g_iTotalChance, random);
 
 	int currentChance = 0;
 

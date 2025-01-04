@@ -4,7 +4,7 @@ stock void SetDrug(int client, int ticks = 30)
 {
 	if (!IsValidAliveClient(client))
 	{
-		PrintToServer("[Tank Draw] IsValidAliveClient false.");
+		DebugPrint("[Tank Draw] IsValidAliveClient false.");
 		return;
 	}
 

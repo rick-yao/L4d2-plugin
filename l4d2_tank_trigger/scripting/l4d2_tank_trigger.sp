@@ -36,7 +36,6 @@ public void OnPluginStart()
 	HookConVarChange(ChanceWitchKilled, ConVarChanged);
 
 	AutoExecConfig(true, "l4d2_tank_trigger");
-	PrintToServer("[Tank Trigger] Plugin loaded");
 
 	SetConVar();
 
@@ -62,7 +61,6 @@ public Action Event_Spawn(Event event, const char[] name, bool dontBroadcast)
 
 		int random = GetRandomInt(1, 100);
 		int chance = g_iChanceWitchKilled;
-		PrintToServer("chance witch killed: %d", chance);
 		if (chance > 0 && random <= chance)
 		{
 			CPrintToChatAll("%t", "TankTrigger_WitchKilledSpawnTank", attackerName);

@@ -123,14 +123,12 @@ stock bool IsTank(int client)
 	// Check if the client is valid and in-game
 	if (!IsValidClient(client))
 	{
-		PrintToServer("IsTank: Client %d is not valid", client);
 		return false;
 	}
 
 	// Check if the client is on the infected team
 	if (GetClientTeam(client) != INFECTED_TEAM)	   // 3 is typically the infected team in L4D2
 	{
-		PrintToServer("IsTank: Client %d is not on the infected team (Team: %d)", client, GetClientTeam(client));
 		return false;
 	}
 	if (!HasEntProp(client, Prop_Send, "m_zombieClass"))
@@ -138,7 +136,6 @@ stock bool IsTank(int client)
 		return false;
 	}
 
-	PrintToServer("IsTank: Client %d passed all preliminary checks", client);
 	return (GetEntProp(client, Prop_Send, "m_zombieClass") == Z_TANK);
 }
 
@@ -176,9 +173,6 @@ stock void TrySpawnTank(const float pos[3], SpawnTankCallback callback = INVALID
 	IsSuccess      = L4D2_SpawnTank(pos, NULL_VECTOR) > 0;
 	if (IsSuccess)
 	{
-		PrintToServer("Successfully spawned Tank at position: %.1f, %.1f, %.1f", pos[0], pos[1], pos[2]);
-		PrintToServer("Successfully spawned Tank at %d attempts", attempts);
-
 		// Call callback if provided
 		if (callback != INVALID_FUNCTION)
 		{
@@ -205,8 +199,6 @@ stock void TrySpawnTank(const float pos[3], SpawnTankCallback callback = INVALID
 		CreateTimer(retryInterval, Timer_RetrySpawnTank, dp, TIMER_FLAG_NO_MAPCHANGE | TIMER_DATA_HNDL_CLOSE);
 		return;
 	}
-
-	PrintToServer("Failed to spawn Tank after first attempt");
 
 	// Call callback if provided
 	if (callback != INVALID_FUNCTION)
@@ -237,9 +229,6 @@ public Action Timer_RetrySpawnTank(Handle timer, DataPack dp)
 
 	if (IsSuccess)
 	{
-		PrintToServer("Successfully spawned Tank at position: %.1f, %.1f, %.1f", pos[0], pos[1], pos[2]);
-		PrintToServer("Successfully spawned Tank at %d attempts", attempts);
-
 		// Call callback if provided
 		if (callback != INVALID_FUNCTION)
 		{
@@ -268,8 +257,6 @@ public Action Timer_RetrySpawnTank(Handle timer, DataPack dp)
 		CreateTimer(retryInterval, Timer_RetrySpawnTank, dp, TIMER_FLAG_NO_MAPCHANGE | TIMER_DATA_HNDL_CLOSE);
 		return Plugin_Continue;
 	}
-
-	PrintToServer("Failed to spawn Tank after %d attempts", maxRetries);
 
 	// Call callback if provided
 	if (callback != INVALID_FUNCTION)
