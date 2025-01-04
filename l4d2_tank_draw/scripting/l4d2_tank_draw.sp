@@ -556,6 +556,7 @@ void SetConVar()
 	DebugPrint("g_iDrugAllSurvivorDuration: %d", g_iDrugAllSurvivorDuration);
 	DebugPrint("g_iDrugLuckySurvivorChance: %d", g_iChanceDrugLuckySurvivor);
 	DebugPrint("g_iDrugLuckySurvivorDuration: %d", g_iDrugLuckySurvivorDuration);
+	DebugPrint("g_iZedTimeEnable: %d", g_iZedTimeEnable);
 	DebugPrint("==============================");
 
 	if (g_iL4D2TankDrawDebugMode == 1)
