@@ -4,7 +4,6 @@
 
 [简体中文](/l4d2_tank_draw/README_CN.md)
 
-
 ## Basic Function
 
 This SourceMod plugin for Left 4 Dead 2 adds a "lucky draw" feature that triggers when a Tank is killed by a melee weapon. The player who delivers the final melee blow to the Tank gets a chance to win various prizes that affect gameplay.
@@ -14,7 +13,7 @@ This SourceMod plugin for Left 4 Dead 2 adds a "lucky draw" feature that trigger
 The plugin includes the following possible prizes:
 
 **The default configuration sets the probability of "no prize" to 10, while all other prizes are set to 0. Please configure them yourself.**  
-**The probability of a single prize is calculated as: (prize probability) / (sum of all prize probabilities)** 
+**The probability of a single prize is calculated as: (prize probability) / (sum of all prize probabilities)**
 
 1. No prize
 2. Lucky player gains random health (Survivor's total health cannot exceed the server's maximum health limit)
@@ -40,7 +39,7 @@ The plugin includes the following possible prizes:
 22. Turn the lucky player into a "freeze bomb" (Repeated draws will cancel the timer)
 23. Remove survivor outlines (Removes survivor glow outlines, but names above players remain visible; not recommended as many plugins modify outlines)
 24. Temporarily Drug lucky player
-24. Temporarily Drug all survivors
+25. Temporarily Drug all survivors
 
 ## Configuration
 
@@ -48,14 +47,14 @@ The plugin is highly configurable.
 
 All these settings can be modified through ConVars, which can be found and adjusted in the plugin's configuration file.
 
-To customize the plugin, look for the `l4d2_tank_draw.cfg` file in your SourceMod `addons/sourcemod/configs/` directory after first running the plugin on your server.
+To customize the plugin, look for the `l4d2_tank_draw.cfg` file in your SourceMod `left4dead2\cfg\sourcemod` directory after first running the plugin on your server.
 
 ## Installation
 
 1. Place the `l4d2_tank_draw.smx` file in your `addons/sourcemod/plugins/` directory.
 2. Put `l4d2_tank_draw.phrases.txt` inside `addons/sourcemod/translations/` directory.
 3. Restart your server or load the plugin using the `sm plugins reload` command.
-4. The plugin will automatically create its configuration file (`l4d2_tank_draw.cfg`) in the `addons/sourcemod/configs/` directory after first run.
+4. The plugin will automatically create its configuration file (`l4d2_tank_draw.cfg`) in the `left4dead2\cfg\sourcemod` directory after first run.
 5. Modify cfg then reload
 
 Enjoy the excitement of random prizes after taking down a Tank with melee weapons!
