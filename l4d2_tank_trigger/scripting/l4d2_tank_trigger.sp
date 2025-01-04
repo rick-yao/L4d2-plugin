@@ -29,8 +29,8 @@ public void OnPluginStart()
 {
 	LoadTranslations("l4d2_tank_trigger.phrases");
 
-	ChanceCarAlarm	  = CreateConVar("l4d2_tank_trigger_chance_car_alarm", "30", "车被触发响动时召唤tank概率 \nprobability of spawning tank when trigger car alarm", _, true, 0.0, true, 100.0);
-	ChanceWitchKilled = CreateConVar("l4d2_tank_trigger_chance_witch_killed", "30", "witch被杀时召唤tank概率 \nprobability of spawning tank when a witch is killed", _, true, 0.0, true, 100.0);
+	ChanceCarAlarm	  = CreateConVar("l4d2_tank_trigger_chance_car_alarm", "20", "车被触发响动时召唤tank概率 \nprobability of spawning tank when trigger car alarm", _, true, 0.0, true, 100.0);
+	ChanceWitchKilled = CreateConVar("l4d2_tank_trigger_chance_witch_killed", "20", "witch被杀时召唤tank概率 \nprobability of spawning tank when a witch is killed", _, true, 0.0, true, 100.0);
 
 	HookConVarChange(ChanceCarAlarm, ConVarChanged);
 	HookConVarChange(ChanceWitchKilled, ConVarChanged);
