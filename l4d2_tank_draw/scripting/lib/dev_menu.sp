@@ -1,5 +1,6 @@
 stock Action MenuFunc_MainMenu(int client, int args)
 {
+	if (g_iTankDrawEnable == 0) { return Plugin_Continue; }
 	Handle menu = CreateMenu(MenuHandler_MainMenu);
 	char   line[1024];
 
