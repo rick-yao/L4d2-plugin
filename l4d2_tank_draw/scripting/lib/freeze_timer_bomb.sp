@@ -110,7 +110,7 @@ public Action Timer_FreezeBomb(Handle timer, DataPack pack)
 	return Plugin_Stop;
 }
 
-void FreezePlayer(int client, int duration)
+stock void FreezePlayer(int client, int duration)
 {
 	if (!IsValidAliveClient(client))
 		return;

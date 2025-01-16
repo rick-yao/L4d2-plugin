@@ -105,47 +105,7 @@ public Action Timer_HandleBomb(Handle timer, DataPack data)
 
 	if (g_iTimeBombTicks[target] <= 0)
 	{
-		// Create explosion effect
-		if (g_ExplosionSprite > -1)
-		{
-			TE_SetupExplosion(vecOrigin, g_ExplosionSprite, 20.0, 1, 0,
-					  RoundToNearest(radius), 5000);
-			TE_SendToAll();
-		}
-
-		float deathPos[3];
-		GetClientAbsOrigin(target, deathPos);
-
-		// Kill the bomb holder
-		ForcePlayerSuicide(target);
-
-		// Damage nearby players
-		for (int i = 1; i <= MaxClients; i++)
-		{
-			if (!IsValidAliveClient(i) || i == target)
-				continue;
-
-			float survivorPos[3];
-			GetClientAbsOrigin(i, survivorPos);
-
-			float distance = GetVectorDistance(deathPos, survivorPos);
-			if (distance <= radius)
-			{
-				// Calculate damage based on distance
-				int finalDamage = RoundToFloor(damage * ((radius - distance) / radius));
-
-				// Create smaller explosion effect on damaged players
-				if (g_ExplosionSprite > -1)
-				{
-					TE_SetupExplosion(survivorPos, g_ExplosionSprite, 0.2, 1, 0, 1, 1);
-					TE_SendToAll();
-				}
-
-				// Apply damage
-				SlapPlayer(i, 0);
-				SDKHooks_TakeDamage(i, i, target, float(finalDamage), DMG_GENERIC);
-			}
-		}
+		BombPlayer(target, radius, damage);
 
 		KillTimeBomb(target);
 		return Plugin_Stop;
@@ -168,5 +128,50 @@ stock void KillAllTimeBombs()
 	for (int i = 1; i <= MaxClients; i++)
 	{
 		KillTimeBomb(i);
+	}
+}
+
+stock void BombPlayer(int target, float radius, int damage)
+{
+	float deathPos[3];
+	GetClientAbsOrigin(target, deathPos);
+
+	// Create explosion effect
+	if (g_ExplosionSprite > -1)
+	{
+		TE_SetupExplosion(deathPos, g_ExplosionSprite, 20.0, 1, 0,
+				  RoundToNearest(radius), 5000);
+		TE_SendToAll();
+	}
+
+	// Kill the bomb holder
+	ForcePlayerSuicide(target);
+
+	// Damage nearby players
+	for (int i = 1; i <= MaxClients; i++)
+	{
+		if (!IsValidAliveClient(i) || i == target)
+			continue;
+
+		float survivorPos[3];
+		GetClientAbsOrigin(i, survivorPos);
+
+		float distance = GetVectorDistance(deathPos, survivorPos);
+		if (distance <= radius)
+		{
+			// Calculate damage based on distance
+			int finalDamage = RoundToFloor(damage * ((radius - distance) / radius));
+
+			// Create smaller explosion effect on damaged players
+			if (g_ExplosionSprite > -1)
+			{
+				TE_SetupExplosion(survivorPos, g_ExplosionSprite, 0.2, 1, 0, 1, 1);
+				TE_SendToAll();
+			}
+
+			// Apply damage
+			SlapPlayer(i, 0);
+			SDKHooks_TakeDamage(i, i, target, float(finalDamage), DMG_GENERIC);
+		}
 	}
 }
