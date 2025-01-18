@@ -160,7 +160,8 @@ public void OnPluginStart()
 	HookEvent("map_transition", Event_RoundEnd, EventHookMode_Pre);
 	HookEvent("finale_win", Event_RoundEnd, EventHookMode_Pre);
 
-	HookEvent("player_afk", Event_Afk, EventHookMode_Pre);
+	HookEvent("player_bot_replace", Event_player_bot_replace);
+	HookEvent("bot_player_replace", Event_bot_player_replace);
 
 	HookConVarChange(ClearBuffIfMissionLost, ConVarChanged);
 	HookConVarChange(ChanceAverageHealth, ConVarChanged);
@@ -568,26 +569,32 @@ void SetConVar()
 	}
 }
 
-// prevent player afk to avoid bomb
-Action Event_Afk(Event event, const char[] name, bool dontBroadcast)
+void Event_player_bot_replace(Event event, const char[] name, bool dontBroadcast)
 {
-	if (g_iTankDrawEnable == 0) { return Plugin_Continue; }
+	if (g_iTankDrawEnable == 0) { return; }
+	HandlePlayerReplace(event.GetInt("bot"), event.GetInt("player"));
+}
 
-	DebugPrint("Event_Afk triggered afk.");
-	int client = GetClientOfUserId(event.GetInt("player"));
+void Event_bot_player_replace(Event event, const char[] name, bool dontBroadcast)
+{
+	if (g_iTankDrawEnable == 0) { return; }
+	HandlePlayerReplace(event.GetInt("player"), event.GetInt("bot"));
+}
 
-	if (g_hTimeBombTimer[client] != null)
+void HandlePlayerReplace(int replacer, int me)
+{
+	DebugPrint("HandlePlayerReplace triggered.");
+
+	if (g_hTimeBombTimer[me] != null)
 	{
-		BombPlayer(client, g_fTimerBombRadius, g_iTimerBombRangeDamage);
-		delete g_hTimeBombTimer[client];
-		g_iTimeBombTicks[client] = 0;
+		BombPlayer(replacer, g_fTimerBombRadius, g_iTimerBombRangeDamage);
+		delete g_hTimeBombTimer[me];
+		g_iTimeBombTicks[me] = 0;
 	}
 
-	if (g_hFreezeBombTimer[client] != null)
+	if (g_hFreezeBombTimer[me] != null)
 	{
-		delete g_hFreezeBombTimer[client];
-		FreezePlayer(client, g_iFreezeBombDuration);
+		delete g_hFreezeBombTimer[me];
+		FreezePlayer(replacer, g_iFreezeBombDuration);
 	}
-
-	return Plugin_Continue;
 }
