@@ -597,4 +597,10 @@ void HandlePlayerReplace(int replacer, int me)
 		delete g_hFreezeBombTimer[me];
 		FreezePlayer(replacer, g_iFreezeBombDuration);
 	}
+	if (g_hDrugTimers[me] != null)
+	{
+		delete g_hDrugTimers[me];
+		g_iDrugTicks[me] = 0;
+		SetDrug(replacer, g_iDrugLuckySurvivorDuration);
+	}
 }
