@@ -271,3 +271,29 @@ stock void DebugPrint(const char[] format, any...)
 		PrintToServer(finalBuffer);
 	}
 }
+stock Action TimerBombPlayer(Handle timer, any client)
+{
+	if (IsValidAliveClient(client))
+	{
+		BombPlayer(client, g_fTimerBombRadius, g_iTimerBombRangeDamage);
+	}
+	return Plugin_Continue;
+}
+
+stock Action TimerFreezePlayer(Handle timer, any client)
+{
+	if (IsValidAliveClient(client))
+	{
+		FreezePlayer(client, g_iFreezeBombDuration);
+	}
+	return Plugin_Continue;
+}
+
+stock Action TimerDrugPlayer(Handle timer, any client)
+{
+	if (IsValidAliveClient(client))
+	{
+		SetDrug(client, g_iDrugLuckySurvivorDuration);
+	}
+	return Plugin_Continue;
+}

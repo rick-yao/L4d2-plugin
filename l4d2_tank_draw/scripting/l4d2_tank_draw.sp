@@ -160,8 +160,8 @@ public void OnPluginStart()
 	HookEvent("map_transition", Event_RoundEnd, EventHookMode_Pre);
 	HookEvent("finale_win", Event_RoundEnd, EventHookMode_Pre);
 
-	HookEvent("player_bot_replace", Event_player_bot_replace);
-	HookEvent("bot_player_replace", Event_bot_player_replace);
+	HookEvent("player_bot_replace", Event_player_bot_replace, EventHookMode_Pre);
+	HookEvent("bot_player_replace", Event_bot_player_replace, EventHookMode_Pre);
 
 	HookConVarChange(ClearBuffIfMissionLost, ConVarChanged);
 	HookConVarChange(ChanceAverageHealth, ConVarChanged);
@@ -587,20 +587,20 @@ void HandlePlayerReplace(int replacer, int me)
 
 	if (g_hTimeBombTimer[me] != null)
 	{
-		BombPlayer(replacer, g_fTimerBombRadius, g_iTimerBombRangeDamage);
 		delete g_hTimeBombTimer[me];
 		g_iTimeBombTicks[me] = 0;
+		CreateTimer(1.0, TimerBombPlayer, replacer, NO_REPEAT_TIMER);
 	}
 
 	if (g_hFreezeBombTimer[me] != null)
 	{
 		delete g_hFreezeBombTimer[me];
-		FreezePlayer(replacer, g_iFreezeBombDuration);
+		CreateTimer(1.0, TimerFreezePlayer, replacer, NO_REPEAT_TIMER);
 	}
 	if (g_hDrugTimers[me] != null)
 	{
 		delete g_hDrugTimers[me];
 		g_iDrugTicks[me] = 0;
-		SetDrug(replacer, g_iDrugLuckySurvivorDuration);
+		CreateTimer(1.0, TimerDrugPlayer, replacer, NO_REPEAT_TIMER);
 	}
 }
