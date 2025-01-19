@@ -151,7 +151,7 @@ public void OnPluginStart()
 
 	HookEvent("player_incapacitated", Event_PlayerIncapacitated);
 
-	HookEvent("player_death", Event_PlayerDeath, EventHookMode_Pre);
+	// HookEvent("player_death", Event_PlayerDeath);
 	HookEvent("mission_lost", Event_Lost, EventHookMode_Pre);
 
 	HookEvent("molotov_thrown", Event_Molotov);
@@ -303,7 +303,7 @@ public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadca
 public void OnClientDisconnect(int client)
 {
 	if (g_iTankDrawEnable == 0) { return; }
-	DebugPrint("OnClientDisconnect triggered.");
+	DebugPrint("OnClientDisconnect triggered. %d", client);
 
 	if (IsValidSurvivor(client))
 	{
