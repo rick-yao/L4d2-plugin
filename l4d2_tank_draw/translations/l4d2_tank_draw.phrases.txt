@@ -670,5 +670,17 @@
     {
         "en"    "[Tank Draw] Player %s's lucky draw result: Drug all survivor for %d seconds."
         "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 全体中毒 %d 秒"
+    },
+
+    "TankDraw_IdleKillTimerBomb"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen} was detected idling with a timer bomb and has been {olive}executed."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 被检测到闲置不用定时炸弹，已被{olive}处决"
+    },
+
+    "TankDraw_IdleKillTimerBomb_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s was detected idling with a timer bomb and has been executed."
+        "chi"   "[坦克抽奖] 玩家 %s 被检测到闲置不用定时炸弹，已被处决"
     }
 }

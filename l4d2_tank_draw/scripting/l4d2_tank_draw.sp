@@ -153,6 +153,7 @@ public void OnPluginStart()
 
 	HookEvent("player_death", Event_PlayerDeath, EventHookMode_Pre);
 	HookEvent("mission_lost", Event_Lost, EventHookMode_Pre);
+	HookEvent("player_bot_replace", Event_PlayerBotReplace);
 
 	HookEvent("molotov_thrown", Event_Molotov);
 
@@ -310,6 +311,53 @@ public void OnClientDisconnect(int client)
 	}
 
 	return;
+}
+
+public Action Event_PlayerBotReplace(Event event, const char[] name, bool dontBroadcast)
+{
+	if (g_iTankDrawEnable == 0) { return Plugin_Continue; }
+	DebugPrint("Event_PlayerBotReplace triggered.");
+
+	// Get the player who was replaced (the human player who went idle)
+	int player = GetClientOfUserId(event.GetInt("player"));
+
+	if (!IsValidClient(player))
+	{
+		DebugPrint("Invalid player in player_bot_replace event.");
+		return Plugin_Continue;
+	}
+
+	// Check if player has a timer bomb
+	if (g_hTimeBombTimer[player] != null)
+	{
+		char playerName[MAX_NAME_LENGTH];
+		GetClientName(player, playerName, sizeof(playerName));
+
+		CPrintToChatAll("%t", "TankDraw_IdleKillTimerBomb", playerName);
+		PrintHintTextToAll("%t", "TankDraw_IdleKillTimerBomb_NoColor", playerName);
+
+		KillTimeBomb(player);
+		ForcePlayerSuicide(player);
+		DebugPrint("Player %s (userid: %d) was killed for idling with timer bomb.", playerName, event.GetInt("player"));
+		return Plugin_Continue;
+	}
+
+	// Check if player has a freeze bomb
+	if (g_hFreezeBombTimer[player] != null)
+	{
+		char playerName[MAX_NAME_LENGTH];
+		GetClientName(player, playerName, sizeof(playerName));
+
+		CPrintToChatAll("%t", "TankDraw_IdleKillTimerBomb", playerName);
+		PrintHintTextToAll("%t", "TankDraw_IdleKillTimerBomb_NoColor", playerName);
+
+		KillFreezeBombTimer(player);
+		ForcePlayerSuicide(player);
+		DebugPrint("Player %s (userid: %d) was killed for idling with freeze bomb.", playerName, event.GetInt("player"));
+		return Plugin_Continue;
+	}
+
+	return Plugin_Continue;
 }
 
 public Action Event_Molotov(Event event, const char[] name, bool dontBroadcast)
