@@ -671,4 +671,16 @@
         "en"    "[Tank Draw] Player %s's lucky draw result: Drug all survivor for %d seconds."
         "chi"   "[坦克抽奖] 玩家 %s 的幸运抽奖结果： 全体中毒 %d 秒"
     }
+
+    "TankDraw_Avoid_Punish"
+    {
+        "en"    "{yellow}[Tank Draw] {lightgreen}Player {olive}%s{lightgreen} attempted to avoid punishment. {olive} Executed."
+        "chi"   "{yellow}[坦克抽奖] {lightgreen}玩家 {olive}%s{lightgreen} 试图躲避惩罚，已被{olive}处决"
+    }
+
+    "TankDraw_Avoid_Punish_NoColor"
+    {
+        "en"    "[Tank Draw] Player %s attempted to avoid punishment. Executed."
+        "chi"   "[坦克抽奖] 玩家 %s 视图躲避惩罚，已被处决"
+    }
 }
