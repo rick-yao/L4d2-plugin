@@ -153,7 +153,7 @@ public void OnPluginStart()
 
 	HookEvent("player_death", Event_PlayerDeath, EventHookMode_Pre);
 	HookEvent("mission_lost", Event_Lost, EventHookMode_Pre);
-	HookEvent("player_bot_replace", Event_PlayerBotReplace);
+	HookEvent("player_bot_replace", Event_PlayerBotReplace, EventHookMode_Pre);
 
 	HookEvent("molotov_thrown", Event_Molotov);
 
@@ -320,6 +320,7 @@ public Action Event_PlayerBotReplace(Event event, const char[] name, bool dontBr
 
 	// Get the player who was replaced (the human player who went idle)
 	int player = GetClientOfUserId(event.GetInt("player"));
+	DebugPrint("player id : %d  is replaced", player);
 
 	if (!IsValidClient(player))
 	{
@@ -328,32 +329,24 @@ public Action Event_PlayerBotReplace(Event event, const char[] name, bool dontBr
 	}
 
 	// Check if player has a timer bomb
-	if (g_hTimeBombTimer[player] != null)
+	if (g_hTimeBombTimer[player] != null || g_hFreezeBombTimer[player] != null || g_hDrugTimers[player] != null)
 	{
 		char playerName[MAX_NAME_LENGTH];
 		GetClientName(player, playerName, sizeof(playerName));
 
-		CPrintToChatAll("%t", "TankDraw_IdleKillTimerBomb", playerName);
-		PrintHintTextToAll("%t", "TankDraw_IdleKillTimerBomb_NoColor", playerName);
+		CPrintToChatAll("%t", "TankDraw_Avoid_Punish", playerName);
+		PrintHintTextToAll("%t", "TankDraw_Avoid_Punish_NoColor", playerName);
 
-		KillTimeBomb(player);
-		ForcePlayerSuicide(player);
-		DebugPrint("Player %s (userid: %d) was killed for idling with timer bomb.", playerName, event.GetInt("player"));
-		return Plugin_Continue;
-	}
-
-	// Check if player has a freeze bomb
-	if (g_hFreezeBombTimer[player] != null)
-	{
-		char playerName[MAX_NAME_LENGTH];
-		GetClientName(player, playerName, sizeof(playerName));
-
-		CPrintToChatAll("%t", "TankDraw_IdleKillTimerBomb", playerName);
-		PrintHintTextToAll("%t", "TankDraw_IdleKillTimerBomb_NoColor", playerName);
+		int botId = GetClientOfUserId(event.GetInt("bot"));
+		DebugPrint("replace bot id: %d", botId);
 
 		KillFreezeBombTimer(player);
+		KillFreezeBombTimer(botId);
+
 		ForcePlayerSuicide(player);
-		DebugPrint("Player %s (userid: %d) was killed for idling with freeze bomb.", playerName, event.GetInt("player"));
+		ForcePlayerSuicide(botId);
+
+		DebugPrint("Player %s (userid: %d) was killed for avoiding punishment.", playerName, event.GetInt("player"));
 		return Plugin_Continue;
 	}
 
