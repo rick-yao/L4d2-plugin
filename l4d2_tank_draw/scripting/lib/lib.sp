@@ -46,6 +46,7 @@ int
 	g_iChanceDrugLuckySurvivor,
 	g_iDrugLuckySurvivorDuration,
 	g_iZedTimeEnable,
+	g_iPlayerBotReplaceEnable,
 
 	g_iGlowDisabled;
 
@@ -120,7 +121,8 @@ ConVar
 	DrugLuckySurvivorChance,
 	DrugLuckySurvivorDuration,
 	ClearBuffIfMissionLost,
-	ZedTimeEnable;
+	ZedTimeEnable,
+	PlayerBotReplaceEnable;
 
 Handle g_SingleGravityTimer[MAXPLAYERS + 1];
 Handle g_WorldGravityTimer;

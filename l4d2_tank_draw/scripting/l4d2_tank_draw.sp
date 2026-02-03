@@ -147,6 +147,8 @@ public void OnPluginStart()
 
 	ClearBuffIfMissionLost		  = CreateConVar("l4d2_tank_draw_clear_buff_if_mission_lost", "0", "关卡失败时清除buff[1=是|0=否] \nClear buff if mission lost[1=yes|0=no].", FCVAR_NONE);
 
+	PlayerBotReplaceEnable		  = CreateConVar("l4d2_tank_draw_player_bot_replace_enable", "1", "是否启用玩家闲置躲避惩罚[1=是|0=否] \nEnable player bot replace punishment. When a player disconnects and has punishments like bombs, they will be killed[1=yes|0=no].", FCVAR_NONE);
+
 	ZedTimeEnable			  = CreateConVar("l4d2_tank_draw_zed_time_enable", "1", "中奖时是否激活子弹时间[1=是|0=否] \nActivate bullet time when winning prize[1=yes|0=no].", FCVAR_NONE);
 
 	HookEvent("player_incapacitated", Event_PlayerIncapacitated);
@@ -211,6 +213,7 @@ public void OnPluginStart()
 	HookConVarChange(DrugLuckySurvivorChance, ConVarChanged);
 	HookConVarChange(DrugLuckySurvivorDuration, ConVarChanged);
 	HookConVarChange(ZedTimeEnable, ConVarChanged);
+	HookConVarChange(PlayerBotReplaceEnable, ConVarChanged);
 
 	AutoExecConfig(true, "l4d2_tank_draw");
 
@@ -316,6 +319,7 @@ public void OnClientDisconnect(int client)
 public Action Event_PlayerBotReplace(Event event, const char[] name, bool dontBroadcast)
 {
 	if (g_iTankDrawEnable == 0) { return Plugin_Continue; }
+	if (g_iPlayerBotReplaceEnable == 0) { return Plugin_Continue; }
 	DebugPrint("Event_PlayerBotReplace triggered.");
 
 	// Get the player who was replaced (the human player who went idle)
@@ -516,6 +520,7 @@ void SetConVar()
 	g_iChanceDrugLuckySurvivor	     = DrugLuckySurvivorChance.IntValue;
 	g_iDrugLuckySurvivorDuration	     = DrugLuckySurvivorDuration.IntValue;
 	g_iZedTimeEnable		     = ZedTimeEnable.IntValue;
+	g_iPlayerBotReplaceEnable	     = PlayerBotReplaceEnable.IntValue;
 
 	// Add all the g_iChance*** variables to the total
 	g_iTotalChance			     = 0;
@@ -598,6 +603,7 @@ void SetConVar()
 	DebugPrint("g_iDrugLuckySurvivorChance: %d", g_iChanceDrugLuckySurvivor);
 	DebugPrint("g_iDrugLuckySurvivorDuration: %d", g_iDrugLuckySurvivorDuration);
 	DebugPrint("g_iZedTimeEnable: %d", g_iZedTimeEnable);
+	DebugPrint("g_iPlayerBotReplaceEnable: %d", g_iPlayerBotReplaceEnable);
 	DebugPrint("==============================");
 
 	if (g_iL4D2TankDrawDebugMode == 1)
